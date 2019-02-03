@@ -3,15 +3,15 @@ cqv <- function(x, na.rm, digits) {  # coefficient of quartile variation
     digits = digits  # digits required for rounding
     q3 <- unname(
         quantile(
-            x, 
-            probs = 0.75,  # third quartile  
+            x,
+            probs = 0.75,  # third quartile (0.75 percentile)
             na.rm = na.rm
         )
     )
     q1 <- unname(
         quantile(
-            x, 
-            probs = 0.25,  # first quartile
+            x,
+            probs = 0.25,  # first quartile (0.75 percentile)
             na.rm = na.rm
         )
     )
