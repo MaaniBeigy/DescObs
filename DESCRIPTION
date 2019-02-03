@@ -1,11 +1,14 @@
 Package: DescObs
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Extract and Visualize the Results of Descriptive Data Exploration
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: Maani Beigy
+Maintainer: The package maintainer <manibeygi@gmail.com>
+Description: Provides some easy-to-use functions to extract and visualize the
+    output of descriptive data analysis for more sophisticated approaches e.g.,
+    robust statistics, smart scale-rescale transformation, and rigorous 
+    descriptions of data considering location, scale, and shape of 
+    distributions. 
+License: GPL-2
 Encoding: UTF-8
 LazyData: true
