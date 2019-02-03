@@ -20,7 +20,7 @@ cqv <- function(x, na.rm, digits) {  # coefficient of quartile variation
     }
     cqv <- 100*(
         (q3 - q1)/(q3 + q1)
-    )  # coefficient of quartile variation
+    )  # coefficient of quartile variation (CQV)
     return(
         round(
             cqv,
