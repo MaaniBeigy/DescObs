@@ -3,19 +3,19 @@ cqv <- function(x, na.rm, digits) {  # coefficient of quartile variation
     digits = digits  # digits required for rounding
     q3 <- unname(
         quantile(
-            x, 
-            probs = 0.75,  # third quartile  
+            x,
+            probs = 0.75,  # third quartile (0.75 percentile)
             na.rm = na.rm
         )
     )
     q1 <- unname(
         quantile(
-            x, 
-            probs = 0.25,  # first quartile
+            x,
+            probs = 0.25,  # first quartile (0.75 percentile)
             na.rm = na.rm
         )
     )
-    if(q3 == 0) {  # to avoid NaNs
+    if(q3 == 0) {  # to avoid NaNs when q3 and q1 are zero
         q3 <- max(x)
     }
     cqv <- 100*(
