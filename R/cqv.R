@@ -4,9 +4,9 @@
 #'
 #' @param x An {R} object. Currently there are methods for numeric vectors
 #' @param na.rm a logical value indicating whether \code{NA} values should be stripped before the computation proceeds.
-#' @digits integer indicating the number of decimal places to be used.
+#' @param digits integer indicating the number of decimal places to be used.
 #' @example ./examples/cqv.R
-#' @references Bonett, DG., 2006, Confidence interval for a coefficient of quartile variation, Computational Statistics & Data Analysis, 50(11), 2953-7, \href{https://doi.org/10.1016/j.csda.2005.05.007}{DOI}
+#' @references Bonett, DG., 2006, Confidence interval for a coefficient of quartile variation, Computational Statistics & Data Analysis, 50(11), 2953-7, DOI: \href{https://doi.org/10.1016/j.csda.2005.05.007}{https://doi.org/10.1016/j.csda.2005.05.007}
 #' @export
 cqv <- function(x, na.rm, digits) {
     if (!is.numeric(x)) {
