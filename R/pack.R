@@ -1,3 +1,4 @@
+# this is for testing
 cqv <- function(x, na.rm, digits) {  # coefficient of quartile variation
     if (!is.numeric(x)) {
         stop("argument is not numeric: returning NA")
