@@ -10,11 +10,26 @@
 #' @export
 cqv <- function(x, na.rm, digits) {
     if (!is.numeric(x)) {
-        warning("argument is not numeric: returning NA")
+        stop("argument is not numeric: returning NA")
+        return(NA_real_)
+    }
+    if (!is.vector(x)) {
+        stop("x is not a vector")
         return(NA_real_)
     }
     na.rm = na.rm  # removes NAs if TRUE
     digits = digits  # digits required for rounding
+    a <- round(
+        (length(x)/4) - (1.96 * (((3 * length(x))/16)^(0.5))),
+        digits = 0
+        )
+    b <- round(
+        (length(x)/4) + (1.96 * (((3 * length(x))/16)^(0.5))),
+        digits = 0
+        )
+    c <- length(x) + 1 - b
+    d <- length(x) + 1 - a
+
     q3 <- unname(
         quantile(
             x,
