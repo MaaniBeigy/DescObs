@@ -7,7 +7,7 @@
 cqv(x, na.rm = FALSE, digits = NULL, CI = NULL, ...)
 }
 \arguments{
-\item{x}{An {R} object. Currently there are methods for numeric vectors}
+\item{x}{An \code{R} object. Currently there are methods for numeric vectors}
 
 \item{na.rm}{a logical value indicating whether \code{NA} values should be stripped before the computation proceeds.}
 

@@ -8,7 +8,7 @@
 #' @example ./examples/cqv.R
 #' @references Bonett, DG., 2006, Confidence interval for a coefficient of quartile variation, Computational Statistics & Data Analysis, 50(11), 2953-7, DOI: \href{https://doi.org/10.1016/j.csda.2005.05.007}{https://doi.org/10.1016/j.csda.2005.05.007}
 #' @export
-cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, ...) {  # coefficient of quartile variation
+cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, ...) {
     if (!is.numeric(x)) {
         stop("argument is not numeric: returning NA")
         return(NA_real_)
@@ -73,23 +73,15 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, ...) {  # coefficien
     D <- q3 - q1
     S <- q3 + q1
     v <- (
-        (1/(16 * length(x))) * (
-            (((3/f1square) + (3/f3square) - (2/sqrt(f1square * f3square))) / D^2) +
-                (((3/f1square) + (3/f3square) + (2/sqrt(f1square * f3square))) / S^2) -
-                ((2 * ((3/f3square) - (3/f1square)))/(D*S))
+    (1/(16 * length(x))) * (
+    (((3/f1square) + (3/f3square) - (2/sqrt(f1square * f3square))) / D^2) +
+    (((3/f1square) + (3/f3square) + (2/sqrt(f1square * f3square))) / S^2) -
+    ((2 * ((3/f3square) - (3/f1square)))/(D*S))
         )
     )
     ccc <- length(x)/(length(x) - 1)
-    upper.tile <- exp(((ln((D/S))*ccc)) + (zzz*(v^(0.5))))
-    lower.tile <- exp(((ln((D/S))*ccc)) - (zzz*(v^(0.5))))
-    cqv <- round(
-        100 * ((q3 - q1)/(q3 + q1)), digits = digits
-    )  # coefficient of quartile variation (CQV)
-    CI95 <- paste0(
-        round(lower.tile * 100, digits = digits),
-        "-",
-        round(upper.tile * 100, digits = digits)
-    )
+    upper.tile <- exp(((ln((D/S)) * ccc)) + (zzz * (v^(0.5))))
+    lower.tile <- exp(((ln((D/S)) * ccc)) - (zzz * (v^(0.5))))
     boot.cqv <- boot(
         x,
         function(x, i) {
@@ -104,7 +96,40 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, ...) {  # coefficien
         R = 1000
     )
     boot.cqv.ci <- boot.ci(boot.cqv, conf = 0.95, type = "bca")
-
+    if (is.null(CI)) {
+        cqv <- round(
+            100 * ((q3 - q1)/(q3 + q1)), digits = digits
+        )
+    } else if (CI == "Bonett") {
+        cqv <- round(
+            100 * ((q3 - q1)/(q3 + q1)), digits = digits
+        )
+    } else if (CI == "bca") {
+        cqv <- (
+            boot.cqv.ci$bca[2]
+        )
+    } else {
+        cqv <- round(
+            100 * ((q3 - q1)/(q3 + q1)), digits = digits
+        )
+    }
+    if (is.null(CI)) {
+        CI95 <- NA
+    } else if (CI == "Bonett") {
+        CI95 <- paste0(
+            round(lower.tile * 100, digits = digits),
+            "-",
+            round(upper.tile * 100, digits = digits)
+        )
+    } else if (CI == "bca") {
+        CI95 <- paste0(
+            round(boot.cqv.ci$bca[4], digits = digits),
+            "-",
+            round(boot.cqv.ci$bca[5], digits = digits)
+        )
+    } else {
+        CI95 <- NA
+    }
     if (is.null(CI)) {
         results <- c(cqv)
         names <- c("cqv")
@@ -114,9 +139,12 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, ...) {  # coefficien
         names <- c("cqv", "Bonett's CI95%")
         dim <- c(1, 2)
     } else if (CI == "bca") {
-        results <- c(boot.cqv.ci$bca[2], boot.cqv.ci$bca[4], boot.cqv.ci$bca[5])
-        names <- c("cqv", " ", "adjusted bootstrap percentile (BCa)")
-        dim <- c(1, 3)
+        results <- c(cqv, CI95)
+        names <- c("cqv", "adjusted bootstrap percentile (BCa)")
+        dim <- c(1, 2)
+    } else {
+        stop("method for confidence interval is not available")
+        return(NA_real_)
     }
 
     return(
