@@ -3,7 +3,7 @@ x <- c(
     0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
     4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
 )
-cqv <- function(x, na.rm, digits) {  # coefficient of quartile variation
+cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, ...) {  # coefficient of quartile variation
     if (!is.numeric(x)) {
         stop("argument is not numeric: returning NA")
         return(NA_real_)
@@ -12,10 +12,17 @@ cqv <- function(x, na.rm, digits) {  # coefficient of quartile variation
         stop("x is not a vector")
         return(NA_real_)
     }
+
     library(dplyr)
     library(SciViews)
     na.rm = na.rm  # removes NAs if TRUE
+    if (is.null(digits)) {
+        digits = 4
+    }
     digits = digits  # digits required for rounding
+    CI = CI  # returns 95% confidence interval if TRUE
+
+
     q3 <- unname(
         quantile(
             x,
@@ -77,13 +84,26 @@ cqv <- function(x, na.rm, digits) {  # coefficient of quartile variation
         "-",
         round(upper.tile*100, digits = digits)
         )
+    if (CI == FALSE || is.null(CI)) {
+        results = c(cqv)
+        names = c("cqv")
+        dim = c(1, 1)
+    } else if (CI == TRUE) {
+        results = c(cqv, CI95)
+        names = c("cqv", "CI95%")
+        dim = c(1, 2)
+    }
+
     return(
         structure(
-            .Data = c(cqv, CI95),
-            "dim" = c(1, 2),
-            "dimnames" = list(c(" "), c("cqv", "CI95%"))
+            .Data = results,
+            "dim" = dim,
+            "dimnames" = list(c(" "), names)
         )
     )
 }
+cqv(x = x, na.rm = TRUE, digits = 2, CI = FALSE)
+cqv(x = x, na.rm = TRUE, digits = 2, CI = TRUE)
 cqv(x = x, na.rm = TRUE, digits = 2)
-
+cqv(x = x, na.rm = TRUE)
+cqv(x = x)
