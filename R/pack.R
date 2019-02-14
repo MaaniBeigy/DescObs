@@ -1,4 +1,8 @@
 # this is for testing
+x <- c(
+    0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
+    4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
+)
 cqv <- function(x, na.rm, digits) {  # coefficient of quartile variation
     if (!is.numeric(x)) {
         stop("argument is not numeric: returning NA")
@@ -10,8 +14,8 @@ cqv <- function(x, na.rm, digits) {  # coefficient of quartile variation
     }
     library(dplyr)
     library(SciViews)
-    na.rm = TRUE  # removes NAs if TRUE
-    digits = 2  # digits required for rounding
+    na.rm = na.rm  # removes NAs if TRUE
+    digits = digits  # digits required for rounding
     q3 <- unname(
         quantile(
             x,
@@ -50,7 +54,7 @@ cqv <- function(x, na.rm, digits) {  # coefficient of quartile variation
             )
         alphastar <- 1 - sum(star[i])
     }
-    zzz <- qnorm((1 - (alphastar/2)))
+    zzz <- qnorm((1 - ((1 - alphastar)/2)))
     f1square <- (3 * (zzz)^2)/(4 * length(x) * ((Yb - Ya)^2))
     f3square <- (3 * (zzz)^2)/(4 * length(x) * ((Yd - Yc)^2))
     D <- q3 - q1
@@ -59,23 +63,27 @@ cqv <- function(x, na.rm, digits) {  # coefficient of quartile variation
         (1/(16 * length(x))) * (
         (((3/f1square) + (3/f3square) - (2/sqrt(f1square * f3square))) / D^2) +
         (((3/f1square) + (3/f3square) + (2/sqrt(f1square * f3square))) / S^2) -
-        (2 * ((3/f3square) - (3/f1square)))/(D*S)
+        ((2 * ((3/f3square) - (3/f1square)))/(D*S))
        )
     )
     ccc <- length(x)/(length(x) - 1)
-    upper.tile <- exp((ln(D/S)*ccc)) + (((zzz)^v)^(0.5))
-    cqv <- 100*(
-        (q3 - q1)/(q3 + q1)
-    )  # coefficient of quartile variation (CQV)
+    upper.tile <- exp(((ln((D/S))*ccc)) + (zzz*(v^(0.5))))
+    lower.tile <- exp(((ln((D/S))*ccc)) - (zzz*(v^(0.5))))
+    cqv <- round(
+        100*((q3 - q1)/(q3 + q1)), digits = digits
+        )  # coefficient of quartile variation (CQV)
+    CI95 <- paste0(
+        round(lower.tile*100, digits = digits),
+        "-",
+        round(upper.tile*100, digits = digits)
+        )
     return(
-        round(  # round output
-            cqv,
-            digits = digits
+        structure(
+            .Data = c(cqv, CI95),
+            "dim" = c(1, 2),
+            "dimnames" = list(c(" "), c("cqv", "CI95%"))
         )
     )
 }
+cqv(x = x, na.rm = TRUE, digits = 2)
 
-x <- c(
-    0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
-    4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
-)
