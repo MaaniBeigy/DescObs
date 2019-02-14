@@ -1,6 +1,6 @@
 Package: DescObs
 Type: Package
-Title: Extract and Visualize the Results of Descriptive Data Exploration
+Title: Versatile Exploration of Data
 Version: 0.1.0
 Author: Maani Beigy
 Maintainer: Maani Beigy <manibeygi@gmail.com>

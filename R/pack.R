@@ -15,6 +15,7 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, ...) {  # coefficien
 
     library(dplyr)
     library(SciViews)
+    library(boot)
     na.rm = na.rm  # removes NAs if TRUE
     if (is.null(digits)) {
         digits = 4
@@ -77,21 +78,40 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, ...) {  # coefficien
     upper.tile <- exp(((ln((D/S))*ccc)) + (zzz*(v^(0.5))))
     lower.tile <- exp(((ln((D/S))*ccc)) - (zzz*(v^(0.5))))
     cqv <- round(
-        100*((q3 - q1)/(q3 + q1)), digits = digits
+        100 * ((q3 - q1)/(q3 + q1)), digits = digits
         )  # coefficient of quartile variation (CQV)
     CI95 <- paste0(
-        round(lower.tile*100, digits = digits),
+        round(lower.tile * 100, digits = digits),
         "-",
-        round(upper.tile*100, digits = digits)
+        round(upper.tile * 100, digits = digits)
         )
+    boot.cqv <- boot(
+        x,
+        function(x, i) {
+            round(((
+    unname(quantile(x[i], probs = 0.75, na.rm = na.rm)) -
+        unname(quantile(x[i], probs = 0.25, na.rm = na.rm))
+             ) / (
+    unname(quantile(x[i], probs = 0.75, na.rm = na.rm)) +
+        unname(quantile(x[i], probs = 0.25, na.rm = na.rm))
+             )) * 100, digits = digits)
+        },
+        R = 1000
+    )
+    boot.cqv.ci <- boot.ci(boot.cqv, conf = 0.95, type = "bca")
+
     if (CI == FALSE || is.null(CI)) {
         results = c(cqv)
         names = c("cqv")
         dim = c(1, 1)
-    } else if (CI == TRUE) {
+    } else if (CI == "Bonett") {
         results = c(cqv, CI95)
-        names = c("cqv", "CI95%")
+        names = c("cqv", "Bonett's CI95%")
         dim = c(1, 2)
+    } else if (CI == "bca") {
+        results = c(boot.cqv.ci$bca[2], boot.cqv.ci$bca[4], boot.cqv.ci$bca[5])
+        names = c("cqv", "", "adjusted bootstrap percentile (BCa)")
+        dim = c(1, 3)
     }
 
     return(
@@ -102,8 +122,9 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, ...) {  # coefficien
         )
     )
 }
-cqv(x = x, na.rm = TRUE, digits = 2, CI = FALSE)
-cqv(x = x, na.rm = TRUE, digits = 2, CI = TRUE)
+
 cqv(x = x, na.rm = TRUE, digits = 2)
 cqv(x = x, na.rm = TRUE)
+cqv(x = x, na.rm = TRUE, digits = 2, CI = "Bonett")
+cqv(x = x, na.rm = TRUE, digits = 2, CI = "bca")
 cqv(x = x)

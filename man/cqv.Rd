@@ -4,7 +4,7 @@
 \alias{cqv}
 \title{Coefficient of Quartile Variation (CQV)}
 \usage{
-cqv(x, na.rm, digits)
+cqv(x, na.rm = FALSE, digits = NULL, CI = NULL, ...)
 }
 \arguments{
 \item{x}{An {R} object. Currently there are methods for numeric vectors}
@@ -17,8 +17,14 @@ cqv(x, na.rm, digits)
 Generic function for the coefficient of quartile variation (cqv)
 }
 \examples{
-x <- rnorm(100, mean = 10, sd = 6)
-cqv(x, na.rm = TRUE, digits = 2)
+x <- c(
+    0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
+    4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
+)
+cqv(x, na.rm = TRUE, digits = 2, CI = TRUE)
+# Output
+# cqv     CI95\%
+# "45.62" "24.78-77.33"
 }
 \references{
 Bonett, DG., 2006, Confidence interval for a coefficient of quartile variation, Computational Statistics & Data Analysis, 50(11), 2953-7, DOI: \href{https://doi.org/10.1016/j.csda.2005.05.007}{https://doi.org/10.1016/j.csda.2005.05.007}
