@@ -20,9 +20,9 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
         stop("x is not a vector")
         return(NA_real_)
     }
-    library(dplyr)
-    library(SciViews)
-    library(boot)
+    # library(dplyr)
+    # library(SciViews)
+    # library(boot)
     na.rm = na.rm  # removes NAs if TRUE
     if (is.null(digits)) {
         digits = 4
