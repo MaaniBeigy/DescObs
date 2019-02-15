@@ -1,2 +1,2 @@
 # DescObs
-Tools for Descriptive Statistics in R
+Tools for Versatile Exploration of Data 
