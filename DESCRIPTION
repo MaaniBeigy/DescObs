@@ -9,6 +9,7 @@ Description: Provides some easy-to-use functions to extract and visualize the
     robust statistics, smart scale-rescale transformation, and rigorous 
     descriptions of data considering location, scale, and shape of 
     distributions. 
+Imports: dplyr, SciViews, boot
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
