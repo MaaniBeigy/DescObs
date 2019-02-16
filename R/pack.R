@@ -48,11 +48,13 @@ cqv <- function(x, na.rm, digits) {  # coefficient of quartile variation
         star[i] <- (
             (choose(length(x), i)) * (0.25^(i)) * (0.75^(length(x) - i))
             )
-        alphastar <- 1 - sum(star[i])
+        alphastar <- sum(star[i])
     }
-    zzz <- qnorm((1 - (alphastar/2)))
+    zzz <- qnorm((1 - ((1 - alphastar)/2)))
     f1square <- (3 * (zzz)^2)/(4 * length(x) * ((Yb - Ya)^2))
     f3square <- (3 * (zzz)^2)/(4 * length(x) * ((Yd - Yc)^2))
+    # f1square <- ((Yb - Ya)^2)/((2*zzz)^2)
+    # f3square <- ((Yd - Yc)^2)/((2*zzz)^2)
     D <- q3 - q1
     S <- q3 + q1
     v <- (
@@ -63,7 +65,8 @@ cqv <- function(x, na.rm, digits) {  # coefficient of quartile variation
        )
     )
     ccc <- length(x)/(length(x) - 1)
-    upper.tile <- exp((ln(D/S)*ccc)) + (((zzz)^v)^(0.5))
+    upper.tile <- exp((ln(D/S)*ccc)) + ((zzz)^(v^0.5))
+    lower.tile <- exp((ln(D/S)*ccc)) - ((zzz)^(v^0.5))
     cqv <- 100*(
         (q3 - q1)/(q3 + q1)
     )  # coefficient of quartile variation (CQV)
