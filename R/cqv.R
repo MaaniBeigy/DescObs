@@ -85,19 +85,40 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
     ccc <- length(x)/(length(x) - 1)
     upper.tile <- exp(((ln((D/S)) * ccc)) + (zzz * (v^(0.5))))
     lower.tile <- exp(((ln((D/S)) * ccc)) - (zzz * (v^(0.5))))
-    boot.cqv <- boot(
-        x,
-        function(x, i) {
-            round(((
-                unname(quantile(x[i], probs = 0.75, na.rm = na.rm)) -
-                    unname(quantile(x[i], probs = 0.25, na.rm = na.rm))
-            ) / (
-                unname(quantile(x[i], probs = 0.75, na.rm = na.rm)) +
-                    unname(quantile(x[i], probs = 0.25, na.rm = na.rm))
-            )) * 100, digits = digits)
-        },
-        R = R
-    )
+    if (
+        unname(quantile(x, probs = 0.75, na.rm = na.rm)) != 0
+    ) {
+        boot.cqv <- boot(
+            x,
+            function(x, i) {
+                round(((
+                    unname(quantile(x[i], probs = 0.75, na.rm = na.rm)) -
+                        unname(quantile(x[i], probs = 0.25, na.rm = na.rm))
+                ) / (
+                    unname(quantile(x[i], probs = 0.75, na.rm = na.rm)) +
+                        unname(quantile(x[i], probs = 0.25, na.rm = na.rm))
+                )) * 100, digits = digits)
+            },
+            R = R
+        )
+    } else if (
+        unname(quantile(x, probs = 0.75, na.rm = na.rm)) == 0
+    ) {
+        boot.cqv <- boot(
+            x,
+            function(x, i) {
+                round(((
+                    max(x[i], na.rm = na.rm) -
+                        unname(quantile(x[i], probs = 0.25, na.rm = na.rm))
+                ) / (
+                    max(x[i], na.rm = na.rm) +
+                        unname(quantile(x[i], probs = 0.25, na.rm = na.rm))
+                )) * 100, digits = digits)
+            },
+            R = R
+        )
+    }
+
     if (is.null(CI)) {
         boot.cqv.ci <- NA
     } else if (CI == "Bonett") {
@@ -173,10 +194,10 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
                 method = "cqv = (q3-q1)/(q3+q1)",
                 statistics = data.frame(
                     cqv = cqv
-                    )
                 )
             )
-    } else if (CI == "Bonett") {
+        )
+    } else if (CI == "Bonett" && cqv != 100) {
         return(
             list(
                 method = "cqv with Bonett's 95% CI",
@@ -187,7 +208,7 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
                     )
                 )
             )
-    } else if (CI == "norm") {
+    } else if (CI == "norm" && cqv != 100) {
         return(
             list(
                 method = "cqv with normal approximation 95% CI",
@@ -198,7 +219,7 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
                     )
                 )
             )
-    } else if (CI == "basic") {
+    } else if (CI == "basic" && cqv != 100) {
         return(
             list(
                 method = "cqv with basic bootstrap 95% CI",
@@ -209,7 +230,7 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
                     )
                 )
             )
-    } else if (CI == "perc") {
+    } else if (CI == "perc" && cqv != 100) {
         return(
             list(
                 method = "cqv with bootstrap percentile 95% CI",
@@ -220,7 +241,7 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
                     )
                 )
             )
-    } else if (CI == "bca") {
+    } else if (CI == "bca" && cqv != 100) {
         return(
             list(
                 method = "cqv with adjusted bootstrap percentile (BCa) 95% CI",
@@ -231,7 +252,24 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
                     )
                 )
             )
-    } else if (CI == "all") {
+    } else if (
+        (
+    CI == "norm" | CI == "Bonett" | CI == "basic" | CI == "perc" |
+    CI == "bca" | CI == "all"
+    ) && cqv == 100
+        ) {
+        warning("All values of t are equal to  100; Cannot calculate confidence intervals")
+        return(
+            list(
+                method = "cqv with Bonett's 95% CI",
+                statistics = data.frame(
+                    cqv = cqv,
+                    lower = round(lower.tile * 100, digits = digits),
+                    upper = round(upper.tile * 100, digits = digits)
+                )
+            )
+        )
+    } else if (CI == "all" && cqv != 100) {
         return(
             list(
                 method = "All Bootstrap methods",
