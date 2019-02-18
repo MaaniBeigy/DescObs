@@ -487,3 +487,11 @@ cqv(x = x)
 # )
 
 # boot.cqv.ci <- boot.ci(boot.cqv, conf = 0.95, type = "basic")
+# df1 <- read.csv(
+#     file = paste0(dir, "\\tmp\\checkmerged2.csv"),
+#     encoding = "UTF-8",
+#     sep = "|",
+#     header = TRUE
+# )
+# cqv(x = df1$psychadm, na.rm = TRUE, digits = 2, CI = "Bonett", R = 1000)
+
