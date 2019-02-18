@@ -5,7 +5,7 @@
 #' @param x An \code{R} object. Currently there are methods for numeric vectors
 #' @param na.rm a logical value indicating whether \code{NA} values should be stripped before the computation proceeds.
 #' @param digits integer indicating the number of decimal places to be used.
-#' @param CI a scalar representing the type of confidence intervals required. The value should be any of the values "Bonett", "norm","basic", "perc", or "bca".
+#' @param CI a scalar representing the type of confidence intervals required. The value should be any of the values "Bonett", "norm","basic", "perc", "bca" or "all".
 #' @param R integer indicating the number of bootstrap replicates.
 #' @details \code{\deqn{ cqv = (q3-q1)/(q3 + q1) , } } where \eqn{q3} and \eqn{q1} are third quartile (\emph{i.e.,} 75th percentile) and first quartile (\emph{i.e.,} 25th percentile), respectively.
 #' @example ./examples/cqv.R
@@ -103,15 +103,18 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
     } else if (CI == "Bonett") {
         boot.cqv.ci <- NA
     } else if (CI == "norm") {
-        boot.cqv.ci <- boot.ci(boot.cqv, conf = 0.95, type = "norm")
+        boot.norm.ci <- boot.ci(boot.cqv, conf = 0.95, type = "norm")
     } else if (CI == "basic") {
-        boot.cqv.ci <- boot.ci(boot.cqv, conf = 0.95, type = "basic")
-    } else if (CI == "stud") {
-        boot.cqv.ci <- boot.ci(boot.cqv, conf = 0.95, type = "stud")
+        boot.basic.ci <- boot.ci(boot.cqv, conf = 0.95, type = "basic")
     } else if (CI == "perc") {
-        boot.cqv.ci <- boot.ci(boot.cqv, conf = 0.95, type = "perc")
+        boot.perc.ci <- boot.ci(boot.cqv, conf = 0.95, type = "perc")
     } else if (CI == "bca") {
-        boot.cqv.ci <- boot.ci(boot.cqv, conf = 0.95, type = "bca")
+        boot.bca.ci <- boot.ci(boot.cqv, conf = 0.95, type = "bca")
+    } else if (CI == "all") {
+        boot.norm.ci <- boot.ci(boot.cqv, conf = 0.95, type = "norm")
+        boot.basic.ci <- boot.ci(boot.cqv, conf = 0.95, type = "basic")
+        boot.perc.ci <- boot.ci(boot.cqv, conf = 0.95, type = "perc")
+        boot.bca.ci <- boot.ci(boot.cqv, conf = 0.95, type = "bca")
     }
 
     if (is.null(CI)) {
@@ -135,6 +138,10 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
             100 * ((q3 - q1)/(q3 + q1)), digits = digits
         )
     } else if (CI == "bca") {
+        cqv <- round(
+            100 * ((q3 - q1)/(q3 + q1)), digits = digits
+        )
+    } else if (CI == "all") {
         cqv <- round(
             100 * ((q3 - q1)/(q3 + q1)), digits = digits
         )
@@ -147,17 +154,17 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
         lower <- round(lower.tile * 100, digits = digits)
         upper <- round(upper.tile * 100, digits = digits)
     } else if (CI == "norm") {
-        lower <- round(boot.cqv.ci$normal[2], digits = digits)
-        upper <- round(boot.cqv.ci$normal[3], digits = digits)
+        lower <- round(boot.norm.ci$normal[2], digits = digits)
+        upper <- round(boot.norm.ci$normal[3], digits = digits)
     } else if (CI == "basic") {
-        lower <- round(boot.cqv.ci$basic[4], digits = digits)
-        upper <- round(boot.cqv.ci$basic[5], digits = digits)
+        lower <- round(boot.basic.ci$basic[4], digits = digits)
+        upper <- round(boot.basic.ci$basic[5], digits = digits)
     } else if (CI == "perc") {
-        lower <- round(boot.cqv.ci$percent[4], digits = digits)
-        upper <- round(boot.cqv.ci$percent[5], digits = digits)
+        lower <- round(boot.perc.ci$percent[4], digits = digits)
+        upper <- round(boot.perc.ci$percent[5], digits = digits)
     } else if (CI == "bca") {
-        lower <- round(boot.cqv.ci$bca[4], digits = digits)
-        upper <- round(boot.cqv.ci$bca[5], digits = digits)
+        lower <- round(boot.bca.ci$bca[4], digits = digits)
+        upper <- round(boot.bca.ci$bca[5], digits = digits)
     }
 
     if (is.null(CI)) {
@@ -221,6 +228,36 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
                     cqv = cqv,
                     lower = lower,
                     upper = upper
+                    )
+                )
+            )
+    } else if (CI == "all") {
+        return(
+            list(
+                method = "All Bootstrap methods",
+                statistics = data.frame(
+                    row.names = c(
+                        "cqv with Bonett's 95% CI",
+                        "cqv with normal approximation 95% CI",
+                        "cqv with basic bootstrap 95% CI",
+                        "cqv with bootstrap percentile 95% CI",
+                        "cqv with adjusted bootstrap percentile (BCa) 95% CI"
+                    ),
+                    cqv = c(cqv, cqv, cqv, cqv, cqv),
+                    lower = c(
+                        round(lower.tile * 100, digits = digits),
+                        round(boot.norm.ci$normal[2], digits = digits),
+                        round(boot.basic.ci$basic[4], digits = digits),
+                        round(boot.perc.ci$percent[4], digits = digits),
+                        round(boot.bca.ci$bca[4], digits = digits)
+                    ),
+                    upper = c(
+                        round(upper.tile * 100, digits = digits),
+                        round(boot.norm.ci$normal[3], digits = digits),
+                        round(boot.basic.ci$basic[5], digits = digits),
+                        round(boot.perc.ci$percent[5], digits = digits),
+                        round(boot.bca.ci$bca[5], digits = digits)
+                        )
                     )
                 )
             )
