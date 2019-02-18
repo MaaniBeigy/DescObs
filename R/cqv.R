@@ -48,7 +48,7 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
         )
     )
     if (q3 == 0) {  # to avoid NaNs when q3 and q1 are zero
-        q3 <- max(x)
+        q3 <- max(x, na.rm = na.rm)
     }
     a <- ceiling(
         (length(x)/4) - (1.96 * (((3 * length(x))/16)^(0.5)))
@@ -68,7 +68,7 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
         star[i] <- (
             (choose(length(x), i)) * (0.25^(i)) * (0.75^(length(x) - i))
         )
-        alphastar <- 1 - sum(star[i])
+        alphastar <- 1 - sum(star[i], na.rm = na.rm)
     }
     zzz <- qnorm((1 - ((1 - alphastar)/2)))
     f1square <- (3 * (zzz)^2)/(4 * length(x) * ((Yb - Ya)^2))
