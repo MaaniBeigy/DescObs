@@ -1,16 +1,39 @@
-#' Coefficient of Quartile Variation (CQV)
-#'
-#' Generic function for the coefficient of quartile variation (cqv)
-#'
+#' @title Coefficient of Quartile Variation (CQV)
+#' @name cqv
+#' @description Generic function for the coefficient of quartile variation (cqv)
 #' @param x An \code{R} object. Currently there are methods for numeric vectors
-#' @param na.rm a logical value indicating whether \code{NA} values should be stripped before the computation proceeds.
+#' @param na.rm a logical value indicating whether \code{NA} values should be
+#'              stripped before the computation proceeds.
 #' @param digits integer indicating the number of decimal places to be used.
-#' @param CI a scalar representing the type of confidence intervals required. The value should be any of the values "Bonett", "norm","basic", "perc", "bca" or "all".
+#' @param CI a scalar representing the type of confidence intervals required.
+#'           The value should be any of the values "Bonett", "norm","basic", "
+#'           perc", "bca" or "all".
 #' @param R integer indicating the number of bootstrap replicates.
-#' @details \code{\deqn{ cqv = (q3-q1)/(q3 + q1) , } } where \eqn{q3} and \eqn{q1} are third quartile (\emph{i.e.,} 75th percentile) and first quartile (\emph{i.e.,} 25th percentile), respectively.
+#' @details \describe{
+#'         \item{\strong{Coefficient of Quartile Variation}}{
+#'         \code{\deqn{ cqv = ((q3-q1)/(q3 + q1))*100 , } } where \eqn{q3}
+#'         and \eqn{q1} are third quartile (\emph{i.e.,} 75th percentile) and
+#'         first quartile (\emph{i.e.,} 25th percentile), respectively.
+#'         The \emph{cqv} is a measure of relative dispersion that is based on
+#'         interquartile range \emph{(iqr)}. Since \eqn{cqv} is unitless, it
+#'         is useful for comparison of variables with different units. It is
+#'         also a measure of homogeneity [1, 2].
+#'         }
+#'         }
+#' @return An object of type "list" which contains the cqv, the
+#'         intervals, and the computation method. It has these components:
+#' @return \describe{
+#'        \item{$method}{
+#'        A description of statistical method used for the computations.
+#'        }
+#'        \item{$statistics}{
+#'        A data frame representing three vectors: cqv, lower and upper limits
+#'        of 95\% confidence interval \code{(CI)}.
+#'        }
+#'        }
 #' @example ./examples/cqv.R
-#' @references Bonett, DG., 2006, Confidence interval for a coefficient of quartile variation, Computational Statistics & Data Analysis, 50(11), 2953-7, DOI: \href{https://doi.org/10.1016/j.csda.2005.05.007}{https://doi.org/10.1016/j.csda.2005.05.007}
-#' @references Altunkaynak, B., Gamgam, H., 2018, Bootstrap confidence intervals for the coefficient of quartile variation, Simulation and Computation, 1-9, DOI: \href{https://doi.org/10.1080/03610918.2018.1435800}{https://doi.org/10.1080/03610918.2018.1435800}
+#' @references [1] Bonett, DG., 2006, Confidence interval for a coefficient of quartile variation, Computational Statistics & Data Analysis, 50(11), 2953-7, DOI: \href{https://doi.org/10.1016/j.csda.2005.05.007}{https://doi.org/10.1016/j.csda.2005.05.007}
+#' @references [2] Altunkaynak, B., Gamgam, H., 2018, Bootstrap confidence intervals for the coefficient of quartile variation, Simulation and Computation, 1-9, DOI: \href{https://doi.org/10.1080/03610918.2018.1435800}{https://doi.org/10.1080/03610918.2018.1435800}
 #' @export
 cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
     if (!is.numeric(x)) {
@@ -21,9 +44,6 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
         stop("x is not a vector")
         return(NA_real_)
     }
-    # library(dplyr)
-    # library(SciViews)
-    # library(boot)
     na.rm = na.rm  # removes NAs if TRUE
     if (is.null(digits)) {
         digits = 4
@@ -59,10 +79,10 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
     )
     c <- length(x) + 1 - b
     d <- length(x) + 1 - a
-    Ya <- nth(x, a, order_by = x)
-    Yb <- nth(x, b, order_by = x)
-    Yc <- nth(x, c, order_by = x)
-    Yd <- nth(x, d, order_by = x)
+    Ya <- dplyr::nth(x, a, order_by = x)
+    Yb <- dplyr::nth(x, b, order_by = x)
+    Yc <- dplyr::nth(x, c, order_by = x)
+    Yd <- dplyr::nth(x, d, order_by = x)
     star <- 0
     for (i in a:(b - 1)) {
         star[i] <- (
@@ -83,12 +103,12 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
         )
     )
     ccc <- length(x)/(length(x) - 1)
-    upper.tile <- exp(((ln((D/S)) * ccc)) + (zzz * (v^(0.5))))
-    lower.tile <- exp(((ln((D/S)) * ccc)) - (zzz * (v^(0.5))))
+    upper.tile <- exp(((SciViews::ln((D/S)) * ccc)) + (zzz * (v^(0.5))))
+    lower.tile <- exp(((SciViews::ln((D/S)) * ccc)) - (zzz * (v^(0.5))))
     if (
         unname(quantile(x, probs = 0.75, na.rm = na.rm)) != 0
     ) {
-        boot.cqv <- boot(
+        boot.cqv <- boot::boot(
             x,
             function(x, i) {
                 round(((
@@ -104,7 +124,7 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
     } else if (
         unname(quantile(x, probs = 0.75, na.rm = na.rm)) == 0
     ) {
-        boot.cqv <- boot(
+        boot.cqv <- boot::boot(
             x,
             function(x, i) {
                 round(((
@@ -124,18 +144,18 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
     } else if (CI == "Bonett") {
         boot.cqv.ci <- NA
     } else if (CI == "norm") {
-        boot.norm.ci <- boot.ci(boot.cqv, conf = 0.95, type = "norm")
+        boot.norm.ci <- boot::boot.ci(boot.cqv, conf = 0.95, type = "norm")
     } else if (CI == "basic") {
-        boot.basic.ci <- boot.ci(boot.cqv, conf = 0.95, type = "basic")
+        boot.basic.ci <- boot::boot.ci(boot.cqv, conf = 0.95, type = "basic")
     } else if (CI == "perc") {
-        boot.perc.ci <- boot.ci(boot.cqv, conf = 0.95, type = "perc")
+        boot.perc.ci <- boot::boot.ci(boot.cqv, conf = 0.95, type = "perc")
     } else if (CI == "bca") {
-        boot.bca.ci <- boot.ci(boot.cqv, conf = 0.95, type = "bca")
+        boot.bca.ci <- boot::boot.ci(boot.cqv, conf = 0.95, type = "bca")
     } else if (CI == "all") {
-        boot.norm.ci <- boot.ci(boot.cqv, conf = 0.95, type = "norm")
-        boot.basic.ci <- boot.ci(boot.cqv, conf = 0.95, type = "basic")
-        boot.perc.ci <- boot.ci(boot.cqv, conf = 0.95, type = "perc")
-        boot.bca.ci <- boot.ci(boot.cqv, conf = 0.95, type = "bca")
+        boot.norm.ci <- boot::boot.ci(boot.cqv, conf = 0.95, type = "norm")
+        boot.basic.ci <- boot::boot.ci(boot.cqv, conf = 0.95, type = "basic")
+        boot.perc.ci <- boot::boot.ci(boot.cqv, conf = 0.95, type = "perc")
+        boot.bca.ci <- boot::boot.ci(boot.cqv, conf = 0.95, type = "bca")
     }
 
     if (is.null(CI)) {
