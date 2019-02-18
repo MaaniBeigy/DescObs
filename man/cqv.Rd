@@ -4,22 +4,57 @@
 \alias{cqv}
 \title{Coefficient of Quartile Variation (CQV)}
 \usage{
-cqv(x, na.rm, digits)
+cqv(x, na.rm = FALSE, digits = NULL, CI = NULL, ...)
 }
 \arguments{
-\item{x}{An {R} object. Currently there are methods for numeric vectors}
+\item{x}{An \code{R} object. Currently there are methods for numeric vectors}
 
 \item{na.rm}{a logical value indicating whether \code{NA} values should be stripped before the computation proceeds.}
 
 \item{digits}{integer indicating the number of decimal places to be used.}
+
+\item{CI}{a scalar representing the type of confidence intervals required. The value should be any of the values "Bonett", "norm","basic", "perc", or "bca".}
+
+\item{R}{integer indicating the number of bootstrap replicates.}
 }
 \description{
 Generic function for the coefficient of quartile variation (cqv)
 }
+\details{
+\code{\deqn{ cqv = (q3-q1)/(q3 + q1) , } } where \eqn{q3} and \eqn{q1} are third quartile (\emph{i.e.,} 75th percentile) and first quartile (\emph{i.e.,} 25th percentile), respectively.
+}
 \examples{
-x <- rnorm(100, mean = 10, sd = 6)
+x <- c(
+    0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
+    4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
+)
+cqv(x)
+cqv(x, na.rm = TRUE)
+# cqv
+# 45.625
 cqv(x, na.rm = TRUE, digits = 2)
+# cqv
+# 45.62
+cqv(x, na.rm = TRUE, digits = 2, CI = "Bonett")
+# cqv     Bonett's 95\% CI
+#   "45.62" "24.78-77.33"
+cqv(x, na.rm = TRUE, digits = 2, CI = "norm")
+# cqv     normal approximation 95\% CI
+# "45.62" "19.95-71.04"
+cqv(x, na.rm = TRUE, digits = 2, CI = "basic")
+# cqv     basic bootstrap 95\% CI
+# "45.62" "19.5-73.37"
+cqv(x, na.rm = TRUE, digits = 2, CI = "perc")
+# cqv     bootstrap percentile 95\% CI
+# "45.62" "16.22-68.68"
+cqv(x, na.rm = TRUE, digits = 2, CI = "bca")
+# cqv     adjusted bootstrap percentile (BCa) 95\% CI
+# "41.74" "23.69-80.39"
+
+
 }
 \references{
 Bonett, DG., 2006, Confidence interval for a coefficient of quartile variation, Computational Statistics & Data Analysis, 50(11), 2953-7, DOI: \href{https://doi.org/10.1016/j.csda.2005.05.007}{https://doi.org/10.1016/j.csda.2005.05.007}
+
+Altunkaynak, B., Gamgam, H., 2018, Bootstrap confidence intervals for the coefficient of quartile variation, Simulation and Computation, 1-9, DOI: \href{https://doi.org/10.1080/03610918.2018.1435800}{https://doi.org/10.1080/03610918.2018.1435800}
 }
