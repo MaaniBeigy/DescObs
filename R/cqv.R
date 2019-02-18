@@ -135,8 +135,8 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
             100 * ((q3 - q1)/(q3 + q1)), digits = digits
         )
     } else if (CI == "bca") {
-        cqv <- (
-            boot.cqv.ci$bca[2]
+        cqv <- round(
+            100 * ((q3 - q1)/(q3 + q1)), digits = digits
         )
     }
 
