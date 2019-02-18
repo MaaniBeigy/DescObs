@@ -1,6 +1,6 @@
 Package: DescObs
 Type: Package
-Title: Extract and Visualize the Results of Descriptive Data Exploration
+Title: Versatile Exploration of Data
 Version: 0.1.0
 Author: Maani Beigy
 Maintainer: Maani Beigy <manibeygi@gmail.com>
@@ -9,6 +9,7 @@ Description: Provides some easy-to-use functions to extract and visualize the
     robust statistics, smart scale-rescale transformation, and rigorous 
     descriptions of data considering location, scale, and shape of 
     distributions. 
+Imports: dplyr, SciViews, boot
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
