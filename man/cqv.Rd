@@ -13,7 +13,7 @@ cqv(x, na.rm = FALSE, digits = NULL, CI = NULL, ...)
 
 \item{digits}{integer indicating the number of decimal places to be used.}
 
-\item{CI}{a scalar representing the type of confidence intervals required. The value should be any of the values "Bonett", "norm","basic", "perc", or "bca".}
+\item{CI}{a scalar representing the type of confidence intervals required. The value should be any of the values "Bonett", "norm","basic", "perc", "bca" or "all".}
 
 \item{R}{integer indicating the number of bootstrap replicates.}
 }
