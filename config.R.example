@@ -1,0 +1,5 @@
+# Windows
+## dir <- "D:\\Maani Beigy\\RASAD\\rprojects\\DescObs"
+# Linux
+## dir <- "/home/maanib/Documents/rprojects/DescObs"
+setwd(dir)
