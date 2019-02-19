@@ -112,6 +112,9 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
         )
     )
     if (q3 == 0) {  # to avoid NaNs when q3 and q1 are zero
+        warning(
+            "cqv is NaN because q3 and q1 are 0, max was used instead of q3"
+            )
         q3 <- max(x, na.rm = na.rm)
     }
     a <- ceiling(
@@ -141,9 +144,9 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
     S <- q3 + q1
     v <- (
         (1/(16 * length(x))) * (
-            (((3/f1square) + (3/f3square) - (2/sqrt(f1square * f3square))) / D^2) +
-                (((3/f1square) + (3/f3square) + (2/sqrt(f1square * f3square))) / S^2) -
-                ((2 * ((3/f3square) - (3/f1square)))/(D*S))
+        (((3/f1square) + (3/f3square) - (2/sqrt(f1square * f3square))) / D^2) +
+        (((3/f1square) + (3/f3square) + (2/sqrt(f1square * f3square))) / S^2) -
+        ((2 * ((3/f3square) - (3/f1square)))/(D*S))
         )
     )
     ccc <- length(x)/(length(x) - 1)
