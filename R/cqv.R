@@ -74,6 +74,9 @@
 #'                 ISBN 0-521-57391-2
 #' @export
 cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
+    # require(dplyr)
+    # require(SciViews)
+    # require(boot)
     if (!is.numeric(x)) {
         stop("argument is not numeric: returning NA")
         return(NA_real_)
@@ -260,7 +263,7 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
             list(
                 method = "cqv with Bonett's 95% CI",
                 statistics = data.frame(
-                    cqv = cqv,
+                    est = cqv,
                     lower = lower,
                     upper = upper
                     )
@@ -271,7 +274,7 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
             list(
                 method = "cqv with normal approximation 95% CI",
                 statistics = data.frame(
-                    cqv = cqv,
+                    est = cqv,
                     lower = lower,
                     upper = upper
                     )
@@ -282,7 +285,7 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
             list(
                 method = "cqv with basic bootstrap 95% CI",
                 statistics = data.frame(
-                    cqv = cqv,
+                    est = cqv,
                     lower = lower,
                     upper = upper
                     )
@@ -293,7 +296,7 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
             list(
                 method = "cqv with bootstrap percentile 95% CI",
                 statistics = data.frame(
-                    cqv = cqv,
+                    est = cqv,
                     lower = lower,
                     upper = upper
                     )
@@ -304,7 +307,7 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
             list(
                 method = "cqv with adjusted bootstrap percentile (BCa) 95% CI",
                 statistics = data.frame(
-                    cqv = cqv,
+                    est = cqv,
                     lower = lower,
                     upper = upper
                     )
@@ -321,7 +324,7 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
             list(
                 method = "cqv with Bonett's 95% CI",
                 statistics = data.frame(
-                    cqv = cqv,
+                    est = cqv,
                     lower = round(lower.tile * 100, digits = digits),
                     upper = round(upper.tile * 100, digits = digits)
                 )
@@ -339,7 +342,7 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
                         "cqv with bootstrap percentile 95% CI",
                         "cqv with adjusted bootstrap percentile (BCa) 95% CI"
                     ),
-                    cqv = c(cqv, cqv, cqv, cqv, cqv),
+                    est = c(cqv, cqv, cqv, cqv, cqv),
                     lower = c(
                         round(lower.tile * 100, digits = digits),
                         round(boot.norm.ci$normal[2], digits = digits),
