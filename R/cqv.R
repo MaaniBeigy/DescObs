@@ -34,11 +34,11 @@
 #'        \code{\deqn{((q3-q1)/(q3 + q1))*100}}
 #'        }
 #'        \strong{Bonett's 95\% CI:}{
-#'        \code{\deqn{  exp{ln(D/S)C ± (z(1−α/2) * sqrt(v))}, }}
-#'        where \eqn{C = n/(n − 1)} is a centering adjustment which helps to
+#'        \code{\deqn{  exp{ln(D/S)C +/- (z(1 - alpha/2) * sqrt(v))}, }}
+#'        where \eqn{C = n/(n - 1)} is a centering adjustment which helps to
 #'        equalize the tail error probabilities. For this confidence interval,
-#'        \eqn{D = q3 - q1} and \eqn{S = q3 + q1}; \eqn{z(1−α/2)} is the \eqn{
-#'        1 − α/2} quantile of the standard normal distribution [1, 2].
+#'        \eqn{D = q3 - q1} and \eqn{S = q3 + q1}; \eqn{z(1 - alpha/2)} is the
+#'        \eqn{1 - alpha/2} quantile of the standard normal distribution [1, 2].
 #'        }
 #'        \cr \cr
 #'        \strong{Normal approximation 95\% CI:}{
