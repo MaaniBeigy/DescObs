@@ -11,8 +11,8 @@ Despite the growing body of these packages and repositories which have been
 quite useful for scientists, the redundancy and multiplicity of these packages
 make it sometimes very difficult to choose between them. Morover, adding 
 methods and features to those functions are not feasible due to noncompliance 
-of some packages with the well-known conventions of functional and/or OO
-programming. 
+of some packages with the well-known conventions of *functional and/or OO
+programming*. 
 ## Aims
 The authors' intention is to create a toolbox to facilitate the use of various 
 descriptive statistical functions and resources in favor of an easier, 
