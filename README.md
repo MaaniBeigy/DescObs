@@ -8,11 +8,13 @@ We do not want just to see, we *observe*!
 ## Background
 There are lots of R packages with statistical functions of particular use cases.
 Despite the growing body of these packages and repositories which have been
-quite useful for scientists, the redundancy and multiplicity of these packages
-make it sometimes very difficult to choose between them. Morover, adding 
-methods and features to those functions are not feasible due to noncompliance 
-of some packages with the well-known conventions of *functional and/or OO
-programming*. 
+quite useful for scientists, the redundancy and multiplicity of them
+make it sometimes very difficult to choose between them. For instance, various
+confidence intervals for a dispersion measure like coefficient of variation or
+coefficient of quartile variation (cqv) is not achievable by a 
+**single function**. Morover, adding methods and features to those functions 
+are not feasible due to noncompliance of some packages with the well-known 
+conventions of *functional and/or OO programming*. 
 
 ## Aims
 The authors' intention is to create a toolbox to facilitate the use of various 
