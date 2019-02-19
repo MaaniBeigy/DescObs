@@ -58,8 +58,27 @@ CoefVar.default <- function(x, unbiased = FALSE, conf.level = NA, na.rm = FALSE,
 
 
     if (!is.na(conf.level)) {
-        ci <- .nctCI(sqrt(n)/res, df = n - 1, conf = conf.level)
+        ci <- .nctCI(sqrt(n)/res, df = n - 1, conf = 0.95)
         res <- c(est = res, low.ci = unname(sqrt(n)/ci["upr.ci"]), upr.ci = unname(sqrt(n)/ci["lwr.ci"]))
+
+        ci <- conf.limits.nct(ncp = sqrt(n)/res, df = n - 1, conf.level = 0.95)
+        res <- c(est = res, low.ci = unname(sqrt(n)/ci$Upper.Limit), upr.ci = unname(sqrt(n)/ci$Lower.Limit))
     }
     return(res)
 }
+
+
+cv(
+    x,
+    na.rm = TRUE,
+    digits = 3,
+    method = "Kelley",
+    unbiased = TRUE,
+    alpha = 0.05)
+cv(
+    df1$Hosp_BOR,
+    na.rm = TRUE,
+    digits = 3,
+    method = "Kelley",
+    unbiased = TRUE,
+    alpha = 0.05)
