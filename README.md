@@ -18,7 +18,7 @@ programming*.
 The authors' intention is to create a toolbox to facilitate the use of various 
 descriptive statistical functions and resources in favor of an easier, 
 scientifically recognized standard for implementing R statistical applications. 
-We will try to provide **multi-control knob tools**, by means of  
+We will try to provide **multi-control knob tools**, by means of 
 **various options**  and incorporating the most available rigorous methods. 
 
 # Getting started
