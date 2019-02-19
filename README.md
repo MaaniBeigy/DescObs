@@ -11,7 +11,7 @@ Despite the growing body of these packages and repositories which have been
 quite useful for scientists, the redundancy and multiplicity of them
 make it sometimes very difficult to choose between them. For instance, various
 confidence intervals for a dispersion measure like coefficient of variation or
-coefficient of quartile variation (cqv) is not achievable by a 
+coefficient of quartile variation (cqv) are not achievable by a 
 **single function**. Morover, adding methods and features to those functions 
 are not feasible due to noncompliance of some packages with the well-known 
 conventions of *functional and/or OO programming*. 
