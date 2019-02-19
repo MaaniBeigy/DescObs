@@ -20,16 +20,19 @@
 #'         also a measure of homogeneity [1, 2].
 #'         }
 #'         }
-#' @return An object of type "list" which contains the cqv, the
-#'         intervals, and the computation method. It has these components:
+#' @return An object of type "list" which contains the estimate, the
+#'         intervals, and the computation method. It has two components:
 #' @return \describe{
 #'        \item{$method}{
 #'        A description of statistical method used for the computations.
 #'        }
 #'        \item{$statistics}{
-#'        A data frame representing three vectors: cqv, lower and upper limits
+#'        A data frame representing three vectors: est, lower and upper limits
 #'        of 95\% confidence interval \code{(CI)}:
 #'        \cr \cr
+#'        \strong{est:}{
+#'        \code{\deqn{((q3-q1)/(q3 + q1))*100}}
+#'        }
 #'        \strong{Bonett's 95\% CI:}{
 #'        \code{\deqn{  exp{ln(D/S)C ± (z(1−α/2) * sqrt(v))}, }}
 #'        where \eqn{C = n/(n − 1)} is a centering adjustment which helps to
