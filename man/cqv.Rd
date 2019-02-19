@@ -2,9 +2,9 @@
 % Please edit documentation in R/cqv.R
 \name{cqv}
 \alias{cqv}
-\title{Coefficient of Quartile Variation (CQV)}
+\title{Coefficient of Quartile Variation (cqv)}
 \usage{
-cqv(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...)
+cqv(x, na.rm = FALSE, digits = NULL, method = NULL, R = NULL, ...)
 }
 \arguments{
 \item{x}{An \code{R} object. Currently there are methods for numeric vectors}
@@ -14,7 +14,7 @@ stripped before the computation proceeds.}
 
 \item{digits}{integer indicating the number of decimal places to be used.}
 
-\item{CI}{a scalar representing the type of confidence intervals required.
+\item{method}{a scalar representing the type of confidence intervals required.
 The value should be any of the values "Bonett", "norm","basic", "
 perc", "bca" or "all".}
 
