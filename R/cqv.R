@@ -1,11 +1,11 @@
-#' @title Coefficient of Quartile Variation (CQV)
+#' @title Coefficient of Quartile Variation (cqv)
 #' @name cqv
 #' @description Generic function for the coefficient of quartile variation (cqv)
 #' @param x An \code{R} object. Currently there are methods for numeric vectors
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #'              stripped before the computation proceeds.
 #' @param digits integer indicating the number of decimal places to be used.
-#' @param CI a scalar representing the type of confidence intervals required.
+#' @param method a scalar representing the type of confidence intervals required.
 #'           The value should be any of the values "Bonett", "norm","basic", "
 #'           perc", "bca" or "all".
 #' @param R integer indicating the number of bootstrap replicates.
@@ -76,7 +76,14 @@
 #'                 Their Applications. Cambridge University Press, Cambridge.
 #'                 ISBN 0-521-57391-2
 #' @export
-cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
+cqv <- function(
+    x,
+    na.rm = FALSE,
+    digits = NULL,
+    method = NULL,
+    R = NULL,
+    ...
+) {
     # require(dplyr)
     # require(SciViews)
     # require(boot)
@@ -93,7 +100,7 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
         digits = 4
     }
     digits = digits  # digits required for rounding
-    CI = CI  # returns 95% confidence interval if TRUE
+    method = method  # returns 95% confidence interval
     if (is.null(R)) {
         R = 1000
     }
@@ -186,76 +193,76 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
         )
     }
 
-    if (is.null(CI)) {
+    if (is.null(method)) {
         boot.cqv.ci <- NA
-    } else if (CI == "Bonett") {
+    } else if (method == "Bonett") {
         boot.cqv.ci <- NA
-    } else if (CI == "norm") {
+    } else if (method == "norm") {
         boot.norm.ci <- boot::boot.ci(boot.cqv, conf = 0.95, type = "norm")
-    } else if (CI == "basic") {
+    } else if (method == "basic") {
         boot.basic.ci <- boot::boot.ci(boot.cqv, conf = 0.95, type = "basic")
-    } else if (CI == "perc") {
+    } else if (method == "perc") {
         boot.perc.ci <- boot::boot.ci(boot.cqv, conf = 0.95, type = "perc")
-    } else if (CI == "bca") {
+    } else if (method == "bca") {
         boot.bca.ci <- boot::boot.ci(boot.cqv, conf = 0.95, type = "bca")
-    } else if (CI == "all") {
+    } else if (method == "all") {
         boot.norm.ci <- boot::boot.ci(boot.cqv, conf = 0.95, type = "norm")
         boot.basic.ci <- boot::boot.ci(boot.cqv, conf = 0.95, type = "basic")
         boot.perc.ci <- boot::boot.ci(boot.cqv, conf = 0.95, type = "perc")
         boot.bca.ci <- boot::boot.ci(boot.cqv, conf = 0.95, type = "bca")
     }
 
-    if (is.null(CI)) {
+    if (is.null(method)) {
         cqv <- round(
             100 * ((q3 - q1)/(q3 + q1)), digits = digits
         )
-    } else if (CI == "Bonett") {
+    } else if (method == "Bonett") {
         cqv <- round(
             100 * ((q3 - q1)/(q3 + q1)), digits = digits
         )
-    } else if (CI == "norm") {
+    } else if (method == "norm") {
         cqv <- round(
             100 * ((q3 - q1)/(q3 + q1)), digits = digits
         )
-    } else if (CI == "basic") {
+    } else if (method == "basic") {
         cqv <- round(
             100 * ((q3 - q1)/(q3 + q1)), digits = digits
         )
-    } else if (CI == "perc") {
+    } else if (method == "perc") {
         cqv <- round(
             100 * ((q3 - q1)/(q3 + q1)), digits = digits
         )
-    } else if (CI == "bca") {
+    } else if (method == "bca") {
         cqv <- round(
             100 * ((q3 - q1)/(q3 + q1)), digits = digits
         )
-    } else if (CI == "all") {
+    } else if (method == "all") {
         cqv <- round(
             100 * ((q3 - q1)/(q3 + q1)), digits = digits
         )
     }
 
-    if (is.null(CI)) {
+    if (is.null(method)) {
         lower <- NA
         upper <- NA
-    } else if (CI == "Bonett") {
+    } else if (method == "Bonett") {
         lower <- round(lower.tile * 100, digits = digits)
         upper <- round(upper.tile * 100, digits = digits)
-    } else if (CI == "norm") {
+    } else if (method == "norm") {
         lower <- round(boot.norm.ci$normal[2], digits = digits)
         upper <- round(boot.norm.ci$normal[3], digits = digits)
-    } else if (CI == "basic") {
+    } else if (method == "basic") {
         lower <- round(boot.basic.ci$basic[4], digits = digits)
         upper <- round(boot.basic.ci$basic[5], digits = digits)
-    } else if (CI == "perc") {
+    } else if (method == "perc") {
         lower <- round(boot.perc.ci$percent[4], digits = digits)
         upper <- round(boot.perc.ci$percent[5], digits = digits)
-    } else if (CI == "bca") {
+    } else if (method == "bca") {
         lower <- round(boot.bca.ci$bca[4], digits = digits)
         upper <- round(boot.bca.ci$bca[5], digits = digits)
     }
 
-    if (is.null(CI)) {
+    if (is.null(method)) {
         return(
             list(
                 method = "cqv = (q3-q1)/(q3+q1)",
@@ -264,7 +271,7 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
                 )
             )
         )
-    } else if (CI == "Bonett" && cqv != 100) {
+    } else if (method == "Bonett" && cqv != 100) {
         return(
             list(
                 method = "cqv with Bonett's 95% CI",
@@ -275,7 +282,7 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
                     )
                 )
             )
-    } else if (CI == "norm" && cqv != 100) {
+    } else if (method == "norm" && cqv != 100) {
         return(
             list(
                 method = "cqv with normal approximation 95% CI",
@@ -286,7 +293,7 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
                     )
                 )
             )
-    } else if (CI == "basic" && cqv != 100) {
+    } else if (method == "basic" && cqv != 100) {
         return(
             list(
                 method = "cqv with basic bootstrap 95% CI",
@@ -297,7 +304,7 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
                     )
                 )
             )
-    } else if (CI == "perc" && cqv != 100) {
+    } else if (method == "perc" && cqv != 100) {
         return(
             list(
                 method = "cqv with bootstrap percentile 95% CI",
@@ -308,7 +315,7 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
                     )
                 )
             )
-    } else if (CI == "bca" && cqv != 100) {
+    } else if (method == "bca" && cqv != 100) {
         return(
             list(
                 method = "cqv with adjusted bootstrap percentile (BCa) 95% CI",
@@ -321,8 +328,8 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
             )
     } else if (
         (
-    CI == "norm" | CI == "Bonett" | CI == "basic" | CI == "perc" |
-    CI == "bca" | CI == "all"
+    method == "norm" | method == "Bonett" | method == "basic" | method == "perc" |
+    method == "bca" | method == "all"
     ) && cqv == 100
         ) {
         warning("All values of t are equal to  100; Cannot calculate confidence intervals")
@@ -336,7 +343,7 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
                 )
             )
         )
-    } else if (CI == "all" && cqv != 100) {
+    } else if (method == "all" && cqv != 100) {
         return(
             list(
                 method = "All Bootstrap methods",
