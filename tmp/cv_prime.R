@@ -43,7 +43,7 @@ confint.cv <- function(x,alpha=.05, method="modmckay"){
     return(ci)
 }
 
-
+library(DescTools)
 CoefVar.default <- function(x, unbiased = FALSE, conf.level = NA, na.rm = FALSE, ...) {
 
     if (na.rm) {
