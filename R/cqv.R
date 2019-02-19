@@ -257,7 +257,7 @@ cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
             list(
                 method = "cqv = (q3-q1)/(q3+q1)",
                 statistics = data.frame(
-                    cqv = cqv
+                    est = cqv
                 )
             )
         )
