@@ -21,7 +21,7 @@ We will try to provide **multi-control knob tools**, by means of
 
 # Getting started
 
-The `DescObs` is available on GitHub. To install it, use:  
+The `DescObs` is available on github. To install it, use:  
 
 ```r
 devtools::install_github('MaaniBeigy/DescObs')  
@@ -29,7 +29,7 @@ devtools::install_github('MaaniBeigy/DescObs')
 \* Note that this package is still under development.   
 \* Pull requests are welcomed   
 
-If you are an ubuntu user, you are going to need these non-R package:    
+If you are an ubuntu user, you are going to need these non-R packages:    
 `sudo apt install libcurl4-openssl-dev libssl-dev libxml2-dev libgsl-dev`   
 
 \* This package is highly inspired by `dplyr`, `SciView`, `boot`, and `MBESS`.
