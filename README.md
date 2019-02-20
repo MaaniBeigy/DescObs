@@ -30,7 +30,7 @@ The `DescObs` is available on GitHub. To install it, use:
 ```r
 devtools::install_github('MaaniBeigy/DescObs')
 ```
-If you are an ubuntu user, you wil need `libgsl-dev` package:   
+If you are an ubuntu user, you are going to need `libgsl-dev` package:   
 `sudo apt install libgsl-dev`
 
 ```r
