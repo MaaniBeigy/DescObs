@@ -31,7 +31,7 @@ The `DescObs` is available on github. To install it in `R`, use:
 devtools::install_github('MaaniBeigy/DescObs')  
 ```
 \* Note that this package is still under development.   
-\* Pull requests are welcomed.   
+\* Pull request welcome.   
 \* This package is highly inspired by `dplyr`, `SciView`, `boot`, and `MBESS`.   
 
 ```r
