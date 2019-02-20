@@ -30,9 +30,11 @@ The `DescObs` is available on GitHub. To install it, use:
 ```r
 devtools::install_github('MaaniBeigy/DescObs')
 ```
+If you are an ubuntu user:
+`sudo apt install libgsl-dev`
 
 ```r
 # load required libraries
-require("DescObs", "dplyr", "SciView", "boot")
+require("DescObs", "dplyr", "SciView", "boot", "MBESS")
 ```
 
