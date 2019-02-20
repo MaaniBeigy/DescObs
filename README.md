@@ -29,8 +29,8 @@ devtools::install_github('MaaniBeigy/DescObs')
 \* Note that this package is still under development.   
 \* Pull requests are welcomed   
 
-If you are an ubuntu user, you are going to need `libgsl-dev` package:    
-`sudo apt install libgsl-dev`   
+If you are an ubuntu user, you are going to need these non-R package:    
+`sudo apt install libcurl4-openssl-dev libssl-dev libxml2-dev libgsl-dev`   
 
 \* This package is highly inspired by `dplyr`, `SciView`, `boot`, and `MBESS`.
 
