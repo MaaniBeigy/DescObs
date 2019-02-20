@@ -85,12 +85,12 @@ x <- c(
 )
 cqv(x)
 cqv(x, na.rm = TRUE, digits = 2)
-cqv(x, na.rm = TRUE, digits = 2, CI = "Bonett")
-cqv(x, na.rm = TRUE, digits = 2, CI = "norm")
-cqv(x, na.rm = TRUE, digits = 2, CI = "basic")
-cqv(x, na.rm = TRUE, digits = 2, CI = "perc")
-cqv(x, na.rm = TRUE, digits = 2, CI = "bca")
-cqv(x, na.rm = TRUE, digits = 2, CI = "all")
+cqv(x, na.rm = TRUE, digits = 2, method = "Bonett")
+cqv(x, na.rm = TRUE, digits = 2, method = "norm")
+cqv(x, na.rm = TRUE, digits = 2, method = "basic")
+cqv(x, na.rm = TRUE, digits = 2, method = "perc")
+cqv(x, na.rm = TRUE, digits = 2, method = "bca")
+cqv(x, na.rm = TRUE, digits = 2, method = "all")
 
 }
 \references{
