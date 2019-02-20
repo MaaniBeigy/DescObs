@@ -28,6 +28,22 @@ cv <- function(
         digits = 4
     }
     digits = digits  # digits required for rounding
+    method = method
+    # METHODS <- c(
+    #     "Kelley", "McKay", "Miller", "Vangel", " Mahmoudvand_Hassani",
+    #     "Equal_Tailed", "Shortest_Length", "Normal_Approximation",
+    #     "norm","basic", "perc", "bca", "all"
+    # )
+    # if (!is.na(pmatch(method, "Kelley"))) {
+    #     method <- "Kelley"
+    # }
+    # method <- pmatch(method, METHODS)
+    # if (is.na(method)) {
+    #     stop("invalid confidence interval method")
+    # }
+    # if (method == -1) {
+    #     stop("ambiguous distance method")
+    # }
     method = method  # returns 95% confidence interval
     cv <- (
         sd(x, na.rm = na.rm)/mean(x, na.rm = na.rm)
@@ -60,7 +76,12 @@ cv <- function(
         est <- res
         lower.tile <- unname(sqrt(length(x))/ci$Upper.Limit)
         upper.tile <- unname(sqrt(length(x))/ci$Lower.Limit)
+    } else if (method == "McKay" && unbiased == FALSE) {
+        cv
     }
+
+
+
     if (method == "Kelley" && unbiased == FALSE) {
         return(
             list(
