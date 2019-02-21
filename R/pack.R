@@ -488,10 +488,10 @@
 #
 # boot.cqv.ci <- boot.ci(boot.cqv, conf = 0.95, type = "basic")
 # df1 <- read.csv(
-#     file = paste0(dir, "\\tmp\\checkmerged2.csv"),
+#     file = paste0(dir, "/data/checkmerged2.csv"),
 #     encoding = "UTF-8",
 #     sep = "|",
 #     header = TRUE
 # )
-# cqv(x = df1$psychadm, na.rm = TRUE, digits = 2, CI = "all", R = 1000)
+# cqv(x = df1$cardioadm, na.rm = TRUE, digits = 2, method = "norm", R = 1000)
 #
