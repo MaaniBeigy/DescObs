@@ -23,32 +23,35 @@ cv <- function(
         stop("x is not a vector")
         return(NA_real_)
     }
-    na.rm = na.rm  # removes NAs if TRUE
+    na.rm <- na.rm  # removes NAs if TRUE
     if (is.null(digits)) {
         digits = 4
     }
-    digits = digits  # digits required for rounding
-    method = method
-    # METHODS <- c(
-    #     "Kelley", "McKay", "Miller", "Vangel", " Mahmoudvand_Hassani",
-    #     "Equal_Tailed", "Shortest_Length", "Normal_Approximation",
-    #     "norm","basic", "perc", "bca", "all"
-    # )
-    # if (!is.na(pmatch(method, "Kelley"))) {
-    #     method <- "Kelley"
-    # }
-    # method <- pmatch(method, METHODS)
-    # if (is.na(method)) {
-    #     stop("invalid confidence interval method")
-    # }
-    # if (method == -1) {
-    #     stop("ambiguous distance method")
-    # }
-    method = method  # returns 95% confidence interval
+    digits <- digits  # digits required for rounding
+    method <- tolower(method)
+    method <- match.arg(
+        arg = method,
+        choices = c(
+            "kelley", "mckay", "miller", "vangel", " mahmoudvand_hassani",
+            "equal_tailed", "shortest_length", "normal_approximation",
+            "norm","basic", "perc", "bca", "all"
+        ),
+        several.ok = TRUE
+    )
+    if ("kelley" %in% method) {
+        if (!require(MBESS)) {
+            warning(
+        "package 'MBESS' required to calculate Kelley's confidence interval"
+            )
+        }
+    }
+    if (is.na(method)) {
+        stop("invalid confidence interval method")
+    }
     cv <- (
         sd(x, na.rm = na.rm)/mean(x, na.rm = na.rm)
     )
-    if (method == "Kelley" && unbiased == FALSE) {
+    if ("kelley" %in% method && unbiased == FALSE) {
         res <- cv * (
             (1 - (1/(4 * (length(x) - 1))) +
                  (1/length(x)) * cv^2) +
@@ -62,7 +65,7 @@ cv <- function(
         est <- cv
         lower.tile <- unname(sqrt(length(x))/ci$Upper.Limit)
         upper.tile <- unname(sqrt(length(x))/ci$Lower.Limit)
-    } else if (method == "Kelley" && unbiased == TRUE) {
+    } else if (method == "kelley" && unbiased == TRUE) {
         res <- cv * (
             (1 - (1/(4 * (length(x) - 1))) +
                  (1/length(x)) * cv^2) +
@@ -76,13 +79,13 @@ cv <- function(
         est <- res
         lower.tile <- unname(sqrt(length(x))/ci$Upper.Limit)
         upper.tile <- unname(sqrt(length(x))/ci$Lower.Limit)
-    } else if (method == "McKay" && unbiased == FALSE) {
+    } else if (method == "mckay" && unbiased == FALSE) {
         cv
     }
 
 
 
-    if (method == "Kelley" && unbiased == FALSE) {
+    if (method == "kelley" && unbiased == FALSE) {
         return(
             list(
                 method = "cv with Kelley's 95% CI",
@@ -93,7 +96,7 @@ cv <- function(
                 )
             )
         )
-    } else if (method == "Kelley" && unbiased == TRUE) {
+    } else if (method == "kelley" && unbiased == TRUE) {
         return(
             list(
                 method = "unbiased cv with Kelley's 95% CI",

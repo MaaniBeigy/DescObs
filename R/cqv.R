@@ -332,7 +332,9 @@ cqv <- function(
     method == "bca" | method == "all"
     ) && cqv == 100
         ) {
-        warning("All values of t are equal to  100; Cannot calculate confidence intervals")
+        warning(
+"All values of t are equal to  100 \n Cannot calculate confidence intervals \n"
+        )
         return(
             list(
                 method = "cqv with Bonett's 95% CI",
