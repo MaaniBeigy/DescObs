@@ -3,255 +3,72 @@ title: "Versatile Exploration of Data: Coefficient of Variation"
 author: "Maani Beigy"
 date: "February 18, 2019"
 output: html_document
+bibliography: DescObs.bib
+csl: apa.csl
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
-
-
-$$\sum_{i=1}^{n} X^3_i$$
+# Coefficient of Variation   
+Coefficient of variation *($CV$)* is a measure of relative dispersion representing 
+the degree of variability relative to the mean [@Albatineh2014]. 
+Since cv is unitless, it is useful for comparison of variables with different 
+units [@Albatineh2014]. It is also a measure of homogeneity. The *population* coefficient of variation is:    
+$$CV = \frac{\sigma}{\mu},$$
+where $\sigma$ is the population standard deviation and $\mu$ is the population mean. Almost always, we analyze data from samples but want to generalize it 
+as the population's parameter [@Albatineh2014]. Its sample's estimate is given 
+as:    
+$$cv = \frac{sd}{\bar{X}}$$   
+where $sd$ is the sample standard deviation, the square root of the unbiased estimator of population variance, and $\bar{X}$ is the sample mean. The 
+corrected *cv* to account for the sample size is:
 $$
-\begin{aligned}
- AR(p): Y_i &= c + \epsilon_i + \phi_i Y_{i-1} \dots \\
- Y_{i} &= c + \phi_i Y_{i-1} \dots
-\end{aligned}
+cv_{korr} = cv * \biggl(1 - \frac{1}{4(n-1)} 
++ \frac{1}{n}cv^2 
++ \frac{1}{2 (n-1)^2} \biggr)
 $$
+There are various methods for the calculation of **confidence intervals (CI)** 
+for *cv*. All of them are fruitful and have particular use cases. Some of them 
+are model-based hence their usage depends the assumptions regarding the distribution of data.   
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+### Kelley's Method        
 
-```
-cqv <- function(x, na.rm = FALSE, digits = NULL, CI = NULL, R = NULL, ...) {
-    if (!is.numeric(x)) {
-        stop("argument is not numeric: returning NA")
-        return(NA_real_)
-    }
-    if (!is.vector(x)) {
-        stop("x is not a vector")
-        return(NA_real_)
-    }
-    # library(dplyr)
-    # library(SciViews)
-    # library(boot)
-    na.rm = na.rm  # removes NAs if TRUE
-    if (is.null(digits)) {
-        digits = 4
-    }
-    digits = digits  # digits required for rounding
-    CI = CI  # returns 95% confidence interval if TRUE
-    if (is.null(R)) {
-        R = 1000
-    }
-    q3 <- unname(
-        quantile(
-            x,
-            probs = 0.75,  # third quartile (0.75 percentile)
-            na.rm = na.rm
-        )
-    )
-    q1 <- unname(
-        quantile(
-            x,
-            probs = 0.25,  # first quartile (0.75 percentile)
-            na.rm = na.rm
-        )
-    )
-    if (q3 == 0) {  # to avoid NaNs when q3 and q1 are zero
-        q3 <- max(x)
-    }
-    a <- ceiling(
-        (length(x)/4) - (1.96 * (((3 * length(x))/16)^(0.5)))
-    )
-    b <- round(
-        (length(x)/4) + (1.96 * (((3 * length(x))/16)^(0.5))),
-        digits = 0
-    )
-    c <- length(x) + 1 - b
-    d <- length(x) + 1 - a
-    Ya <- nth(x, a, order_by = x)
-    Yb <- nth(x, b, order_by = x)
-    Yc <- nth(x, c, order_by = x)
-    Yd <- nth(x, d, order_by = x)
-    star <- 0
-    for (i in a:(b - 1)) {
-        star[i] <- (
-            (choose(length(x), i)) * (0.25^(i)) * (0.75^(length(x) - i))
-        )
-        alphastar <- 1 - sum(star[i])
-    }
-    zzz <- qnorm((1 - ((1 - alphastar)/2)))
-    f1square <- (3 * (zzz)^2)/(4 * length(x) * ((Yb - Ya)^2))
-    f3square <- (3 * (zzz)^2)/(4 * length(x) * ((Yd - Yc)^2))
-    D <- q3 - q1
-    S <- q3 + q1
-    v <- (
-        (1/(16 * length(x))) * (
-            (((3/f1square) + (3/f3square) - (2/sqrt(f1square * f3square))) / D^2) +
-                (((3/f1square) + (3/f3square) + (2/sqrt(f1square * f3square))) / S^2) -
-                ((2 * ((3/f3square) - (3/f1square)))/(D*S))
-        )
-    )
-    ccc <- length(x)/(length(x) - 1)
-    upper.tile <- exp(((ln((D/S)) * ccc)) + (zzz * (v^(0.5))))
-    lower.tile <- exp(((ln((D/S)) * ccc)) - (zzz * (v^(0.5))))
-    boot.cqv <- boot(
-        x,
-        function(x, i) {
-            round(((
-                unname(quantile(x[i], probs = 0.75, na.rm = na.rm)) -
-                    unname(quantile(x[i], probs = 0.25, na.rm = na.rm))
-            ) / (
-                unname(quantile(x[i], probs = 0.75, na.rm = na.rm)) +
-                    unname(quantile(x[i], probs = 0.25, na.rm = na.rm))
-            )) * 100, digits = digits)
-        },
-        R = R
-    )
-    if (is.null(CI)) {
-        boot.cqv.ci <- NA
-    } else if (CI == "Bonett") {
-        boot.cqv.ci <- NA
-    } else if (CI == "norm") {
-        boot.cqv.ci <- boot.ci(boot.cqv, conf = 0.95, type = "norm")
-    } else if (CI == "basic") {
-        boot.cqv.ci <- boot.ci(boot.cqv, conf = 0.95, type = "basic")
-    } else if (CI == "stud") {
-        boot.cqv.ci <- boot.ci(boot.cqv, conf = 0.95, type = "stud")
-    } else if (CI == "perc") {
-        boot.cqv.ci <- boot.ci(boot.cqv, conf = 0.95, type = "perc")
-    } else if (CI == "bca") {
-        boot.cqv.ci <- boot.ci(boot.cqv, conf = 0.95, type = "bca")
-    }
-
-    if (is.null(CI)) {
-        cqv <- round(
-            100 * ((q3 - q1)/(q3 + q1)), digits = digits
-        )
-    } else if (CI == "Bonett") {
-        cqv <- round(
-            100 * ((q3 - q1)/(q3 + q1)), digits = digits
-        )
-    } else if (CI == "norm") {
-        cqv <- round(
-            100 * ((q3 - q1)/(q3 + q1)), digits = digits
-        )
-    } else if (CI == "basic") {
-        cqv <- round(
-            100 * ((q3 - q1)/(q3 + q1)), digits = digits
-        )
-    } else if (CI == "perc") {
-        cqv <- round(
-            100 * ((q3 - q1)/(q3 + q1)), digits = digits
-        )
-    } else if (CI == "bca") {
-        cqv <- (
-            boot.cqv.ci$bca[2]
-        )
-    }
-
-    if (is.null(CI)) {
-        CI95 <- NA
-    } else if (CI == "Bonett") {
-        CI95 <- paste0(
-            round(lower.tile * 100, digits = digits),
-            "-",
-            round(upper.tile * 100, digits = digits)
-        )
-    } else if (CI == "norm") {
-        CI95 <- paste0(
-            round(boot.cqv.ci$normal[2], digits = digits),
-            "-",
-            round(boot.cqv.ci$normal[3], digits = digits)
-        )
-    } else if (CI == "basic") {
-        CI95 <- paste0(
-            round(boot.cqv.ci$basic[4], digits = digits),
-            "-",
-            round(boot.cqv.ci$basic[5], digits = digits)
-        )
-    } else if (CI == "perc") {
-        CI95 <- paste0(
-            round(boot.cqv.ci$percent[4], digits = digits),
-            "-",
-            round(boot.cqv.ci$percent[5], digits = digits)
-        )
-    } else if (CI == "bca") {
-        CI95 <- paste0(
-            round(boot.cqv.ci$bca[4], digits = digits),
-            "-",
-            round(boot.cqv.ci$bca[5], digits = digits)
-        )
-    }
-
-    if (is.null(CI)) {
-        return(
-            structure(
-                .Data = c(cqv),
-                "dim" = c(1, 1),
-                "dimnames" = list(c(" "), c("cqv"))
-            )
-        )
-    } else if (CI == "Bonett") {
-        return(
-            structure(
-                .Data = c(cqv, CI95),
-                "dim" = c(1, 2),
-                "dimnames" = list(c(" "), c("cqv", "Bonett's 95% CI"))
-            )
-        )
-    } else if (CI == "norm") {
-        return(
-            structure(
-                .Data = c(cqv, CI95),
-                "dim" = c(1, 2),
-                "dimnames" = list(c(" "),
-                                  c("cqv", "normal approximation 95% CI"))
-            )
-        )
-    } else if (CI == "basic") {
-        return(
-            structure(
-                .Data = c(cqv, CI95),
-                "dim" = c(1, 2),
-                "dimnames" = list(c(" "),
-                                  c("cqv", "basic bootstrap 95% CI"))
-            )
-        )
-    } else if (CI == "perc") {
-        return(
-            structure(
-                .Data = c(cqv, CI95),
-                "dim" = c(1, 2),
-                "dimnames" = list(c(" "),
-                                  c("cqv", "bootstrap percentile 95% CI"))
-            )
-        )
-    } else if (CI == "bca") {
-        return(
-            structure(
-                .Data = c(cqv, CI95),
-                "dim" = c(1, 2),
-                "dimnames" = list(
-                    c(" "),
-                    c("cqv", "adjusted bootstrap percentile (BCa) 95% CI"))
-            )
-        )
-    } else {
-        stop("method for confidence interval is not available")
-        return(NA_real_)
-    }
-}
-
+Let us assume that *cv* follows a noncentral *t* distribution, when the parent  population of the scores is *normally-distributed*, with noncentrality 
+($\lambda$) parameter:   
+$$
+\lambda = \frac{\sqrt{n}}{cv}
+$$
+with *v* degrees of freedom, where $v = n - 1$. 
+Let $1 - \alpha$ be the CI coverage with $\alpha_L + \alpha_U = \alpha$ in which $\alpha_L$ is the the proportion of times that *cv* will be 
+less than the lower confidence bound and $\alpha_U$ the proportion of times that
+*cv* will be greater than the upper confidence bound in the CI procedure [@Kelley2007]. The lower confidence tile for $\lambda$ is is the noncentrality parameter that results in $t_{(1-\alpha_L,v,\lambda_L)}=\hat{\lambda}$ and the
+upper confdence tile for $\lambda$ is is the noncentrality parameter that 
+results in $t_{(\alpha_U,v,\lambda_U)}=\hat{\lambda}$, where $t_{(1-\alpha_L,v,\lambda_L)}=\hat{\lambda}$ is the value of noncentral *t* distribution at the $1-\alpha_L$ **quantile** with noncentrality parameter $\lambda_L$ and $t_{(\alpha_U,v,\lambda_U)}=\hat{\lambda}$ is the value of noncentral *t* distribution at the $\alpha_U$ **quantile** with noncentrality parameter $\lambda_U$, respectively [@Kelley2007].   
+Afterwards, we transform the tiles of the confidence interval for $\lambda$, by
+dividing the tiles by $\sqrt{n}$ and therafter inversing them; the CI limits of 
+$cv$ will be obtaned:  
+$$
+p\left[\biggl(\frac{\lambda_U}{\sqrt{n}}\biggr)^{-1}
+\le cv \le \biggl(\frac{\lambda_L}{\sqrt{n}}\biggr)^{-1}\right] = 1-\alpha
+$$
+where $p$ stands for *probability*. Thanks to package `MBESS` [@Kelley2018] for 
+the computation of confidence limits for the noncentrality parameter from a *t* distribution (`conf.limits.nct`), $cv$ will be obtained as:   
+```{r echo = TRUE}
+x <- c(
+    0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
+    4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
+)
+cv(
+    x, 
+    na.rm = TRUE, 
+    digits = 3, 
+    method = "kelley", 
+    correction = TRUE, 
+    alpha = 0.05
+)
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
+# References   
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
