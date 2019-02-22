@@ -6,7 +6,7 @@ cv <- function(
     na.rm = FALSE,
     digits = NULL,
     method = NULL,
-    unbiased = TRUE,
+    correction = TRUE,
     alpha = 0.05,
     R = NULL,
     ...
@@ -51,41 +51,41 @@ cv <- function(
     cv <- (
         sd(x, na.rm = na.rm)/mean(x, na.rm = na.rm)
     )
-    if ("kelley" %in% method && unbiased == FALSE) {
-        res <- cv * (
+    if ("kelley" %in% method && correction == FALSE) {
+        cv_corr <- cv * (
             (1 - (1/(4 * (length(x) - 1))) +
                  (1/length(x)) * cv^2) +
                 (1/(2 * (length(x) - 1)^2))
         )
         ci <- MBESS::conf.limits.nct(
-            ncp = sqrt(length(x))/res,
+            ncp = sqrt(length(x))/cv_corr,
             df = length(x) - 1,
             conf.level = (1 - alpha)
         )
         est <- cv
         lower.tile <- unname(sqrt(length(x))/ci$Upper.Limit)
         upper.tile <- unname(sqrt(length(x))/ci$Lower.Limit)
-    } else if (method == "kelley" && unbiased == TRUE) {
-        res <- cv * (
+    } else if (method == "kelley" && correction == TRUE) {
+        cv_corr <- cv * (
             (1 - (1/(4 * (length(x) - 1))) +
                  (1/length(x)) * cv^2) +
                 (1/(2 * (length(x) - 1)^2))
         )
         ci <- MBESS::conf.limits.nct(
-            ncp = sqrt(length(x))/res,
+            ncp = sqrt(length(x))/cv_corr,
             df = length(x) - 1,
             conf.level = (1 - alpha)
         )
-        est <- res
+        est <- cv_corr
         lower.tile <- unname(sqrt(length(x))/ci$Upper.Limit)
         upper.tile <- unname(sqrt(length(x))/ci$Lower.Limit)
-    } else if (method == "mckay" && unbiased == FALSE) {
+    } else if (method == "mckay" && correction == FALSE) {
         cv
     }
 
 
 
-    if (method == "kelley" && unbiased == FALSE) {
+    if (method == "kelley" && correction == FALSE) {
         return(
             list(
                 method = "cv with Kelley's 95% CI",
@@ -96,10 +96,10 @@ cv <- function(
                 )
             )
         )
-    } else if (method == "kelley" && unbiased == TRUE) {
+    } else if (method == "kelley" && correction == TRUE) {
         return(
             list(
-                method = "unbiased cv with Kelley's 95% CI",
+                method = "Corrected cv with Kelley's 95% CI",
                 statistics = data.frame(
                     est = round(est * 100, digits = digits),
                     lower = round(lower.tile * 100, digits = digits),

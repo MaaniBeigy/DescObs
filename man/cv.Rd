@@ -4,8 +4,8 @@
 \alias{cv}
 \title{Coefficient of Variation (cv)}
 \usage{
-cv(x, na.rm = FALSE, digits = NULL, method = NULL, unbiased = TRUE,
-  alpha = 0.05, R = NULL, ...)
+cv(x, na.rm = FALSE, digits = NULL, method = NULL,
+  correction = TRUE, alpha = 0.05, R = NULL, ...)
 }
 \description{
 Generic function for the coefficient of variation (cv)
