@@ -32,7 +32,7 @@ There are various methods for the calculation of **confidence intervals (CI)**
 for *cv*. All of them are fruitful and have particular use cases. Some of them 
 are model-based hence their usage depends the assumptions regarding the distribution of data. For sake of versatility, we cover almost all of these methods in `DescObs` package. Here, we explain them along with some examples:
 
-### Kelley's Method        
+### Kelley's Confidence Interval        
 
 Let us assume that *cv* follows a noncentral *t* distribution, when the parent  population of the scores is *normally-distributed*, with noncentrality 
 ($\lambda$) parameter:   
@@ -50,7 +50,7 @@ dividing the tiles by $\sqrt{n}$ and therafter inversing them; the CI limits of
 $cv$ will be obtaned:  
 $$
 p\left[\biggl(\frac{\lambda_U}{\sqrt{n}}\biggr)^{-1}
-\le cv \le \biggl(\frac{\lambda_L}{\sqrt{n}}\biggr)^{-1}\right] = 1-\alpha
+\le CV \le \biggl(\frac{\lambda_L}{\sqrt{n}}\biggr)^{-1}\right] = 1-\alpha
 $$
 where $p$ stands for *probability*. Thanks to package `MBESS` [@Kelley2018] for 
 the computation of confidence limits for the noncentrality parameter from a *t* distribution (`conf.limits.nct`), $cv$ will be obtained as: 
@@ -134,7 +134,34 @@ cv <- function(
         lower.tile <- unname(sqrt(length(x))/ci$Upper.Limit)
         upper.tile <- unname(sqrt(length(x))/ci$Lower.Limit)
     } else if (method == "mckay" && correction == FALSE) {
-        cv
+        if (cv > 0.33) {
+            warning("Confidence interval may be very approximate")
+        }
+        v <- length(x) - 1
+        t1 <- qchisq(1 - alpha/2,v)/v
+        t2 <- qchisq(alpha/2,v)/v
+        u1 <- v*t1
+        u2 <- v*t2
+        est <- cv
+        lower.tile <- cv/sqrt((u1/(v + 1) - 1 )*cv*cv + u1/v)
+        upper.tile <- cv/sqrt((u2/(v + 1) - 1)*cv*cv + u2/v)
+    } else if (method == "mckay" && correction == TRUE) {
+        cv_corr <- cv * (
+            (1 - (1/(4 * (length(x) - 1))) +
+                 (1/length(x)) * cv^2) +
+                (1/(2 * (length(x) - 1)^2))
+        )
+        if (cv_corr > 0.33) {
+            warning("Confidence interval may be very approximate")
+        }
+        v <- length(x) - 1
+        t1 <- qchisq(1 - alpha/2,v)/v
+        t2 <- qchisq(alpha/2,v)/v
+        u1 <- v*t1
+        u2 <- v*t2
+        est <- cv_corr
+        lower.tile <- cv_corr/sqrt((u1/(v + 1) - 1 )*cv_corr*cv_corr + u1/v)
+        upper.tile <- cv_corr/sqrt((u2/(v + 1) - 1)*cv_corr*cv_corr + u2/v)
     }
 
 
@@ -161,12 +188,30 @@ cv <- function(
                 )
             )
         )
+    } else if (method == "mckay" && correction == FALSE) {
+        return(
+            list(
+                method = "cv with McKay's 95% CI",
+                statistics = data.frame(
+                    est = round(est * 100, digits = digits),
+                    lower = round(lower.tile * 100, digits = digits),
+                    upper = round(upper.tile * 100, digits = digits)
+                )
+            )
+        )
+    } else if (method == "mckay" && correction == TRUE) {
+        return(
+            list(
+                method = "Corrected cv with McKay's 95% CI",
+                statistics = data.frame(
+                    est = round(est * 100, digits = digits),
+                    lower = round(lower.tile * 100, digits = digits),
+                    upper = round(upper.tile * 100, digits = digits)
+                )
+            )
+        )
     }
-
-
-
 }
-
 ```
 
 ```{r eval = TRUE, warning=FALSE, message=FALSE}
@@ -183,7 +228,28 @@ cv(
     alpha = 0.05
 )
 ```
-
-
+### McKay's Confidence Interval
+McKay [@McKay1932] introduced the following confidence interval for $cv$; considering $u_1 = \chi_{v,1-\alpha/2}^2$ and $u_1 = \chi_{v,\alpha/2}^2$ being
+the $100(1-\alpha/2)\%$ and $100(\alpha/2)\%$ percentile of the $\chi^2$ distribution with $v = n-1$ degrees of freedom, respectively [@Albatineh2014]:   
+$$
+\biggl(cv\left[\biggl(\frac{u_1}{v}-1\biggr)(cv)^{2}+\frac{u_1}{v}\right]^{-1/2}
+\le CV \le cv
+\left[\biggl(\frac{u_2}{v}-1\biggr)(cv)^{2}+\frac{u_2}{v}\right]^{-1/2}\biggr)
+$$
+Let us calculate the 95\% CI for our variable $x$ according to McKay's method [@McKay1932]:
+```{r eval = TRUE, warning=FALSE, message=FALSE}
+x <- c(
+    0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
+    4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
+)
+cv(
+    x, 
+    na.rm = TRUE, 
+    digits = 3, 
+    method = "mckay", 
+    correction = TRUE, 
+    alpha = 0.05
+)
+```
 # References   
 

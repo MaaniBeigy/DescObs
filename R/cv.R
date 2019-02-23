@@ -80,7 +80,34 @@ cv <- function(
         lower.tile <- unname(sqrt(length(x))/ci$Upper.Limit)
         upper.tile <- unname(sqrt(length(x))/ci$Lower.Limit)
     } else if (method == "mckay" && correction == FALSE) {
-        cv
+        if (cv > 0.33) {
+            warning("Confidence interval may be very approximate")
+        }
+        v <- length(x) - 1
+        t1 <- qchisq(1 - alpha/2,v)/v
+        t2 <- qchisq(alpha/2,v)/v
+        u1 <- v*t1
+        u2 <- v*t2
+        est <- cv
+        lower.tile <- cv/sqrt((u1/(v + 1) - 1 )*cv*cv + u1/v)
+        upper.tile <- cv/sqrt((u2/(v + 1) - 1)*cv*cv + u2/v)
+    } else if (method == "mckay" && correction == TRUE) {
+        cv_corr <- cv * (
+            (1 - (1/(4 * (length(x) - 1))) +
+                 (1/length(x)) * cv^2) +
+                (1/(2 * (length(x) - 1)^2))
+        )
+        if (cv_corr > 0.33) {
+            warning("Confidence interval may be very approximate")
+        }
+        v <- length(x) - 1
+        t1 <- qchisq(1 - alpha/2,v)/v
+        t2 <- qchisq(alpha/2,v)/v
+        u1 <- v*t1
+        u2 <- v*t2
+        est <- cv_corr
+        lower.tile <- cv_corr/sqrt((u1/(v + 1) - 1 )*cv_corr*cv_corr + u1/v)
+        upper.tile <- cv_corr/sqrt((u2/(v + 1) - 1)*cv_corr*cv_corr + u2/v)
     }
 
 
@@ -107,7 +134,30 @@ cv <- function(
                 )
             )
         )
+    } else if (method == "mckay" && correction == FALSE) {
+        return(
+            list(
+                method = "cv with McKay's 95% CI",
+                statistics = data.frame(
+                    est = round(est * 100, digits = digits),
+                    lower = round(lower.tile * 100, digits = digits),
+                    upper = round(upper.tile * 100, digits = digits)
+                )
+            )
+        )
+    } else if (method == "mckay" && correction == TRUE) {
+        return(
+            list(
+                method = "Corrected cv with McKay's 95% CI",
+                statistics = data.frame(
+                    est = round(est * 100, digits = digits),
+                    lower = round(lower.tile * 100, digits = digits),
+                    upper = round(upper.tile * 100, digits = digits)
+                )
+            )
+        )
     }
+
 
 
 

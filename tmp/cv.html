@@ -202,8 +202,8 @@ cv_{korr} = cv * \biggl(1 - \frac{1}{4(n-1)}
 + \frac{1}{n}cv^2 
 + \frac{1}{2 (n-1)^2} \biggr)
 \]</span> There are various methods for the calculation of <strong>confidence intervals (CI)</strong> for <em>cv</em>. All of them are fruitful and have particular use cases. Some of them are model-based hence their usage depends the assumptions regarding the distribution of data. For sake of versatility, we cover almost all of these methods in <code>DescObs</code> package. Here, we explain them along with some examples:</p>
-<div id="kelleys-method" class="section level3">
-<h3>Kelley’s Method</h3>
+<div id="kelleys-confidence-interval" class="section level3">
+<h3>Kelley’s Confidence Interval</h3>
 <p>Let us assume that <em>cv</em> follows a noncentral <em>t</em> distribution, when the parent population of the scores is <em>normally-distributed</em>, with noncentrality (<span class="math inline">\(\lambda\)</span>) parameter:<br />
 <span class="math display">\[
 \lambda = \frac{\sqrt{n}}{cv}
@@ -211,7 +211,7 @@ cv_{korr} = cv * \biggl(1 - \frac{1}{4(n-1)}
 Afterwards, we transform the tiles of the confidence interval for <span class="math inline">\(\lambda\)</span>, by dividing the tiles by <span class="math inline">\(\sqrt{n}\)</span> and therafter inversing them; the CI limits of <span class="math inline">\(cv\)</span> will be obtaned:<br />
 <span class="math display">\[
 p\left[\biggl(\frac{\lambda_U}{\sqrt{n}}\biggr)^{-1}
-\le cv \le \biggl(\frac{\lambda_L}{\sqrt{n}}\biggr)^{-1}\right] = 1-\alpha
+\le CV \le \biggl(\frac{\lambda_L}{\sqrt{n}}\biggr)^{-1}\right] = 1-\alpha
 \]</span> where <span class="math inline">\(p\)</span> stands for <em>probability</em>. Thanks to package <code>MBESS</code> <span class="citation">(Kelley, 2018)</span> for the computation of confidence limits for the noncentrality parameter from a <em>t</em> distribution (<code>conf.limits.nct</code>), <span class="math inline">\(cv\)</span> will be obtained as:</p>
 <pre class="r"><code>x &lt;- c(
     0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
@@ -232,6 +232,33 @@ cv(
 ##      est  lower upper
 ## 1 58.058 41.467 98.51</code></pre>
 </div>
+<div id="mckays-confidence-interval" class="section level3">
+<h3>McKay’s Confidence Interval</h3>
+<p>McKay <span class="citation">(McKay, 1932)</span> introduced the following confidence interval for <span class="math inline">\(cv\)</span>; considering <span class="math inline">\(u_1 = \chi_{v,1-\alpha/2}^2\)</span> and <span class="math inline">\(u_1 = \chi_{v,\alpha/2}^2\)</span> being the <span class="math inline">\(100(1-\alpha/2)\%\)</span> and <span class="math inline">\(100(\alpha/2)\%\)</span> percentile of the <span class="math inline">\(\chi^2\)</span> distribution with <span class="math inline">\(v = n-1\)</span> degrees of freedom, respectively <span class="citation">(Albatineh et al., 2014)</span>:<br />
+<span class="math display">\[
+\biggl(cv\left[\biggl(\frac{u_1}{v}-1\biggr)(cv)^{2}+\frac{u_1}{v}\right]^{-1/2}
+\le CV \le cv
+\left[\biggl(\frac{u_2}{v}-1\biggr)(cv)^{2}+\frac{u_2}{v}\right]^{-1/2}\biggr)
+\]</span> Let us calculate the 95% CI for our variable <span class="math inline">\(x\)</span> according to McKay’s method <span class="citation">(McKay, 1932)</span>:</p>
+<pre class="r"><code>x &lt;- c(
+    0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
+    4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
+)
+cv(
+    x, 
+    na.rm = TRUE, 
+    digits = 3, 
+    method = &quot;mckay&quot;, 
+    correction = TRUE, 
+    alpha = 0.05
+)</code></pre>
+<pre><code>## $method
+## [1] &quot;Corrected cv with McKay's 95% CI&quot;
+## 
+## $statistics
+##      est  lower   upper
+## 1 58.058 41.622 109.367</code></pre>
+</div>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1>References</h1>
@@ -244,6 +271,9 @@ cv(
 </div>
 <div id="ref-Kelley2018">
 <p>Kelley, K. (2018). MBESS: The MBESS R Package. R package version 4.4. 3. Retrieved from <a href="https://cran.r-project.org/package=MBESS" class="uri">https://cran.r-project.org/package=MBESS</a></p>
+</div>
+<div id="ref-McKay1932">
+<p>McKay, A. T. (1932). Distribution of the Coefficient of Variation and the Extended“ t” Distribution. <em>Journal of the Royal Statistical Society</em>, <em>95</em>(4), 695–698.</p>
 </div>
 </div>
 </div>
