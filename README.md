@@ -32,7 +32,7 @@ devtools::install_github('MaaniBeigy/DescObs')
 ```
 \* Note that this package is still under development.   
 \* Pull request welcome.   
-\* This package is highly inspired by `dplyr`, `SciView`, `boot`, and `MBESS`.   
+\* This package is inspired by `dplyr`, `SciView`, `boot`, and `MBESS`.   
 
 ```r
 # load required libraries  
