@@ -138,8 +138,8 @@ cv <- function(
         u1 <- v*t1
         u2 <- v*t2
         est <- cv
-        lower.tile <- cv/sqrt((u1/(v + 1) - 1 )*cv*cv + u1/v)
-        upper.tile <- cv/sqrt((u2/(v + 1) - 1)*cv*cv + u2/v)
+        lower.tile <- cv/sqrt((u1/(v + 1) - 1 )*(cv^2) + u1/v)
+        upper.tile <- cv/sqrt((u2/(v + 1) - 1)*(cv^2) + u2/v)
     } else if (method == "mckay" && correction == TRUE) {
         if (cv_corr > 0.33) {
             warning("Confidence interval may be very approximate")
@@ -150,8 +150,8 @@ cv <- function(
         u1 <- v*t1
         u2 <- v*t2
         est <- cv_corr
-        lower.tile <- cv_corr/sqrt((u1/(v + 1) - 1 )*cv_corr*cv_corr + u1/v)
-        upper.tile <- cv_corr/sqrt((u2/(v + 1) - 1)*cv_corr*cv_corr + u2/v)
+        lower.tile <- cv_corr/sqrt((u1/(v + 1) - 1 )*(cv_corr^2) + u1/v)
+        upper.tile <- cv_corr/sqrt((u2/(v + 1) - 1)*(cv_corr^2) + u2/v)
     } else if (method == "miller" && correction == FALSE) {
         v <- length(x) - 1
         z_alpha_over2 <- qnorm(1 - (alpha/2))
@@ -172,6 +172,30 @@ cv <- function(
         est <- cv_corr
         lower.tile <- cv_corr - zu
         upper.tile <- cv_corr + zu
+    }  else if (method == "vangel" && correction == FALSE) {
+        if (cv > 0.33) {
+            warning("Confidence interval may be very approximate")
+        }
+        v <- length(x) - 1
+        t1 <- qchisq(1 - alpha/2,v)/v
+        t2 <- qchisq(alpha/2,v)/v
+        u1 <- v*t1
+        u2 <- v*t2
+        est <- cv
+        lower.tile <- cv/sqrt(((u1 + 1)/(v + 1) - 1 )*(cv^2) + u1/v)
+        upper.tile <- cv/sqrt(((u2 + 1)/(v + 1) - 1)*(cv^2) + u2/v)
+    } else if (method == "vangel" && correction == TRUE) {
+        if (cv_corr > 0.33) {
+            warning("Confidence interval may be very approximate")
+        }
+        v <- length(x) - 1
+        t1 <- qchisq(1 - alpha/2,v)/v
+        t2 <- qchisq(alpha/2,v)/v
+        u1 <- v*t1
+        u2 <- v*t2
+        est <- cv_corr
+        lower.tile <- cv_corr/sqrt(((u1 + 1)/(v + 1) - 1 )*(cv_corr^2) + u1/v)
+        upper.tile <- cv_corr/sqrt(((u2 + 1)/(v + 1) - 1)*(cv_corr^2) + u2/v)
     }
 
 
@@ -248,26 +272,35 @@ cv <- function(
                 )
             )
         )
+    } else if (method == "vangel" && correction == FALSE) {
+        return(
+            list(
+                method = "cv with Vangel 95% CI",
+                statistics = data.frame(
+                    est = round(est * 100, digits = digits),
+                    lower = round(lower.tile * 100, digits = digits),
+                    upper = round(upper.tile * 100, digits = digits),
+                    row.names = c(" ")
+                )
+            )
+        )
+    } else if (method == "vangel" && correction == TRUE) {
+        return(
+            list(
+                method = "Corrected cv with Vangel 95% CI",
+                statistics = data.frame(
+                    est = round(est * 100, digits = digits),
+                    lower = round(lower.tile * 100, digits = digits),
+                    upper = round(upper.tile * 100, digits = digits),
+                    row.names = c(" ")
+                )
+            )
+        )
     }
 }
 ```
-
-```{r eval = TRUE, warning=FALSE, message=FALSE}
-x <- c(
-    0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
-    4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
-)
-cv(
-    x, 
-    na.rm = TRUE, 
-    digits = 3, 
-    method = "kelley", 
-    correction = TRUE, 
-    alpha = 0.05
-)
-```
 ### McKay Confidence Interval
-McKay [@McKay1932] introduced the following confidence interval for $cv$; considering $u_1 = \chi_{v,1-\alpha/2}^2$ and $u_1 = \chi_{v,\alpha/2}^2$ being
+McKay [@McKay1932] introduced the following CI for $cv$; considering $u_1 = \chi_{v,1-\alpha/2}^2$ and $u_1 = \chi_{v,\alpha/2}^2$ being
 the $100(1-\alpha/2)\%$ and $100(\alpha/2)\%$ percentile of the $\chi^2$ distribution with $v = n-1$ degrees of freedom, respectively [@Albatineh2014]:   
 $$
 \biggl(cv\left[\biggl(\frac{u_1}{v}-1\biggr)(cv)^{2}+\frac{u_1}{v}\right]^{-1/2}
@@ -290,7 +323,7 @@ cv(
 )
 ```
 ### Miller Confidence Interval    
-Miller [@EdwardMiller1991] introduced the following confidence interval for 
+Miller [@EdwardMiller1991] introduced the following CI for 
 $cv$; considering $Z_{\alpha/2}$ being the $(1-\alpha/2)$ percentile of the standard normal distribution [@Albatineh2014]:
 $$
 \biggl(cv - Z_{\alpha/2}\sqrt{
@@ -311,6 +344,29 @@ cv(
     na.rm = TRUE, 
     digits = 3, 
     method = "miller", 
+    correction = TRUE, 
+    alpha = 0.05
+)
+```
+### Vangel Confidence Interval      
+Vangel [@Vangel1996] introduced the following CI for 
+$cv$; which is a modification on McKay’s CI:
+$$
+\biggl(cv\left[\biggl(\frac{u_1+1}{v}-1\biggr)(cv)^{2}+\frac{u_1}{v}\right]^{-1/2}
+\le CV \le cv
+\left[\biggl(\frac{u_2+1}{v}-1\biggr)(cv)^{2}+\frac{u_2}{v}\right]^{-1/2}\biggr)
+$$
+Let us calculate the 95\% CI for $x$ according to Vangel's method [@Vangel1996]:   
+```{r eval = TRUE, warning=FALSE, message=FALSE}
+x <- c(
+    0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
+    4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
+)
+cv(
+    x, 
+    na.rm = TRUE, 
+    digits = 3, 
+    method = "vangel", 
     correction = TRUE, 
     alpha = 0.05
 )

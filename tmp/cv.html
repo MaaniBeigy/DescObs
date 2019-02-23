@@ -213,28 +213,10 @@ Afterwards, we transform the tiles of the confidence interval for <span class="m
 p\left[\biggl(\frac{\lambda_U}{\sqrt{n}}\biggr)^{-1}
 \le CV \le \biggl(\frac{\lambda_L}{\sqrt{n}}\biggr)^{-1}\right] = 1-\alpha
 \]</span> where <span class="math inline">\(p\)</span> stands for <em>probability</em>. Thanks to package <code>MBESS</code> <span class="citation">(Kelley, 2018)</span> for the computation of confidence limits for the noncentrality parameter from a <em>t</em> distribution (<code>conf.limits.nct</code>), <span class="math inline">\(cv\)</span> will be obtained as:</p>
-<pre class="r"><code>x &lt;- c(
-    0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
-    4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
-)
-cv(
-    x, 
-    na.rm = TRUE, 
-    digits = 3, 
-    method = &quot;kelley&quot;, 
-    correction = TRUE, 
-    alpha = 0.05
-)</code></pre>
-<pre><code>## $method
-## [1] &quot;Corrected cv with Kelley 95% CI&quot;
-## 
-## $statistics
-##      est  lower upper
-##   58.058 41.467 98.51</code></pre>
 </div>
 <div id="mckay-confidence-interval" class="section level3">
 <h3>McKay Confidence Interval</h3>
-<p>McKay <span class="citation">(McKay, 1932)</span> introduced the following confidence interval for <span class="math inline">\(cv\)</span>; considering <span class="math inline">\(u_1 = \chi_{v,1-\alpha/2}^2\)</span> and <span class="math inline">\(u_1 = \chi_{v,\alpha/2}^2\)</span> being the <span class="math inline">\(100(1-\alpha/2)\%\)</span> and <span class="math inline">\(100(\alpha/2)\%\)</span> percentile of the <span class="math inline">\(\chi^2\)</span> distribution with <span class="math inline">\(v = n-1\)</span> degrees of freedom, respectively <span class="citation">(Albatineh et al., 2014)</span>:<br />
+<p>McKay <span class="citation">(McKay, 1932)</span> introduced the following CI for <span class="math inline">\(cv\)</span>; considering <span class="math inline">\(u_1 = \chi_{v,1-\alpha/2}^2\)</span> and <span class="math inline">\(u_1 = \chi_{v,\alpha/2}^2\)</span> being the <span class="math inline">\(100(1-\alpha/2)\%\)</span> and <span class="math inline">\(100(\alpha/2)\%\)</span> percentile of the <span class="math inline">\(\chi^2\)</span> distribution with <span class="math inline">\(v = n-1\)</span> degrees of freedom, respectively <span class="citation">(Albatineh et al., 2014)</span>:<br />
 <span class="math display">\[
 \biggl(cv\left[\biggl(\frac{u_1}{v}-1\biggr)(cv)^{2}+\frac{u_1}{v}\right]^{-1/2}
 \le CV \le cv
@@ -261,7 +243,7 @@ cv(
 </div>
 <div id="miller-confidence-interval" class="section level3">
 <h3>Miller Confidence Interval</h3>
-<p>Miller <span class="citation">(Edward Miller, 1991)</span> introduced the following confidence interval for <span class="math inline">\(cv\)</span>; considering <span class="math inline">\(Z_{\alpha/2}\)</span> being the <span class="math inline">\((1-\alpha/2)\)</span> percentile of the standard normal distribution <span class="citation">(Albatineh et al., 2014)</span>: <span class="math display">\[
+<p>Miller <span class="citation">(Edward Miller, 1991)</span> introduced the following CI for <span class="math inline">\(cv\)</span>; considering <span class="math inline">\(Z_{\alpha/2}\)</span> being the <span class="math inline">\((1-\alpha/2)\)</span> percentile of the standard normal distribution <span class="citation">(Albatineh et al., 2014)</span>: <span class="math display">\[
 \biggl(cv - Z_{\alpha/2}\sqrt{
 \biggl(\frac{cv^2}{v}\biggr)\biggl(\frac{1}{2}+cv^2\biggr)} \le
 CV \le cv + Z_{\alpha/2}\sqrt{
@@ -288,6 +270,32 @@ cv(
 ##      est  lower  upper
 ##   58.058 34.173 81.942</code></pre>
 </div>
+<div id="vangel-confidence-interval" class="section level3">
+<h3>Vangel Confidence Interval</h3>
+<p>Vangel <span class="citation">(Vangel, 1996)</span> introduced the following CI for <span class="math inline">\(cv\)</span>; which is a modification on McKay’s CI: <span class="math display">\[
+\biggl(cv\left[\biggl(\frac{u_1+1}{v}-1\biggr)(cv)^{2}+\frac{u_1}{v}\right]^{-1/2}
+\le CV \le cv
+\left[\biggl(\frac{u_2+1}{v}-1\biggr)(cv)^{2}+\frac{u_2}{v}\right]^{-1/2}\biggr)
+\]</span> Let us calculate the 95% CI for <span class="math inline">\(x\)</span> according to Vangel’s method <span class="citation">(Vangel, 1996)</span>:</p>
+<pre class="r"><code>x &lt;- c(
+    0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
+    4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
+)
+cv(
+    x, 
+    na.rm = TRUE, 
+    digits = 3, 
+    method = &quot;vangel&quot;, 
+    correction = TRUE, 
+    alpha = 0.05
+)</code></pre>
+<pre><code>## $method
+## [1] &quot;Corrected cv with Vangel 95% CI&quot;
+## 
+## $statistics
+##      est  lower   upper
+##   58.058 41.443 106.237</code></pre>
+</div>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1>References</h1>
@@ -306,6 +314,9 @@ cv(
 </div>
 <div id="ref-McKay1932">
 <p>McKay, A. T. (1932). Distribution of the Coefficient of Variation and the Extended“ t” Distribution. <em>Journal of the Royal Statistical Society</em>, <em>95</em>(4), 695–698.</p>
+</div>
+<div id="ref-Vangel1996">
+<p>Vangel, M. G. (1996). Confidence intervals for a normal coefficient of variation. <em>The American Statistician</em>, <em>50</em>(1), 21–26.</p>
 </div>
 </div>
 </div>
