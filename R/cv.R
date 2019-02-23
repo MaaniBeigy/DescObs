@@ -32,7 +32,7 @@ cv <- function(
     method <- match.arg(
         arg = method,
         choices = c(
-            "kelley", "mckay", "miller", "vangel", " mahmoudvand_hassani",
+            "kelley", "mckay", "miller", "vangel", "mahmoudvand_hassani",
             "equal_tailed", "shortest_length", "normal_approximation",
             "norm","basic", "perc", "bca", "all"
         ),
@@ -142,9 +142,37 @@ cv <- function(
         est <- cv_corr
         lower.tile <- cv_corr/sqrt(((u1 + 1)/(v + 1) - 1 )*(cv_corr^2) + u1/v)
         upper.tile <- cv_corr/sqrt(((u2 + 1)/(v + 1) - 1)*(cv_corr^2) + u2/v)
+    } else if (method == "mahmoudvand_hassani" && correction == FALSE) {
+        if (length(x) <= 340) {
+            cn <- sqrt(2/(length(x) - 1)) * (
+                (gamma(length(x)/2))/(gamma((length(x) - 1)/2))
+                )
+        } else {
+            cn <- sqrt(2/(length(x) - 1)) * (
+                (lgamma(length(x)/2))/(lgamma((length(x) - 1)/2))
+            )
+        }
+        ul <- 2 - (cn + (qnorm((alpha/2)) * sqrt(1 - cn^2)))
+        uu <- 2 - (cn - (qnorm((alpha/2)) * sqrt(1 - cn^2)))
+        est <- cv
+        lower.tile <- cv/ul
+        upper.tile <- cv/uu
+    } else if (method == "mahmoudvand_hassani" && correction == TRUE) {
+        if (length(x) <= 340) {
+            cn <- sqrt(2/(length(x) - 1)) * (
+                (gamma(length(x)/2))/(gamma((length(x) - 1)/2))
+            )
+        } else {
+            cn <- sqrt(2/(length(x) - 1)) * (
+                (lgamma(length(x)/2))/(lgamma((length(x) - 1)/2))
+            )
+        }
+        ul <- 2 - (cn + (qnorm((alpha/2)) * sqrt(1 - cn^2)))
+        uu <- 2 - (cn - (qnorm((alpha/2)) * sqrt(1 - cn^2)))
+        est <- cv_corr
+        lower.tile <- cv_corr/ul
+        upper.tile <- cv_corr/uu
     }
-
-
 
     if (method == "kelley" && correction == FALSE) {
         return(
@@ -234,6 +262,30 @@ cv <- function(
         return(
             list(
                 method = "Corrected cv with Vangel 95% CI",
+                statistics = data.frame(
+                    est = round(est * 100, digits = digits),
+                    lower = round(lower.tile * 100, digits = digits),
+                    upper = round(upper.tile * 100, digits = digits),
+                    row.names = c(" ")
+                )
+            )
+        )
+    } else if (method == "mahmoudvand_hassani" && correction == FALSE) {
+        return(
+            list(
+                method = "cv with Mahmoudvand-Hassani 95% CI",
+                statistics = data.frame(
+                    est = round(est * 100, digits = digits),
+                    lower = round(lower.tile * 100, digits = digits),
+                    upper = round(upper.tile * 100, digits = digits),
+                    row.names = c(" ")
+                )
+            )
+        )
+    } else if (method == "mahmoudvand_hassani" && correction == TRUE) {
+        return(
+            list(
+                method = "Corrected cv with Mahmoudvand-Hassani 95% CI",
                 statistics = data.frame(
                     est = round(est * 100, digits = digits),
                     lower = round(lower.tile * 100, digits = digits),

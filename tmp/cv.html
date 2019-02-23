@@ -296,6 +296,37 @@ cv(
 ##      est  lower   upper
 ##   58.058 41.443 106.237</code></pre>
 </div>
+<div id="mahmoudvand-hassani-confidence-interval" class="section level3">
+<h3>Mahmoudvand-Hassani Confidence Interval</h3>
+<p>Mahmoudvand and Hassani <span class="citation">(Mahmoudvand &amp; Hassani, 2009)</span> introduced the following CI for <span class="math inline">\(cv\)</span>; which is obtained using ranked set sampling <em>(RSS)</em>:<br />
+<span class="math display">\[
+\biggl(\frac{cv}{2-C_n+Z_{1-\alpha/2}\sqrt{1-C_n^2}}
+\le CV \le
+\frac{cv}{2-C_n-Z_{1-\alpha/2}\sqrt{1-C_n^2}}
+\biggr)
+\]</span> where <span class="math display">\[
+C_n=\sqrt{\frac{2}{n-1}}\frac{\Gamma{(n/2)}}{\Gamma{((n-1)/2)}},
+\Gamma(n)=(n-1)!
+\]</span> Let us now calculate the 95% CI for <span class="math inline">\(x\)</span> according to Mahmoudvand-Hassani’s method <span class="citation">(Mahmoudvand &amp; Hassani, 2009)</span>:</p>
+<pre class="r"><code>x &lt;- c(
+    0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
+    4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
+)
+cv(
+    x, 
+    na.rm = TRUE, 
+    digits = 3, 
+    method = &quot;mahmoudvand_hassani&quot;, 
+    correction = TRUE, 
+    alpha = 0.05
+)</code></pre>
+<pre><code>## $method
+## [1] &quot;Corrected cv with Mahmoudvand-Hassani 95% CI&quot;
+## 
+## $statistics
+##      est lower  upper
+##   58.058 43.69 83.264</code></pre>
+</div>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1>References</h1>
@@ -311,6 +342,9 @@ cv(
 </div>
 <div id="ref-Kelley2018">
 <p>Kelley, K. (2018). MBESS: The MBESS R Package. R package version 4.4. 3. Retrieved from <a href="https://cran.r-project.org/package=MBESS" class="uri">https://cran.r-project.org/package=MBESS</a></p>
+</div>
+<div id="ref-Mahmoudvand2009">
+<p>Mahmoudvand, R., &amp; Hassani, H. (2009). Two new confidence intervals for the coefficient of variation in a normal distribution. <em>Journal of Applied Statistics</em>, <em>36</em>(4), 429–442.</p>
 </div>
 <div id="ref-McKay1932">
 <p>McKay, A. T. (1932). Distribution of the Coefficient of Variation and the Extended“ t” Distribution. <em>Journal of the Royal Statistical Society</em>, <em>95</em>(4), 695–698.</p>

@@ -86,7 +86,7 @@ cv <- function(
     method <- match.arg(
         arg = method,
         choices = c(
-            "kelley", "mckay", "miller", "vangel", " mahmoudvand_hassani",
+            "kelley", "mckay", "miller", "vangel", "mahmoudvand_hassani",
             "equal_tailed", "shortest_length", "normal_approximation",
             "norm","basic", "perc", "bca", "all"
         ),
@@ -196,9 +196,37 @@ cv <- function(
         est <- cv_corr
         lower.tile <- cv_corr/sqrt(((u1 + 1)/(v + 1) - 1 )*(cv_corr^2) + u1/v)
         upper.tile <- cv_corr/sqrt(((u2 + 1)/(v + 1) - 1)*(cv_corr^2) + u2/v)
+    } else if (method == "mahmoudvand_hassani" && correction == FALSE) {
+        if (length(x) <= 340) {
+            cn <- sqrt(2/(length(x) - 1)) * (
+                (gamma(length(x)/2))/(gamma((length(x) - 1)/2))
+                )
+        } else {
+            cn <- sqrt(2/(length(x) - 1)) * (
+                (lgamma(length(x)/2))/(lgamma((length(x) - 1)/2))
+            )
+        }
+        ul <- 2 - (cn + (qnorm((alpha/2)) * sqrt(1 - cn^2)))
+        uu <- 2 - (cn - (qnorm((alpha/2)) * sqrt(1 - cn^2)))
+        est <- cv
+        lower.tile <- cv/ul
+        upper.tile <- cv/uu
+    } else if (method == "mahmoudvand_hassani" && correction == TRUE) {
+        if (length(x) <= 340) {
+            cn <- sqrt(2/(length(x) - 1)) * (
+                (gamma(length(x)/2))/(gamma((length(x) - 1)/2))
+            )
+        } else {
+            cn <- sqrt(2/(length(x) - 1)) * (
+                (lgamma(length(x)/2))/(lgamma((length(x) - 1)/2))
+            )
+        }
+        ul <- 2 - (cn + (qnorm((alpha/2)) * sqrt(1 - cn^2)))
+        uu <- 2 - (cn - (qnorm((alpha/2)) * sqrt(1 - cn^2)))
+        est <- cv_corr
+        lower.tile <- cv_corr/ul
+        upper.tile <- cv_corr/uu
     }
-
-
 
     if (method == "kelley" && correction == FALSE) {
         return(
@@ -296,6 +324,30 @@ cv <- function(
                 )
             )
         )
+    } else if (method == "mahmoudvand_hassani" && correction == FALSE) {
+        return(
+            list(
+                method = "cv with Mahmoudvand-Hassani 95% CI",
+                statistics = data.frame(
+                    est = round(est * 100, digits = digits),
+                    lower = round(lower.tile * 100, digits = digits),
+                    upper = round(upper.tile * 100, digits = digits),
+                    row.names = c(" ")
+                )
+            )
+        )
+    } else if (method == "mahmoudvand_hassani" && correction == TRUE) {
+        return(
+            list(
+                method = "Corrected cv with Mahmoudvand-Hassani 95% CI",
+                statistics = data.frame(
+                    est = round(est * 100, digits = digits),
+                    lower = round(lower.tile * 100, digits = digits),
+                    upper = round(upper.tile * 100, digits = digits),
+                    row.names = c(" ")
+                )
+            )
+        )
     }
 }
 ```
@@ -371,5 +423,36 @@ cv(
     alpha = 0.05
 )
 ```
+### Mahmoudvand-Hassani Confidence Interval   
+Mahmoudvand and Hassani [@Mahmoudvand2009] introduced the following CI for 
+$cv$; which is obtained using ranked set sampling *(RSS)*:    
+$$
+\biggl(\frac{cv}{2-C_n+Z_{1-\alpha/2}\sqrt{1-C_n^2}}
+\le CV \le
+\frac{cv}{2-C_n-Z_{1-\alpha/2}\sqrt{1-C_n^2}}
+\biggr)
+$$
+where 
+$$
+C_n=\sqrt{\frac{2}{n-1}}\frac{\Gamma{(n/2)}}{\Gamma{((n-1)/2)}},
+\Gamma(n)=(n-1)!
+$$
+Let us now calculate the 95\% CI for $x$ according to Mahmoudvand-Hassani's 
+method [@Mahmoudvand2009]:   
+```{r eval = TRUE, warning=FALSE, message=FALSE}
+x <- c(
+    0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
+    4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
+)
+cv(
+    x, 
+    na.rm = TRUE, 
+    digits = 3, 
+    method = "mahmoudvand_hassani", 
+    correction = TRUE, 
+    alpha = 0.05
+)
+```
+
 # References   
 
