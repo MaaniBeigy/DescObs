@@ -84,8 +84,8 @@ cv <- function(
         u1 <- v*t1
         u2 <- v*t2
         est <- cv
-        lower.tile <- cv/sqrt((u1/(v + 1) - 1 )*cv*cv + u1/v)
-        upper.tile <- cv/sqrt((u2/(v + 1) - 1)*cv*cv + u2/v)
+        lower.tile <- cv/sqrt((u1/(v + 1) - 1 )*(cv^2) + u1/v)
+        upper.tile <- cv/sqrt((u2/(v + 1) - 1)*(cv^2) + u2/v)
     } else if (method == "mckay" && correction == TRUE) {
         if (cv_corr > 0.33) {
             warning("Confidence interval may be very approximate")
@@ -96,8 +96,8 @@ cv <- function(
         u1 <- v*t1
         u2 <- v*t2
         est <- cv_corr
-        lower.tile <- cv_corr/sqrt((u1/(v + 1) - 1 )*cv_corr*cv_corr + u1/v)
-        upper.tile <- cv_corr/sqrt((u2/(v + 1) - 1)*cv_corr*cv_corr + u2/v)
+        lower.tile <- cv_corr/sqrt((u1/(v + 1) - 1 )*(cv_corr^2) + u1/v)
+        upper.tile <- cv_corr/sqrt((u2/(v + 1) - 1)*(cv_corr^2) + u2/v)
     } else if (method == "miller" && correction == FALSE) {
         v <- length(x) - 1
         z_alpha_over2 <- qnorm(1 - (alpha/2))
@@ -118,6 +118,30 @@ cv <- function(
         est <- cv_corr
         lower.tile <- cv_corr - zu
         upper.tile <- cv_corr + zu
+    }  else if (method == "vangel" && correction == FALSE) {
+        if (cv > 0.33) {
+            warning("Confidence interval may be very approximate")
+        }
+        v <- length(x) - 1
+        t1 <- qchisq(1 - alpha/2,v)/v
+        t2 <- qchisq(alpha/2,v)/v
+        u1 <- v*t1
+        u2 <- v*t2
+        est <- cv
+        lower.tile <- cv/sqrt(((u1 + 1)/(v + 1) - 1 )*(cv^2) + u1/v)
+        upper.tile <- cv/sqrt(((u2 + 1)/(v + 1) - 1)*(cv^2) + u2/v)
+    } else if (method == "vangel" && correction == TRUE) {
+        if (cv_corr > 0.33) {
+            warning("Confidence interval may be very approximate")
+        }
+        v <- length(x) - 1
+        t1 <- qchisq(1 - alpha/2,v)/v
+        t2 <- qchisq(alpha/2,v)/v
+        u1 <- v*t1
+        u2 <- v*t2
+        est <- cv_corr
+        lower.tile <- cv_corr/sqrt(((u1 + 1)/(v + 1) - 1 )*(cv_corr^2) + u1/v)
+        upper.tile <- cv_corr/sqrt(((u2 + 1)/(v + 1) - 1)*(cv_corr^2) + u2/v)
     }
 
 
@@ -186,6 +210,30 @@ cv <- function(
         return(
             list(
                 method = "Corrected cv with Miller 95% CI",
+                statistics = data.frame(
+                    est = round(est * 100, digits = digits),
+                    lower = round(lower.tile * 100, digits = digits),
+                    upper = round(upper.tile * 100, digits = digits),
+                    row.names = c(" ")
+                )
+            )
+        )
+    } else if (method == "vangel" && correction == FALSE) {
+        return(
+            list(
+                method = "cv with Vangel 95% CI",
+                statistics = data.frame(
+                    est = round(est * 100, digits = digits),
+                    lower = round(lower.tile * 100, digits = digits),
+                    upper = round(upper.tile * 100, digits = digits),
+                    row.names = c(" ")
+                )
+            )
+        )
+    } else if (method == "vangel" && correction == TRUE) {
+        return(
+            list(
+                method = "Corrected cv with Vangel 95% CI",
                 statistics = data.frame(
                     est = round(est * 100, digits = digits),
                     lower = round(lower.tile * 100, digits = digits),
