@@ -198,7 +198,7 @@ $(document).ready(function () {
 <span class="math display">\[CV = \frac{\sigma}{\mu},\]</span> where <span class="math inline">\(\sigma\)</span> is the population standard deviation and <span class="math inline">\(\mu\)</span> is the population mean. Almost always, we analyze data from samples but want to generalize it as the population’s parameter <span class="citation">(Albatineh et al., 2014)</span>. Its sample’s estimate is given as:<br />
 <span class="math display">\[cv = \frac{sd}{\bar{X}}\]</span><br />
 where <span class="math inline">\(sd\)</span> is the sample standard deviation, the square root of the unbiased estimator of population variance, and <span class="math inline">\(\bar{X}\)</span> is the sample mean. The corrected <em>cv</em> to account for the sample size is: <span class="math display">\[
-cv_{korr} = cv * \biggl(1 - \frac{1}{4(n-1)} 
+cv_{corr} = cv * \biggl(1 - \frac{1}{4(n-1)} 
 + \frac{1}{n}cv^2 
 + \frac{1}{2 (n-1)^2} \biggr)
 \]</span> There are various methods for the calculation of <strong>confidence intervals (CI)</strong> for <em>cv</em>. All of them are fruitful and have particular use cases. Some of them are model-based hence their usage depends the assumptions regarding the distribution of data. For sake of versatility, we cover almost all of these methods in <code>DescObs</code> package. Here, we explain them along with some examples:</p>

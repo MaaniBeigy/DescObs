@@ -24,7 +24,7 @@ $$cv = \frac{sd}{\bar{X}}$$
 where $sd$ is the sample standard deviation, the square root of the unbiased estimator of population variance, and $\bar{X}$ is the sample mean. The 
 corrected *cv* to account for the sample size is:
 $$
-cv_{korr} = cv * \biggl(1 - \frac{1}{4(n-1)} 
+cv_{corr} = cv * \biggl(1 - \frac{1}{4(n-1)} 
 + \frac{1}{n}cv^2 
 + \frac{1}{2 (n-1)^2} \biggr)
 $$
