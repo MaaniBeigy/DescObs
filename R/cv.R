@@ -172,6 +172,20 @@ cv <- function(
         est <- cv_corr
         lower.tile <- cv_corr/ul
         upper.tile <- cv_corr/uu
+    } else if (method == "normal_approximation" && correction == FALSE) {
+        cn <- sqrt(1 - (1/(2 * length(x))))
+        ul <- cn + (qnorm(1 - (alpha/2)) * sqrt(1 - cn^2))
+        uu <- cn - (qnorm(1 - (alpha/2)) * sqrt(1 - cn^2))
+        est <- cv
+        lower.tile <- cv/ul
+        upper.tile <- cv/uu
+    } else if (method == "normal_approximation" && correction == TRUE) {
+        cn <- sqrt(1 - (1/(2 * length(x))))
+        ul <- cn + (qnorm(1 - (alpha/2)) * sqrt(1 - cn^2))
+        uu <- cn - (qnorm(1 - (alpha/2)) * sqrt(1 - cn^2))
+        est <- cv_corr
+        lower.tile <- cv_corr/ul
+        upper.tile <- cv_corr/uu
     }
 
     if (method == "kelley" && correction == FALSE) {
@@ -294,9 +308,30 @@ cv <- function(
                 )
             )
         )
+    } else if (method == "normal_approximation" && correction == FALSE) {
+        return(
+            list(
+                method = "cv with Normal Approximation 95% CI",
+                statistics = data.frame(
+                    est = round(est * 100, digits = digits),
+                    lower = round(lower.tile * 100, digits = digits),
+                    upper = round(upper.tile * 100, digits = digits),
+                    row.names = c(" ")
+                )
+            )
+        )
+    } else if (method == "normal_approximation" && correction == TRUE) {
+        return(
+            list(
+                method = "Corrected cv with Normal Approximation 95% CI",
+                statistics = data.frame(
+                    est = round(est * 100, digits = digits),
+                    lower = round(lower.tile * 100, digits = digits),
+                    upper = round(upper.tile * 100, digits = digits),
+                    row.names = c(" ")
+                )
+            )
+        )
     }
-
-
-
 
 }

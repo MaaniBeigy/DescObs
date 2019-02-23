@@ -213,6 +213,24 @@ Afterwards, we transform the tiles of the confidence interval for <span class="m
 p\left[\biggl(\frac{\lambda_U}{\sqrt{n}}\biggr)^{-1}
 \le CV \le \biggl(\frac{\lambda_L}{\sqrt{n}}\biggr)^{-1}\right] = 1-\alpha
 \]</span> where <span class="math inline">\(p\)</span> stands for <em>probability</em>. Thanks to package <code>MBESS</code> <span class="citation">(Kelley, 2018)</span> for the computation of confidence limits for the noncentrality parameter from a <em>t</em> distribution (<code>conf.limits.nct</code>), <span class="math inline">\(cv\)</span> will be obtained as:</p>
+<pre class="r"><code>x &lt;- c(
+    0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
+    4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
+)
+cv(
+    x, 
+    na.rm = TRUE, 
+    digits = 3, 
+    method = &quot;kelley&quot;, 
+    correction = TRUE, 
+    alpha = 0.05
+)</code></pre>
+<pre><code>## $method
+## [1] &quot;Corrected cv with Kelley 95% CI&quot;
+## 
+## $statistics
+##      est  lower upper
+##   58.058 41.467 98.51</code></pre>
 </div>
 <div id="mckay-confidence-interval" class="section level3">
 <h3>McKay Confidence Interval</h3>
@@ -327,6 +345,34 @@ cv(
 ##      est lower  upper
 ##   58.058 43.69 83.264</code></pre>
 </div>
+<div id="normal-approximation-confidence-interval" class="section level3">
+<h3>Normal Approximation Confidence Interval</h3>
+<p>Panichkitkosolkul <span class="citation">(Panichkitkosolkul, 2013)</span> introduced the following CI for <span class="math inline">\(cv\)</span>; which is a <em>normal approximation</em>: <span class="math display">\[
+\biggl(\frac{cv}{C_{n+1}+Z_{1-\alpha/2}\sqrt{1-C_{n+1}^2}}
+\le CV \le
+\frac{cv}{C_{n+1}-Z_{1-\alpha/2}\sqrt{1-C_{n+1}^2}}
+\biggr)
+\]</span> where <span class="math inline">\(C_{n+1}=\sqrt{1-(1/2n)}\)</span><br />
+Now we calculate the normal approximation 95% CI for <span class="math inline">\(x\)</span> according to Panichkitkosolkul <span class="citation">(Panichkitkosolkul, 2013)</span> :</p>
+<pre class="r"><code>x &lt;- c(
+    0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
+    4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
+)
+cv(
+    x, 
+    na.rm = TRUE, 
+    digits = 3, 
+    method = &quot;normal_approximation&quot;, 
+    correction = TRUE, 
+    alpha = 0.05
+)</code></pre>
+<pre><code>## $method
+## [1] &quot;Corrected cv with Normal Approximation 95% CI&quot;
+## 
+## $statistics
+##      est  lower  upper
+##   58.058 44.752 85.691</code></pre>
+</div>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1>References</h1>
@@ -348,6 +394,9 @@ cv(
 </div>
 <div id="ref-McKay1932">
 <p>McKay, A. T. (1932). Distribution of the Coefficient of Variation and the Extended“ t” Distribution. <em>Journal of the Royal Statistical Society</em>, <em>95</em>(4), 695–698.</p>
+</div>
+<div id="ref-Panichkitkosolkul2013">
+<p>Panichkitkosolkul, W. (2013). Confidence Intervals for the Coefficient of Variation in a Normal Distribution with a Known Population Mean. <em>Journal of Probability and Statistics</em>, <em>2013</em>, 1–11. <a href="https://doi.org/10.1155/2013/324940" class="uri">https://doi.org/10.1155/2013/324940</a></p>
 </div>
 <div id="ref-Vangel1996">
 <p>Vangel, M. G. (1996). Confidence intervals for a normal coefficient of variation. <em>The American Statistician</em>, <em>50</em>(1), 21–26.</p>
