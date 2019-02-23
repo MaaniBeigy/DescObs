@@ -32,7 +32,7 @@ There are various methods for the calculation of **confidence intervals (CI)**
 for *cv*. All of them are fruitful and have particular use cases. Some of them 
 are model-based hence their usage depends the assumptions regarding the distribution of data. For sake of versatility, we cover almost all of these methods in `DescObs` package. Here, we explain them along with some examples:
 
-### Kelley's Confidence Interval        
+### Kelley Confidence Interval        
 
 Let us assume that *cv* follows a noncentral *t* distribution, when the parent  population of the scores is *normally-distributed*, with noncentrality 
 ($\lambda$) parameter:   
@@ -105,12 +105,12 @@ cv <- function(
     cv <- (
         sd(x, na.rm = na.rm)/mean(x, na.rm = na.rm)
     )
+    cv_corr <- cv * (
+        (1 - (1/(4 * (length(x) - 1))) +
+             (1/length(x)) * cv^2) +
+            (1/(2 * (length(x) - 1)^2))
+    )
     if ("kelley" %in% method && correction == FALSE) {
-        cv_corr <- cv * (
-            (1 - (1/(4 * (length(x) - 1))) +
-                 (1/length(x)) * cv^2) +
-                (1/(2 * (length(x) - 1)^2))
-        )
         ci <- MBESS::conf.limits.nct(
             ncp = sqrt(length(x))/cv_corr,
             df = length(x) - 1,
@@ -120,11 +120,6 @@ cv <- function(
         lower.tile <- unname(sqrt(length(x))/ci$Upper.Limit)
         upper.tile <- unname(sqrt(length(x))/ci$Lower.Limit)
     } else if (method == "kelley" && correction == TRUE) {
-        cv_corr <- cv * (
-            (1 - (1/(4 * (length(x) - 1))) +
-                 (1/length(x)) * cv^2) +
-                (1/(2 * (length(x) - 1)^2))
-        )
         ci <- MBESS::conf.limits.nct(
             ncp = sqrt(length(x))/cv_corr,
             df = length(x) - 1,
@@ -146,11 +141,6 @@ cv <- function(
         lower.tile <- cv/sqrt((u1/(v + 1) - 1 )*cv*cv + u1/v)
         upper.tile <- cv/sqrt((u2/(v + 1) - 1)*cv*cv + u2/v)
     } else if (method == "mckay" && correction == TRUE) {
-        cv_corr <- cv * (
-            (1 - (1/(4 * (length(x) - 1))) +
-                 (1/length(x)) * cv^2) +
-                (1/(2 * (length(x) - 1)^2))
-        )
         if (cv_corr > 0.33) {
             warning("Confidence interval may be very approximate")
         }
@@ -162,6 +152,26 @@ cv <- function(
         est <- cv_corr
         lower.tile <- cv_corr/sqrt((u1/(v + 1) - 1 )*cv_corr*cv_corr + u1/v)
         upper.tile <- cv_corr/sqrt((u2/(v + 1) - 1)*cv_corr*cv_corr + u2/v)
+    } else if (method == "miller" && correction == FALSE) {
+        v <- length(x) - 1
+        z_alpha_over2 <- qnorm(1 - (alpha/2))
+        u <- sqrt(
+            (cv^2/v) * (0.5 + cv^2)
+        )
+        zu <- z_alpha_over2 * u
+        est <- cv
+        lower.tile <- cv - zu
+        upper.tile <- cv + zu
+    } else if (method == "miller" && correction == TRUE) {
+        v <- length(x) - 1
+        z_alpha_over2 <- qnorm(1 - (alpha/2))
+        u <- sqrt(
+            (cv_corr^2/v) * (0.5 + cv_corr^2)
+        )
+        zu <- z_alpha_over2 * u
+        est <- cv_corr
+        lower.tile <- cv_corr - zu
+        upper.tile <- cv_corr + zu
     }
 
 
@@ -169,44 +179,72 @@ cv <- function(
     if (method == "kelley" && correction == FALSE) {
         return(
             list(
-                method = "cv with Kelley's 95% CI",
+                method = "cv with Kelley 95% CI",
                 statistics = data.frame(
                     est = round(est * 100, digits = digits),
                     lower = round(lower.tile * 100, digits = digits),
-                    upper = round(upper.tile * 100, digits = digits)
+                    upper = round(upper.tile * 100, digits = digits),
+                    row.names = c(" ")
                 )
             )
         )
     } else if (method == "kelley" && correction == TRUE) {
         return(
             list(
-                method = "Corrected cv with Kelley's 95% CI",
+                method = "Corrected cv with Kelley 95% CI",
                 statistics = data.frame(
                     est = round(est * 100, digits = digits),
                     lower = round(lower.tile * 100, digits = digits),
-                    upper = round(upper.tile * 100, digits = digits)
+                    upper = round(upper.tile * 100, digits = digits),
+                    row.names = c(" ")
                 )
             )
         )
     } else if (method == "mckay" && correction == FALSE) {
         return(
             list(
-                method = "cv with McKay's 95% CI",
+                method = "cv with McKay 95% CI",
                 statistics = data.frame(
                     est = round(est * 100, digits = digits),
                     lower = round(lower.tile * 100, digits = digits),
-                    upper = round(upper.tile * 100, digits = digits)
+                    upper = round(upper.tile * 100, digits = digits),
+                    row.names = c(" ")
                 )
             )
         )
     } else if (method == "mckay" && correction == TRUE) {
         return(
             list(
-                method = "Corrected cv with McKay's 95% CI",
+                method = "Corrected cv with McKay 95% CI",
                 statistics = data.frame(
                     est = round(est * 100, digits = digits),
                     lower = round(lower.tile * 100, digits = digits),
-                    upper = round(upper.tile * 100, digits = digits)
+                    upper = round(upper.tile * 100, digits = digits),
+                    row.names = c(" ")
+                )
+            )
+        )
+    } else if (method == "miller" && correction == FALSE) {
+        return(
+            list(
+                method = "cv with Miller 95% CI",
+                statistics = data.frame(
+                    est = round(est * 100, digits = digits),
+                    lower = round(lower.tile * 100, digits = digits),
+                    upper = round(upper.tile * 100, digits = digits),
+                    row.names = c(" ")
+                )
+            )
+        )
+    } else if (method == "miller" && correction == TRUE) {
+        return(
+            list(
+                method = "Corrected cv with Miller 95% CI",
+                statistics = data.frame(
+                    est = round(est * 100, digits = digits),
+                    lower = round(lower.tile * 100, digits = digits),
+                    upper = round(upper.tile * 100, digits = digits),
+                    row.names = c(" ")
                 )
             )
         )
@@ -228,7 +266,7 @@ cv(
     alpha = 0.05
 )
 ```
-### McKay's Confidence Interval
+### McKay Confidence Interval
 McKay [@McKay1932] introduced the following confidence interval for $cv$; considering $u_1 = \chi_{v,1-\alpha/2}^2$ and $u_1 = \chi_{v,\alpha/2}^2$ being
 the $100(1-\alpha/2)\%$ and $100(\alpha/2)\%$ percentile of the $\chi^2$ distribution with $v = n-1$ degrees of freedom, respectively [@Albatineh2014]:   
 $$
@@ -247,6 +285,32 @@ cv(
     na.rm = TRUE, 
     digits = 3, 
     method = "mckay", 
+    correction = TRUE, 
+    alpha = 0.05
+)
+```
+### Miller Confidence Interval    
+Miller [@EdwardMiller1991] introduced the following confidence interval for 
+$cv$; considering $Z_{\alpha/2}$ being the $(1-\alpha/2)$ percentile of the standard normal distribution [@Albatineh2014]:
+$$
+\biggl(cv - Z_{\alpha/2}\sqrt{
+\biggl(\frac{cv^2}{v}\biggr)\biggl(\frac{1}{2}+cv^2\biggr)} \le
+CV \le cv + Z_{\alpha/2}\sqrt{
+\biggl(\frac{cv^2}{v}\biggr)\biggl(\frac{1}{2}+cv^2\biggr)}
+\biggr)
+$$
+where $v = n-1$ is the degree of freedom.   
+Let us calculate the 95\% CI for $x$ according to Miller's method [@EdwardMiller1991]:   
+```{r eval = TRUE, warning=FALSE, message=FALSE}
+x <- c(
+    0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
+    4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
+)
+cv(
+    x, 
+    na.rm = TRUE, 
+    digits = 3, 
+    method = "miller", 
     correction = TRUE, 
     alpha = 0.05
 )

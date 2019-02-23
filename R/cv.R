@@ -51,12 +51,12 @@ cv <- function(
     cv <- (
         sd(x, na.rm = na.rm)/mean(x, na.rm = na.rm)
     )
+    cv_corr <- cv * (
+        (1 - (1/(4 * (length(x) - 1))) +
+             (1/length(x)) * cv^2) +
+            (1/(2 * (length(x) - 1)^2))
+    )
     if ("kelley" %in% method && correction == FALSE) {
-        cv_corr <- cv * (
-            (1 - (1/(4 * (length(x) - 1))) +
-                 (1/length(x)) * cv^2) +
-                (1/(2 * (length(x) - 1)^2))
-        )
         ci <- MBESS::conf.limits.nct(
             ncp = sqrt(length(x))/cv_corr,
             df = length(x) - 1,
@@ -66,11 +66,6 @@ cv <- function(
         lower.tile <- unname(sqrt(length(x))/ci$Upper.Limit)
         upper.tile <- unname(sqrt(length(x))/ci$Lower.Limit)
     } else if (method == "kelley" && correction == TRUE) {
-        cv_corr <- cv * (
-            (1 - (1/(4 * (length(x) - 1))) +
-                 (1/length(x)) * cv^2) +
-                (1/(2 * (length(x) - 1)^2))
-        )
         ci <- MBESS::conf.limits.nct(
             ncp = sqrt(length(x))/cv_corr,
             df = length(x) - 1,
@@ -92,11 +87,6 @@ cv <- function(
         lower.tile <- cv/sqrt((u1/(v + 1) - 1 )*cv*cv + u1/v)
         upper.tile <- cv/sqrt((u2/(v + 1) - 1)*cv*cv + u2/v)
     } else if (method == "mckay" && correction == TRUE) {
-        cv_corr <- cv * (
-            (1 - (1/(4 * (length(x) - 1))) +
-                 (1/length(x)) * cv^2) +
-                (1/(2 * (length(x) - 1)^2))
-        )
         if (cv_corr > 0.33) {
             warning("Confidence interval may be very approximate")
         }
@@ -108,6 +98,26 @@ cv <- function(
         est <- cv_corr
         lower.tile <- cv_corr/sqrt((u1/(v + 1) - 1 )*cv_corr*cv_corr + u1/v)
         upper.tile <- cv_corr/sqrt((u2/(v + 1) - 1)*cv_corr*cv_corr + u2/v)
+    } else if (method == "miller" && correction == FALSE) {
+        v <- length(x) - 1
+        z_alpha_over2 <- qnorm(1 - (alpha/2))
+        u <- sqrt(
+            (cv^2/v) * (0.5 + cv^2)
+        )
+        zu <- z_alpha_over2 * u
+        est <- cv
+        lower.tile <- cv - zu
+        upper.tile <- cv + zu
+    } else if (method == "miller" && correction == TRUE) {
+        v <- length(x) - 1
+        z_alpha_over2 <- qnorm(1 - (alpha/2))
+        u <- sqrt(
+            (cv_corr^2/v) * (0.5 + cv_corr^2)
+        )
+        zu <- z_alpha_over2 * u
+        est <- cv_corr
+        lower.tile <- cv_corr - zu
+        upper.tile <- cv_corr + zu
     }
 
 
@@ -115,44 +125,72 @@ cv <- function(
     if (method == "kelley" && correction == FALSE) {
         return(
             list(
-                method = "cv with Kelley's 95% CI",
+                method = "cv with Kelley 95% CI",
                 statistics = data.frame(
                     est = round(est * 100, digits = digits),
                     lower = round(lower.tile * 100, digits = digits),
-                    upper = round(upper.tile * 100, digits = digits)
+                    upper = round(upper.tile * 100, digits = digits),
+                    row.names = c(" ")
                 )
             )
         )
     } else if (method == "kelley" && correction == TRUE) {
         return(
             list(
-                method = "Corrected cv with Kelley's 95% CI",
+                method = "Corrected cv with Kelley 95% CI",
                 statistics = data.frame(
                     est = round(est * 100, digits = digits),
                     lower = round(lower.tile * 100, digits = digits),
-                    upper = round(upper.tile * 100, digits = digits)
+                    upper = round(upper.tile * 100, digits = digits),
+                    row.names = c(" ")
                 )
             )
         )
     } else if (method == "mckay" && correction == FALSE) {
         return(
             list(
-                method = "cv with McKay's 95% CI",
+                method = "cv with McKay 95% CI",
                 statistics = data.frame(
                     est = round(est * 100, digits = digits),
                     lower = round(lower.tile * 100, digits = digits),
-                    upper = round(upper.tile * 100, digits = digits)
+                    upper = round(upper.tile * 100, digits = digits),
+                    row.names = c(" ")
                 )
             )
         )
     } else if (method == "mckay" && correction == TRUE) {
         return(
             list(
-                method = "Corrected cv with McKay's 95% CI",
+                method = "Corrected cv with McKay 95% CI",
                 statistics = data.frame(
                     est = round(est * 100, digits = digits),
                     lower = round(lower.tile * 100, digits = digits),
-                    upper = round(upper.tile * 100, digits = digits)
+                    upper = round(upper.tile * 100, digits = digits),
+                    row.names = c(" ")
+                )
+            )
+        )
+    } else if (method == "miller" && correction == FALSE) {
+        return(
+            list(
+                method = "cv with Miller 95% CI",
+                statistics = data.frame(
+                    est = round(est * 100, digits = digits),
+                    lower = round(lower.tile * 100, digits = digits),
+                    upper = round(upper.tile * 100, digits = digits),
+                    row.names = c(" ")
+                )
+            )
+        )
+    } else if (method == "miller" && correction == TRUE) {
+        return(
+            list(
+                method = "Corrected cv with Miller 95% CI",
+                statistics = data.frame(
+                    est = round(est * 100, digits = digits),
+                    lower = round(lower.tile * 100, digits = digits),
+                    upper = round(upper.tile * 100, digits = digits),
+                    row.names = c(" ")
                 )
             )
         )

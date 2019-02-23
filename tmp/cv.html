@@ -202,8 +202,8 @@ cv_{corr} = cv * \biggl(1 - \frac{1}{4(n-1)}
 + \frac{1}{n}cv^2 
 + \frac{1}{2 (n-1)^2} \biggr)
 \]</span> There are various methods for the calculation of <strong>confidence intervals (CI)</strong> for <em>cv</em>. All of them are fruitful and have particular use cases. Some of them are model-based hence their usage depends the assumptions regarding the distribution of data. For sake of versatility, we cover almost all of these methods in <code>DescObs</code> package. Here, we explain them along with some examples:</p>
-<div id="kelleys-confidence-interval" class="section level3">
-<h3>Kelley’s Confidence Interval</h3>
+<div id="kelley-confidence-interval" class="section level3">
+<h3>Kelley Confidence Interval</h3>
 <p>Let us assume that <em>cv</em> follows a noncentral <em>t</em> distribution, when the parent population of the scores is <em>normally-distributed</em>, with noncentrality (<span class="math inline">\(\lambda\)</span>) parameter:<br />
 <span class="math display">\[
 \lambda = \frac{\sqrt{n}}{cv}
@@ -226,14 +226,14 @@ cv(
     alpha = 0.05
 )</code></pre>
 <pre><code>## $method
-## [1] &quot;Corrected cv with Kelley's 95% CI&quot;
+## [1] &quot;Corrected cv with Kelley 95% CI&quot;
 ## 
 ## $statistics
 ##      est  lower upper
-## 1 58.058 41.467 98.51</code></pre>
+##   58.058 41.467 98.51</code></pre>
 </div>
-<div id="mckays-confidence-interval" class="section level3">
-<h3>McKay’s Confidence Interval</h3>
+<div id="mckay-confidence-interval" class="section level3">
+<h3>McKay Confidence Interval</h3>
 <p>McKay <span class="citation">(McKay, 1932)</span> introduced the following confidence interval for <span class="math inline">\(cv\)</span>; considering <span class="math inline">\(u_1 = \chi_{v,1-\alpha/2}^2\)</span> and <span class="math inline">\(u_1 = \chi_{v,\alpha/2}^2\)</span> being the <span class="math inline">\(100(1-\alpha/2)\%\)</span> and <span class="math inline">\(100(\alpha/2)\%\)</span> percentile of the <span class="math inline">\(\chi^2\)</span> distribution with <span class="math inline">\(v = n-1\)</span> degrees of freedom, respectively <span class="citation">(Albatineh et al., 2014)</span>:<br />
 <span class="math display">\[
 \biggl(cv\left[\biggl(\frac{u_1}{v}-1\biggr)(cv)^{2}+\frac{u_1}{v}\right]^{-1/2}
@@ -253,11 +253,40 @@ cv(
     alpha = 0.05
 )</code></pre>
 <pre><code>## $method
-## [1] &quot;Corrected cv with McKay's 95% CI&quot;
+## [1] &quot;Corrected cv with McKay 95% CI&quot;
 ## 
 ## $statistics
 ##      est  lower   upper
-## 1 58.058 41.622 109.367</code></pre>
+##   58.058 41.622 109.367</code></pre>
+</div>
+<div id="miller-confidence-interval" class="section level3">
+<h3>Miller Confidence Interval</h3>
+<p>Miller <span class="citation">(Edward Miller, 1991)</span> introduced the following confidence interval for <span class="math inline">\(cv\)</span>; considering <span class="math inline">\(Z_{\alpha/2}\)</span> being the <span class="math inline">\((1-\alpha/2)\)</span> percentile of the standard normal distribution <span class="citation">(Albatineh et al., 2014)</span>: <span class="math display">\[
+\biggl(cv - Z_{\alpha/2}\sqrt{
+\biggl(\frac{cv^2}{v}\biggr)\biggl(\frac{1}{2}+cv^2\biggr)} \le
+CV \le cv + Z_{\alpha/2}\sqrt{
+\biggl(\frac{cv^2}{v}\biggr)\biggl(\frac{1}{2}+cv^2\biggr)}
+\biggr)
+\]</span> where <span class="math inline">\(v = n-1\)</span> is the degree of freedom.<br />
+Let us calculate the 95% CI for <span class="math inline">\(x\)</span> according to Miller’s method <span class="citation">(Edward Miller, 1991)</span>:</p>
+<pre class="r"><code>x &lt;- c(
+    0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
+    4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
+)
+cv(
+    x, 
+    na.rm = TRUE, 
+    digits = 3, 
+    method = &quot;miller&quot;, 
+    correction = TRUE, 
+    alpha = 0.05
+)</code></pre>
+<pre><code>## $method
+## [1] &quot;Corrected cv with Miller 95% CI&quot;
+## 
+## $statistics
+##      est  lower  upper
+##   58.058 34.173 81.942</code></pre>
 </div>
 </div>
 <div id="references" class="section level1 unnumbered">
@@ -265,6 +294,9 @@ cv(
 <div id="refs" class="references">
 <div id="ref-Albatineh2014">
 <p>Albatineh, A. N., Kibria, B. M., Wilcox, M. L., &amp; Zogheib, B. (2014). Confidence interval estimation for the population coefficient of variation using ranked set sampling: A simulation study. <em>Journal of Applied Statistics</em>, <em>41</em>(4), 733–751. <a href="https://doi.org/10.1080/02664763.2013.847405" class="uri">https://doi.org/10.1080/02664763.2013.847405</a></p>
+</div>
+<div id="ref-EdwardMiller1991">
+<p>Edward Miller, G. (1991). Asymptotic test statistics for coefficients of variation. <em>Communications in Statistics-Theory and Methods</em>, <em>20</em>(10), 3351–3363.</p>
 </div>
 <div id="ref-Kelley2007">
 <p>Kelley, K. (2007). Sample size planning for the coefficient of variation from the accuracy in parameter estimation approach. <em>Behavior Research Methods</em>, <em>39</em>(4), 755–766. <a href="https://doi.org/10.3758/BF03192966" class="uri">https://doi.org/10.3758/BF03192966</a></p>
