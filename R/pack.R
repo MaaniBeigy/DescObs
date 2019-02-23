@@ -495,9 +495,14 @@
 # )
 # cqv(x = df1$cardioadm, na.rm = TRUE, digits = 2, method = "norm", R = 1000)
 #
-shortest_length <- read.csv(
-    file = paste0(dir, "/data/shortest_length.csv"),
-    encoding = "UTF-8",
-    sep = ",",
-    header = TRUE
-)
+# shortest_length <- read.csv(
+#     file = paste0(dir, "/data/shortest_length.csv"),
+#     encoding = "UTF-8",
+#     sep = ",",
+#     header = TRUE
+# )
+# shortest_length <- system.file(
+#     'data',
+#     'shortest_length.csv',
+#     package = 'DescObs'
+#     )
