@@ -14,7 +14,7 @@ Description: Provides some easy-to-use functions to extract and visualize the
     statistical applications. We will try to provide multi-control knob tools,
     by means of various options and incorporating the most available rigorous 
     methods.
-Imports: dplyr, SciViews, boot
+Imports: dplyr, SciViews, boot, MBESS
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
