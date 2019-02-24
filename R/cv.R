@@ -293,8 +293,8 @@ cv <- function(
                 dplyr::select(b)
         }
         est <- cv  # cv is an estimate of CV
-        lower.tile <- (cv*sqrt(length(x)))/sqrt(b_value$b)
-        upper.tile <- (cv*sqrt(length(x)))/sqrt(a_value$a)
+        lower.tile <- (cv*sqrt(length(x) - 1))/sqrt(b_value$b)
+        upper.tile <- (cv*sqrt(length(x) - 1))/sqrt(a_value$a)
     } else if (method == "shortest_length" && correction == TRUE) {
         if (length(x) <= 300) {
             a_value <- shortest_length %>%
@@ -312,8 +312,22 @@ cv <- function(
                 dplyr::select(b)
         }
         est <- cv_corr  # corrected cv is an estimate of CV
-        lower.tile <- (cv_corr*sqrt(length(x)))/sqrt(b_value$b)
-        upper.tile <- (cv_corr*sqrt(length(x)))/sqrt(a_value$a)
+        lower.tile <- (cv_corr*sqrt(length(x) - 1))/sqrt(b_value$b)
+        upper.tile <- (cv_corr*sqrt(length(x) - 1))/sqrt(a_value$a)
+    }  else if (method == "equal_tailed" && correction == FALSE) {
+        v <- length(x) - 1
+        tt1 <- qchisq(1 - alpha/2,v)
+        tt2 <- qchisq(alpha/2,v)
+        est <- cv  # cv is an estimate of CV
+        lower.tile <- (cv*sqrt(v))/(sqrt(tt1))
+        upper.tile <- (cv*sqrt(v))/(sqrt(tt2))
+    } else if (method == "equal_tailed" && correction == TRUE) {
+        v <- length(x) - 1
+        tt1 <- qchisq(1 - alpha/2,v)
+        tt2 <- qchisq(alpha/2,v)
+        est <- cv_corr  # corrected cv is an estimate of CV
+        lower.tile <- (cv_corr*sqrt(v))/(sqrt(tt1))
+        upper.tile <- (cv_corr*sqrt(v))/(sqrt(tt2))
     }
 # preparing the output based on the selected methods
     if (method == "kelley" && correction == FALSE) {
@@ -476,6 +490,30 @@ cv <- function(
         return(
             list(
                 method = "Corrected cv with Shortest-Length 95% CI",
+                statistics = data.frame(
+                    est = round(est * 100, digits = digits),
+                    lower = round(lower.tile * 100, digits = digits),
+                    upper = round(upper.tile * 100, digits = digits),
+                    row.names = c(" ")
+                )
+            )
+        )
+    } else if (method == "equal_tailed" && correction == FALSE) {
+        return(
+            list(
+                method = "cv with Equal-Tailed 95% CI",
+                statistics = data.frame(
+                    est = round(est * 100, digits = digits),
+                    lower = round(lower.tile * 100, digits = digits),
+                    upper = round(upper.tile * 100, digits = digits),
+                    row.names = c(" ")
+                )
+            )
+        )
+    } else if (method == "equal_tailed" && correction == TRUE) {
+        return(
+            list(
+                method = "Corrected cv with Equal-Tailed 95% CI",
                 statistics = data.frame(
                     est = round(est * 100, digits = digits),
                     lower = round(lower.tile * 100, digits = digits),

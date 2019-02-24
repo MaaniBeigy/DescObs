@@ -357,11 +357,11 @@ Now we calculate the normal approximation 95% CI for <span class="math inline">\
 <h3>Shortest-Length Confidence Interval</h3>
 <p>Panichkitkosolkul <span class="citation">(Panichkitkosolkul, 2013)</span> has also introduced the following CI for <span class="math inline">\(cv\)</span>:<br />
 <span class="math display">\[
-\biggl(\frac{cv\sqrt{n}}{\sqrt{b}}
+\biggl(\frac{cv\sqrt{v}}{\sqrt{b}}
 \le CV \le
-\frac{cv\sqrt{n}}{\sqrt{a}}
+\frac{cv\sqrt{v}}{\sqrt{a}}
 \biggr)
-\]</span> Then, shortest-length 95% CI for <span class="math inline">\(x\)</span> is:</p>
+\]</span> with <span class="math inline">\(v = n-1\)</span> degrees of freedom. Then, shortest-length 95% CI for <span class="math inline">\(x\)</span> is:</p>
 <pre class="r"><code>cv(
     x, 
     na.rm = TRUE, 
@@ -375,7 +375,31 @@ Now we calculate the normal approximation 95% CI for <span class="math inline">\
 ## 
 ## $statistics
 ##      est  lower  upper
-##   58.058 43.318 83.526</code></pre>
+##   58.058 42.221 81.411</code></pre>
+</div>
+<div id="equal-tailed-confidence-interval" class="section level3">
+<h3>Equal-Tailed Confidence Interval</h3>
+<p>The <span class="math inline">\(100(1-\alpha)\%\)</span> equal-tailed CI for <span class="math inline">\(cv\)</span> can be obtained as: <span class="math display">\[
+\biggl(\frac{cv\sqrt{v}}{\sqrt{\chi_{v,1-\alpha/2}^2}}
+\le CV \le
+\frac{cv\sqrt{v}}{\sqrt{\chi_{v,\alpha/2}^2}}
+\biggr)
+\]</span> where <span class="math inline">\(\chi_{v,\alpha/2}^2\)</span> and <span class="math inline">\(\chi_{v,1-\alpha/2}^2\)</span> are the <span class="math inline">\(100(\alpha/2)\)</span> and <span class="math inline">\(100(1-\alpha/2)\)</span> percentiles of the central <span class="math inline">\(\chi^2\)</span> distribution with <span class="math inline">\(v\)</span> degrees of freedom, respectively <span class="citation">(Panichkitkosolkul, 2013)</span>.<br />
+Then, equal-tailed 95% CI for <span class="math inline">\(x\)</span> is:</p>
+<pre class="r"><code>cv(
+    x, 
+    na.rm = TRUE, 
+    digits = 3, 
+    method = &quot;equal_tailed&quot;, 
+    correction = TRUE, 
+    alpha = 0.05
+)</code></pre>
+<pre><code>## $method
+## [1] &quot;Corrected cv with Equal-Tailed 95% CI&quot;
+## 
+## $statistics
+##      est  lower  upper
+##   58.058 44.152 84.797</code></pre>
 </div>
 </div>
 <div id="references" class="section level1 unnumbered">
