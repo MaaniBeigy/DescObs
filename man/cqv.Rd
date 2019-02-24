@@ -14,9 +14,9 @@ stripped before the computation proceeds.}
 
 \item{digits}{integer indicating the number of decimal places to be used.}
 
-\item{method}{a scalar representing the type of confidence intervals required.
-The value should be any of the values "Bonett", "norm","basic", "
-perc", "bca" or "all".}
+\item{method}{a scalar representing the type of confidence intervals
+required. The value should be any of the values "Bonett", "norm",
+"basic", "perc", "bca" or "all".}
 
 \item{R}{integer indicating the number of bootstrap replicates.}
 }

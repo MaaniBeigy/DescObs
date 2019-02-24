@@ -5,9 +5,9 @@
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #'              stripped before the computation proceeds.
 #' @param digits integer indicating the number of decimal places to be used.
-#' @param method a scalar representing the type of confidence intervals required.
-#'           The value should be any of the values "Bonett", "norm","basic", "
-#'           perc", "bca" or "all".
+#' @param method a scalar representing the type of confidence intervals
+#'           required. The value should be any of the values "Bonett", "norm",
+#'           "basic", "perc", "bca" or "all".
 #' @param R integer indicating the number of bootstrap replicates.
 #' @details \describe{
 #'         \item{\strong{Coefficient of Quartile Variation}}{
