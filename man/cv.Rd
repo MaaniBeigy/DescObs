@@ -7,6 +7,27 @@
 cv(x, na.rm = FALSE, digits = NULL, method = NULL,
   correction = TRUE, alpha = 0.05, R = NULL, ...)
 }
+\arguments{
+\item{x}{An \code{R} object. Currently there are methods for numeric vectors}
+
+\item{na.rm}{a logical value indicating whether \code{NA} values should be
+stripped before the computation proceeds.}
+
+\item{digits}{integer indicating the number of decimal places to be used.}
+
+\item{method}{a scalar representing the type of confidence intervals
+required. The value should be any of the values "kelley",
+"mckay", "miller", "vangel", "mahmoudvand_hassani",
+"equal_tailed", "shortest_length", "normal_approximation",
+"norm","basic", "perc", "bca", or "all".}
+
+\item{correction}{returns the unbiased estimate of the coefficient of
+variation}
+
+\item{alpha}{The allowed type I error probability}
+
+\item{R}{integer indicating the number of bootstrap replicates.}
+}
 \description{
 Generic function for the coefficient of variation (cv)
 }
