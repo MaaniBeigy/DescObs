@@ -401,12 +401,33 @@ Then, equal-tailed 95% CI for <span class="math inline">\(x\)</span> is:</p>
 ##      est  lower  upper
 ##   58.058 44.152 84.797</code></pre>
 </div>
+<div id="bootstrap-confidence-intervals" class="section level3">
+<h3>Bootstrap Confidence Intervals</h3>
+<p>Thanks to package <code>boot</code> <span class="citation">(Canty &amp; Ripley, 2017)</span> we can obtain bootstrap CI around <span class="math inline">\(cv\)</span>:</p>
+<pre class="r"><code>cv(
+    x, 
+    na.rm = TRUE, 
+    digits = 3, 
+    method = &quot;basic&quot;, 
+    correction = TRUE, 
+    alpha = 0.05
+)</code></pre>
+<pre><code>## $method
+## [1] &quot;Corrected cv with Basic Bootstrap 95% CI&quot;
+## 
+## $statistics
+##      est  lower  upper
+##   58.058 38.454 78.265</code></pre>
+</div>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1>References</h1>
 <div id="refs" class="references">
 <div id="ref-Albatineh2014">
 <p>Albatineh, A. N., Kibria, B. M., Wilcox, M. L., &amp; Zogheib, B. (2014). Confidence interval estimation for the population coefficient of variation using ranked set sampling: A simulation study. <em>Journal of Applied Statistics</em>, <em>41</em>(4), 733–751. <a href="https://doi.org/10.1080/02664763.2013.847405" class="uri">https://doi.org/10.1080/02664763.2013.847405</a></p>
+</div>
+<div id="ref-Canty2017">
+<p>Canty, A., &amp; Ripley, B. (2017). boot: Bootstrap R (S-Plus) Functions. R package version 1.3-20.</p>
 </div>
 <div id="ref-EdwardMiller1991">
 <p>Edward Miller, G. (1991). Asymptotic test statistics for coefficients of variation. <em>Communications in Statistics-Theory and Methods</em>, <em>20</em>(10), 3351–3363.</p>

@@ -40,6 +40,9 @@ cv <- function(
     if (is.null(digits)) {  # checkpoint 3 determining digits
         digits = 4
     }
+    if (is.null(R)) {  # checkpoint 4 the number of bootstrap replicates
+        R = 1000
+    }
     digits <- digits  # digits required for rounding
     method <- tolower(method)  # convert user's input to lower-case
     method <- match.arg(  # match the user's input with available methods
@@ -145,6 +148,27 @@ cv <- function(
              (1/length(x)) * cv^2) +
             (1/(2 * (length(x) - 1)^2))
     )
+# calculating cv's bootstrap CI
+    boot.cv <- boot::boot(
+        x,
+        function(x, i) {  # coefficient of variation
+            sd(x[i], na.rm = na.rm)/mean(x[i], na.rm = na.rm)
+        },
+        R = R
+    )
+    boot.cv_corr <- boot::boot(
+        x,
+        function(x, i) {  # corrected coefficient of variation
+            sd(x[i], na.rm = na.rm)/mean(x[i], na.rm = na.rm) * (
+                (1 - (1/(4 * (length(x[i]) - 1))) +
+                     (1/length(x)) * (
+                         sd(x[i], na.rm = na.rm)/mean(x[i], na.rm = na.rm)
+                     )^2) +
+                    (1/(2 * (length(x) - 1)^2))
+            )
+        },
+        R = R
+    )
 # calculating cv and its CI attributes based on selected methods
     if ("kelley" %in% method && correction == FALSE) {
         ci <- MBESS::conf.limits.nct(
@@ -152,19 +176,19 @@ cv <- function(
             df = length(x) - 1,
             conf.level = (1 - alpha)
         )
-        est <- cv  # cv is an estimate of CV
-        lower.tile <- unname(sqrt(length(x))/ci$Upper.Limit)
-        upper.tile <- unname(sqrt(length(x))/ci$Lower.Limit)
-    } else if (method == "kelley" && correction == TRUE) {
+        est.kelley <- cv  # cv is an estimate of CV
+        lower.tile.kelley <- unname(sqrt(length(x))/ci$Upper.Limit)
+        upper.tile.kelley <- unname(sqrt(length(x))/ci$Lower.Limit)
+    } else if ("kelley" %in% method && correction == TRUE) {
         ci <- MBESS::conf.limits.nct(
             ncp = sqrt(length(x))/cv_corr,
             df = length(x) - 1,
             conf.level = (1 - alpha)
         )
-        est <- cv_corr  # corrected cv is an estimate of CV
-        lower.tile <- unname(sqrt(length(x))/ci$Upper.Limit)
-        upper.tile <- unname(sqrt(length(x))/ci$Lower.Limit)
-    } else if (method == "mckay" && correction == FALSE) {
+        est.kelley <- cv_corr  # corrected cv is an estimate of CV
+        lower.tile.kelley <- unname(sqrt(length(x))/ci$Upper.Limit)
+        upper.tile.kelley <- unname(sqrt(length(x))/ci$Lower.Limit)
+    } else if ("mckay" %in% method && correction == FALSE) {
         if (cv > 0.33) {
             warning("Confidence interval may be very approximate")
         }
@@ -173,10 +197,10 @@ cv <- function(
         t2 <- qchisq(alpha/2,v)/v
         u1 <- v*t1
         u2 <- v*t2
-        est <- cv  # cv is an estimate of CV
-        lower.tile <- cv/sqrt((u1/(v + 1) - 1 )*(cv^2) + u1/v)
-        upper.tile <- cv/sqrt((u2/(v + 1) - 1)*(cv^2) + u2/v)
-    } else if (method == "mckay" && correction == TRUE) {
+        est.mckay <- cv  # cv is an estimate of CV
+        lower.tile.mckay <- cv/sqrt((u1/(v + 1) - 1 )*(cv^2) + u1/v)
+        upper.tile.mckay <- cv/sqrt((u2/(v + 1) - 1)*(cv^2) + u2/v)
+    } else if ("mckay" %in% method && correction == TRUE) {
         if (cv_corr > 0.33) {
             warning("Confidence interval may be very approximate")
         }
@@ -185,30 +209,30 @@ cv <- function(
         t2 <- qchisq(alpha/2,v)/v
         u1 <- v*t1
         u2 <- v*t2
-        est <- cv_corr  # corrected cv is an estimate of CV
-        lower.tile <- cv_corr/sqrt((u1/(v + 1) - 1 )*(cv_corr^2) + u1/v)
-        upper.tile <- cv_corr/sqrt((u2/(v + 1) - 1)*(cv_corr^2) + u2/v)
-    } else if (method == "miller" && correction == FALSE) {
+        est.mckay <- cv_corr  # corrected cv is an estimate of CV
+        lower.tile.mckay <- cv_corr/sqrt((u1/(v + 1) - 1 )*(cv_corr^2) + u1/v)
+        upper.tile.mckay <- cv_corr/sqrt((u2/(v + 1) - 1)*(cv_corr^2) + u2/v)
+    } else if ("miller" %in% method && correction == FALSE) {
         v <- length(x) - 1
         z_alpha_over2 <- qnorm(1 - (alpha/2))
         u <- sqrt(
             (cv^2/v) * (0.5 + cv^2)
         )
         zu <- z_alpha_over2 * u
-        est <- cv  # cv is an estimate of CV
-        lower.tile <- cv - zu
-        upper.tile <- cv + zu
-    } else if (method == "miller" && correction == TRUE) {
+        est.miller <- cv  # cv is an estimate of CV
+        lower.tile.miller <- cv - zu
+        upper.tile.miller <- cv + zu
+    } else if ("miller" %in% method && correction == TRUE) {
         v <- length(x) - 1
         z_alpha_over2 <- qnorm(1 - (alpha/2))
         u <- sqrt(
             (cv_corr^2/v) * (0.5 + cv_corr^2)
         )
         zu <- z_alpha_over2 * u
-        est <- cv_corr  # corrected cv is an estimate of CV
-        lower.tile <- cv_corr - zu
-        upper.tile <- cv_corr + zu
-    }  else if (method == "vangel" && correction == FALSE) {
+        est.miller <- cv_corr  # corrected cv is an estimate of CV
+        lower.tile.miller <- cv_corr - zu
+        upper.tile.miller <- cv_corr + zu
+    }  else if ("vangel" %in% method && correction == FALSE) {
         if (cv > 0.33) {
             warning("Confidence interval may be very approximate")
         }
@@ -217,10 +241,10 @@ cv <- function(
         t2 <- qchisq(alpha/2,v)/v
         u1 <- v*t1
         u2 <- v*t2
-        est <- cv  # cv is an estimate of CV
-        lower.tile <- cv/sqrt(((u1 + 1)/(v + 1) - 1 )*(cv^2) + u1/v)
-        upper.tile <- cv/sqrt(((u2 + 1)/(v + 1) - 1)*(cv^2) + u2/v)
-    } else if (method == "vangel" && correction == TRUE) {
+        est.vangel <- cv  # cv is an estimate of CV
+        lower.tile.vangel <- cv/sqrt(((u1 + 1)/(v + 1) - 1 )*(cv^2) + u1/v)
+        upper.tile.vangel <- cv/sqrt(((u2 + 1)/(v + 1) - 1)*(cv^2) + u2/v)
+    } else if ("vangel" %in% method && correction == TRUE) {
         if (cv_corr > 0.33) {
             warning("Confidence interval may be very approximate")
         }
@@ -229,10 +253,14 @@ cv <- function(
         t2 <- qchisq(alpha/2,v)/v
         u1 <- v*t1
         u2 <- v*t2
-        est <- cv_corr  # corrected cv is an estimate of CV
-        lower.tile <- cv_corr/sqrt(((u1 + 1)/(v + 1) - 1 )*(cv_corr^2) + u1/v)
-        upper.tile <- cv_corr/sqrt(((u2 + 1)/(v + 1) - 1)*(cv_corr^2) + u2/v)
-    } else if (method == "mahmoudvand_hassani" && correction == FALSE) {
+        est.vangel <- cv_corr  # corrected cv is an estimate of CV
+        lower.tile.vangel <- cv_corr/sqrt(
+            ((u1 + 1)/(v + 1) - 1 )*(cv_corr^2) + u1/v
+            )
+        upper.tile.vangel <- cv_corr/sqrt(
+            ((u2 + 1)/(v + 1) - 1)*(cv_corr^2) + u2/v
+            )
+    } else if ("mahmoudvand_hassani" %in% method && correction == FALSE) {
         if (length(x) <= 340) {
             cn <- sqrt(2/(length(x) - 1)) * (
                 (gamma(length(x)/2))/(gamma((length(x) - 1)/2))
@@ -244,10 +272,10 @@ cv <- function(
         }
         ul <- 2 - (cn + (qnorm((alpha/2)) * sqrt(1 - cn^2)))
         uu <- 2 - (cn - (qnorm((alpha/2)) * sqrt(1 - cn^2)))
-        est <- cv  # cv is an estimate of CV
-        lower.tile <- cv/ul
-        upper.tile <- cv/uu
-    } else if (method == "mahmoudvand_hassani" && correction == TRUE) {
+        est.mahmoud <- cv  # cv is an estimate of CV
+        lower.tile.mahmoud <- cv/ul
+        upper.tile.mahmoud <- cv/uu
+    } else if ("mahmoudvand_hassani" %in% method && correction == TRUE) {
         if (length(x) <= 340) {
             cn <- sqrt(2/(length(x) - 1)) * (
                 (gamma(length(x)/2))/(gamma((length(x) - 1)/2))
@@ -259,24 +287,24 @@ cv <- function(
         }
         ul <- 2 - (cn + (qnorm((alpha/2)) * sqrt(1 - cn^2)))
         uu <- 2 - (cn - (qnorm((alpha/2)) * sqrt(1 - cn^2)))
-        est <- cv_corr  # corrected cv is an estimate of CV
-        lower.tile <- cv_corr/ul
-        upper.tile <- cv_corr/uu
-    } else if (method == "normal_approximation" && correction == FALSE) {
+        est.mahmoud <- cv_corr  # corrected cv is an estimate of CV
+        lower.tile.mahmoud <- cv_corr/ul
+        upper.tile.mahmoud <- cv_corr/uu
+    } else if ("normal_approximation" %in% method && correction == FALSE) {
         cn <- sqrt(1 - (1/(2 * length(x))))
         ul <- cn + (qnorm(1 - (alpha/2)) * sqrt(1 - cn^2))
         uu <- cn - (qnorm(1 - (alpha/2)) * sqrt(1 - cn^2))
-        est <- cv  # cv is an estimate of CV
-        lower.tile <- cv/ul
-        upper.tile <- cv/uu
-    } else if (method == "normal_approximation" && correction == TRUE) {
+        est.normaapprox <- cv  # cv is an estimate of CV
+        lower.tile.normaapprox <- cv/ul
+        upper.tile.normaapprox <- cv/uu
+    } else if ("normal_approximation" %in% method && correction == TRUE) {
         cn <- sqrt(1 - (1/(2 * length(x))))
         ul <- cn + (qnorm(1 - (alpha/2)) * sqrt(1 - cn^2))
         uu <- cn - (qnorm(1 - (alpha/2)) * sqrt(1 - cn^2))
-        est <- cv_corr  # corrected cv is an estimate of CV
-        lower.tile <- cv_corr/ul
-        upper.tile <- cv_corr/uu
-    } else if (method == "shortest_length" && correction == FALSE) {
+        est.normaapprox <- cv_corr  # corrected cv is an estimate of CV
+        lower.tile.normaapprox <- cv_corr/ul
+        upper.tile.normaapprox <- cv_corr/uu
+    } else if ("shortest_length" %in% method && correction == FALSE) {
         if (length(x) <= 300) {
             a_value <- shortest_length %>%
                 subset(al == alpha & v == length(x) - 1) %>%
@@ -292,10 +320,10 @@ cv <- function(
                 subset(al == alpha & v == 300) %>%
                 dplyr::select(b)
         }
-        est <- cv  # cv is an estimate of CV
-        lower.tile <- (cv*sqrt(length(x) - 1))/sqrt(b_value$b)
-        upper.tile <- (cv*sqrt(length(x) - 1))/sqrt(a_value$a)
-    } else if (method == "shortest_length" && correction == TRUE) {
+        est.shortest <- cv  # cv is an estimate of CV
+        lower.tile.shortest <- (cv*sqrt(length(x) - 1))/sqrt(b_value$b)
+        upper.tile.shortest <- (cv*sqrt(length(x) - 1))/sqrt(a_value$a)
+    } else if ("shortest_length" %in% method && correction == TRUE) {
         if (length(x) <= 300) {
             a_value <- shortest_length %>%
                 subset(al == alpha & v == length(x) - 1) %>%
@@ -311,213 +339,421 @@ cv <- function(
                 subset(al == alpha & v == 300) %>%
                 dplyr::select(b)
         }
-        est <- cv_corr  # corrected cv is an estimate of CV
-        lower.tile <- (cv_corr*sqrt(length(x) - 1))/sqrt(b_value$b)
-        upper.tile <- (cv_corr*sqrt(length(x) - 1))/sqrt(a_value$a)
-    }  else if (method == "equal_tailed" && correction == FALSE) {
+        est.shortest <- cv_corr  # corrected cv is an estimate of CV
+        lower.tile.shortest <- (cv_corr*sqrt(length(x) - 1))/sqrt(b_value$b)
+        upper.tile.shortest <- (cv_corr*sqrt(length(x) - 1))/sqrt(a_value$a)
+    } else if ("equal_tailed" %in% method && correction == FALSE) {
         v <- length(x) - 1
         tt1 <- qchisq(1 - alpha/2,v)
         tt2 <- qchisq(alpha/2,v)
-        est <- cv  # cv is an estimate of CV
-        lower.tile <- (cv*sqrt(v))/(sqrt(tt1))
-        upper.tile <- (cv*sqrt(v))/(sqrt(tt2))
-    } else if (method == "equal_tailed" && correction == TRUE) {
+        est.equal <- cv  # cv is an estimate of CV
+        lower.tile.equal <- (cv*sqrt(v))/(sqrt(tt1))
+        upper.tile.equal <- (cv*sqrt(v))/(sqrt(tt2))
+    } else if ("equal_tailed" %in% method && correction == TRUE) {
         v <- length(x) - 1
         tt1 <- qchisq(1 - alpha/2,v)
         tt2 <- qchisq(alpha/2,v)
-        est <- cv_corr  # corrected cv is an estimate of CV
-        lower.tile <- (cv_corr*sqrt(v))/(sqrt(tt1))
-        upper.tile <- (cv_corr*sqrt(v))/(sqrt(tt2))
+        est.equal <- cv_corr  # corrected cv is an estimate of CV
+        lower.tile.equal <- (cv_corr*sqrt(v))/(sqrt(tt1))
+        upper.tile.equal <- (cv_corr*sqrt(v))/(sqrt(tt2))
+    } else if ("norm" %in% method && correction == FALSE) {
+        boot.normcv.ci <- boot::boot.ci(
+            boot.cv, conf = (1 - alpha), type = "norm"
+        )
+        est.norm <- cv  # cv is an estimate of CV
+        lower.tile.norm <- boot.normcv.ci$normal[2]
+        upper.tile.norm <- boot.normcv.ci$normal[3]
+    } else if ("norm" %in% method && correction == TRUE) {
+        boot.normcv_corr.ci <- boot::boot.ci(
+            boot.cv_corr, conf = (1 - alpha), type = "norm"
+        )
+        est.norm <- cv_corr  # corrected cv is an estimate of CV
+        lower.tile.norm <- boot.normcv_corr.ci$normal[2]
+        upper.tile.norm <- boot.normcv_corr.ci$normal[3]
+    } else if ("basic" %in% method && correction == FALSE) {
+        boot.basiccv.ci <- boot::boot.ci(
+            boot.cv, conf = (1 - alpha), type = "basic"
+        )
+        est.basic <- cv  # cv is an estimate of CV
+        lower.tile.basic <- boot.basiccv.ci$basic[4]
+        upper.tile.basic <- boot.basiccv.ci$basic[5]
+    } else if ("basic" %in% method && correction == TRUE) {
+        boot.basiccv_corr.ci <- boot::boot.ci(
+            boot.cv_corr, conf = (1 - alpha), type = "basic"
+        )
+        est.basic <- cv_corr  # corrected cv is an estimate of CV
+        lower.tile.basic <- boot.basiccv_corr.ci$basic[4]
+        upper.tile.basic <- boot.basiccv_corr.ci$basic[5]
+    } else if ("perc" %in% method && correction == FALSE) {
+        boot.percentcv.ci <- boot::boot.ci(
+            boot.cv, conf = (1 - alpha), type = "basic"
+        )
+        est.percent <- cv  # cv is an estimate of CV
+        lower.tile.percent <- boot.percentcv.ci$percent[4]
+        upper.tile.percent <- boot.percentcv.ci$percent[5]
+    } else if ("perc" %in% method && correction == TRUE) {
+        boot.percentcv_corr.ci <- boot::boot.ci(
+            boot.cv_corr, conf = (1 - alpha), type = "basic"
+        )
+        est.percent <- cv_corr  # corrected cv is an estimate of CV
+        lower.tile.percent <- boot.percentcv_corr.ci$percent[4]
+        upper.tile.percent <- boot.percentcv_corr.ci$percent[5]
+    } else if ("bca" %in% method && correction == FALSE) {
+        boot.bcacv.ci <- boot::boot.ci(
+            boot.cv, conf = (1 - alpha), type = "basic"
+        )
+        est.bca <- cv  # cv is an estimate of CV
+        lower.tile.bca <- boot.bcacv.ci$bca[4]
+        upper.tile.bca <- boot.bcacv.ci$bca[5]
+    } else if ("bca" %in% method && correction == TRUE) {
+        boot.bcacv_corr.ci <- boot::boot.ci(
+            boot.cv_corr, conf = (1 - alpha), type = "basic"
+        )
+        est.bca <- cv_corr  # corrected cv is an estimate of CV
+        lower.tile.bca <- boot.bcacv_corr.ci$percent[4]
+        upper.tile.bca <- boot.bcacv_corr.ci$percent[5]
     }
 # preparing the output based on the selected methods
-    if (method == "kelley" && correction == FALSE) {
+    if ("kelley" %in% method && correction == FALSE) {
         return(
             list(
-                method = "cv with Kelley 95% CI",
+                method = (
+                    "cv with Kelley 95% CI"
+                ),
                 statistics = data.frame(
-                    est = round(est * 100, digits = digits),
-                    lower = round(lower.tile * 100, digits = digits),
-                    upper = round(upper.tile * 100, digits = digits),
+                    est = round(est.kelley * 100, digits = digits),
+                    lower = round(lower.tile.kelley * 100, digits = digits),
+                    upper = round(upper.tile.kelley * 100, digits = digits),
                     row.names = c(" ")
                 )
             )
         )
-    } else if (method == "kelley" && correction == TRUE) {
+    } else if ("kelley" %in% method && correction == TRUE) {
         return(
             list(
-                method = "Corrected cv with Kelley 95% CI",
+                method = (
+                    "Corrected cv with Kelley 95% CI"
+                ),
                 statistics = data.frame(
-                    est = round(est * 100, digits = digits),
-                    lower = round(lower.tile * 100, digits = digits),
-                    upper = round(upper.tile * 100, digits = digits),
+                    est = round(est.kelley * 100, digits = digits),
+                    lower = round(lower.tile.kelley * 100, digits = digits),
+                    upper = round(upper.tile.kelley * 100, digits = digits),
                     row.names = c(" ")
                 )
             )
         )
-    } else if (method == "mckay" && correction == FALSE) {
+    } else if ("mckay" %in% method && correction == FALSE) {
         return(
             list(
-                method = "cv with McKay 95% CI",
+                method = (
+                    "cv with McKay 95% CI"
+                ),
                 statistics = data.frame(
-                    est = round(est * 100, digits = digits),
-                    lower = round(lower.tile * 100, digits = digits),
-                    upper = round(upper.tile * 100, digits = digits),
+                    est = round(est.mckay * 100, digits = digits),
+                    lower = round(lower.tile.mckay * 100, digits = digits),
+                    upper = round(upper.tile.mckay * 100, digits = digits),
                     row.names = c(" ")
                 )
             )
         )
-    } else if (method == "mckay" && correction == TRUE) {
+    } else if ("mckay" %in% method && correction == TRUE) {
         return(
             list(
-                method = "Corrected cv with McKay 95% CI",
+                method = (
+                    "Corrected cv with McKay 95% CI"
+                ),
                 statistics = data.frame(
-                    est = round(est * 100, digits = digits),
-                    lower = round(lower.tile * 100, digits = digits),
-                    upper = round(upper.tile * 100, digits = digits),
+                    est = round(est.mckay * 100, digits = digits),
+                    lower = round(lower.tile.mckay * 100, digits = digits),
+                    upper = round(upper.tile.mckay * 100, digits = digits),
                     row.names = c(" ")
                 )
             )
         )
-    } else if (method == "miller" && correction == FALSE) {
+    } else if ("miller" %in% method && correction == FALSE) {
         return(
             list(
-                method = "cv with Miller 95% CI",
+                method = (
+                   "cv with Miller 95% CI"
+                ),
                 statistics = data.frame(
-                    est = round(est * 100, digits = digits),
-                    lower = round(lower.tile * 100, digits = digits),
-                    upper = round(upper.tile * 100, digits = digits),
+                    est = round(est.miller * 100, digits = digits),
+                    lower = round(lower.tile.miller * 100, digits = digits),
+                    upper = round(upper.tile.miller * 100, digits = digits),
                     row.names = c(" ")
                 )
             )
         )
-    } else if (method == "miller" && correction == TRUE) {
+    } else if ("miller" %in% method && correction == TRUE) {
         return(
             list(
-                method = "Corrected cv with Miller 95% CI",
+                method = (
+                    "Corrected cv with Miller 95% CI"
+                ),
                 statistics = data.frame(
-                    est = round(est * 100, digits = digits),
-                    lower = round(lower.tile * 100, digits = digits),
-                    upper = round(upper.tile * 100, digits = digits),
+                    est = round(est.miller * 100, digits = digits),
+                    lower = round(lower.tile.miller * 100, digits = digits),
+                    upper = round(upper.tile.miller * 100, digits = digits),
                     row.names = c(" ")
                 )
             )
         )
-    } else if (method == "vangel" && correction == FALSE) {
+    } else if ("vangel" %in% method && correction == FALSE) {
         return(
             list(
-                method = "cv with Vangel 95% CI",
+                method = (
+                    "cv with Vangel 95% CI"
+                ),
                 statistics = data.frame(
-                    est = round(est * 100, digits = digits),
-                    lower = round(lower.tile * 100, digits = digits),
-                    upper = round(upper.tile * 100, digits = digits),
+                    est = round(est.vangel * 100, digits = digits),
+                    lower = round(lower.tile.vangel * 100, digits = digits),
+                    upper = round(upper.tile.vangel * 100, digits = digits),
                     row.names = c(" ")
                 )
             )
         )
-    } else if (method == "vangel" && correction == TRUE) {
+    } else if ("vangel" %in% method && correction == TRUE) {
         return(
             list(
-                method = "Corrected cv with Vangel 95% CI",
+                method = (
+                    "Corrected cv with Vangel 95% CI"
+                ),
                 statistics = data.frame(
-                    est = round(est * 100, digits = digits),
-                    lower = round(lower.tile * 100, digits = digits),
-                    upper = round(upper.tile * 100, digits = digits),
+                    est = round(est.vangel * 100, digits = digits),
+                    lower = round(lower.tile.vangel * 100, digits = digits),
+                    upper = round(upper.tile.vangel * 100, digits = digits),
                     row.names = c(" ")
                 )
             )
         )
-    } else if (method == "mahmoudvand_hassani" && correction == FALSE) {
+    } else if ("mahmoudvand_hassani" %in% method && correction == FALSE) {
         return(
             list(
-                method = "cv with Mahmoudvand-Hassani 95% CI",
+                method = (
+                    "cv with Mahmoudvand-Hassani 95% CI"
+                ),
                 statistics = data.frame(
-                    est = round(est * 100, digits = digits),
-                    lower = round(lower.tile * 100, digits = digits),
-                    upper = round(upper.tile * 100, digits = digits),
+                    est = round(est.mahmoud * 100, digits = digits),
+                    lower = round(lower.tile.mahmoud * 100, digits = digits),
+                    upper = round(upper.tile.mahmoud * 100, digits = digits),
                     row.names = c(" ")
                 )
             )
         )
-    } else if (method == "mahmoudvand_hassani" && correction == TRUE) {
+    } else if ("mahmoudvand_hassani" %in% method && correction == TRUE) {
         return(
             list(
-                method = "Corrected cv with Mahmoudvand-Hassani 95% CI",
+                method = (
+                    "Corrected cv with Mahmoudvand-Hassani 95% CI"
+                ),
                 statistics = data.frame(
-                    est = round(est * 100, digits = digits),
-                    lower = round(lower.tile * 100, digits = digits),
-                    upper = round(upper.tile * 100, digits = digits),
+                    est = round(est.mahmoud * 100, digits = digits),
+                    lower = round(lower.tile.mahmoud * 100, digits = digits),
+                    upper = round(upper.tile.mahmoud * 100, digits = digits),
                     row.names = c(" ")
                 )
             )
         )
-    } else if (method == "normal_approximation" && correction == FALSE) {
+    } else if ("normal_approximation" %in% method && correction == FALSE) {
         return(
             list(
-                method = "cv with Normal Approximation 95% CI",
+                method = (
+                    "cv with Normal Approximation 95% CI"
+                ),
                 statistics = data.frame(
-                    est = round(est * 100, digits = digits),
-                    lower = round(lower.tile * 100, digits = digits),
-                    upper = round(upper.tile * 100, digits = digits),
+                    est = round(est.normaapprox * 100, digits = digits),
+                    lower = round(
+                        lower.tile.normaapprox * 100, digits = digits
+                    ),
+                    upper = round(
+                        upper.tile.normaapprox * 100, digits = digits
+                    ),
                     row.names = c(" ")
                 )
             )
         )
-    } else if (method == "normal_approximation" && correction == TRUE) {
+    } else if ("normal_approximation" %in% method && correction == TRUE) {
         return(
             list(
-                method = "Corrected cv with Normal Approximation 95% CI",
+                method = (
+                    "Corrected cv with Normal Approximation 95% CI"
+                ),
                 statistics = data.frame(
-                    est = round(est * 100, digits = digits),
-                    lower = round(lower.tile * 100, digits = digits),
-                    upper = round(upper.tile * 100, digits = digits),
+                    est = round(est.normaapprox * 100, digits = digits),
+                    lower = round(
+                        lower.tile.normaapprox * 100, digits = digits
+                        ),
+                    upper = round(
+                        upper.tile.normaapprox * 100, digits = digits
+                    ),
                     row.names = c(" ")
                 )
             )
         )
-    } else if (method == "shortest_length" && correction == FALSE) {
+    } else if ("shortest_length" %in% method && correction == FALSE) {
         return(
             list(
-                method = "cv with Shortest-Length 95% CI",
+                method = (
+                    "cv with Shortest-Length 95% CI"
+                ),
                 statistics = data.frame(
-                    est = round(est * 100, digits = digits),
-                    lower = round(lower.tile * 100, digits = digits),
-                    upper = round(upper.tile * 100, digits = digits),
+                    est = round(est.shortest * 100, digits = digits),
+                    lower = round(lower.tile.shortest * 100, digits = digits),
+                    upper = round(upper.tile.shortest * 100, digits = digits),
                     row.names = c(" ")
                 )
             )
         )
-    } else if (method == "shortest_length" && correction == TRUE) {
+    } else if ("shortest_length" %in% method && correction == TRUE) {
         return(
             list(
-                method = "Corrected cv with Shortest-Length 95% CI",
+                method = (
+                    "Corrected cv with Shortest-Length 95% CI"
+                ),
                 statistics = data.frame(
-                    est = round(est * 100, digits = digits),
-                    lower = round(lower.tile * 100, digits = digits),
-                    upper = round(upper.tile * 100, digits = digits),
+                    est = round(est.shortest * 100, digits = digits),
+                    lower = round(lower.tile.shortest * 100, digits = digits),
+                    upper = round(upper.tile.shortest * 100, digits = digits),
                     row.names = c(" ")
                 )
             )
         )
-    } else if (method == "equal_tailed" && correction == FALSE) {
+    } else if ("equal_tailed" %in% method && correction == FALSE) {
         return(
             list(
-                method = "cv with Equal-Tailed 95% CI",
+                method = (
+                    "cv with Equal-Tailed 95% CI"
+                ),
                 statistics = data.frame(
-                    est = round(est * 100, digits = digits),
-                    lower = round(lower.tile * 100, digits = digits),
-                    upper = round(upper.tile * 100, digits = digits),
+                    est = round(est.equal * 100, digits = digits),
+                    lower = round(lower.tile.equal * 100, digits = digits),
+                    upper = round(upper.tile.equal * 100, digits = digits),
                     row.names = c(" ")
                 )
             )
         )
-    } else if (method == "equal_tailed" && correction == TRUE) {
+    } else if ("equal_tailed" %in% method && correction == TRUE) {
         return(
             list(
-                method = "Corrected cv with Equal-Tailed 95% CI",
+                method = (
+                    "Corrected cv with Equal-Tailed 95% CI"
+                ),
                 statistics = data.frame(
-                    est = round(est * 100, digits = digits),
-                    lower = round(lower.tile * 100, digits = digits),
-                    upper = round(upper.tile * 100, digits = digits),
+                    est = round(est.equal * 100, digits = digits),
+                    lower = round(lower.tile.equal * 100, digits = digits),
+                    upper = round(upper.tile.equal * 100, digits = digits),
+                    row.names = c(" ")
+                )
+            )
+        )
+    } else if ("norm" %in% method && correction == FALSE) {
+        return(
+            list(
+                method = (
+                    "cv with Normal Approximation Bootstrap 95% CI"
+                ),
+                statistics = data.frame(
+                    est = round(est.norm * 100, digits = digits),
+                    lower = round(lower.tile.norm * 100, digits = digits),
+                    upper = round(upper.tile.norm * 100, digits = digits),
+                    row.names = c(" ")
+                )
+            )
+        )
+    } else if ("norm" %in% method && correction == TRUE) {
+        return(
+            list(
+                method = (
+                    "Corrected cv with Normal Approximation Bootstrap 95% CI"
+                ),
+                statistics = data.frame(
+                    est = round(est.norm * 100, digits = digits),
+                    lower = round(lower.tile.norm * 100, digits = digits),
+                    upper = round(upper.tile.norm * 100, digits = digits),
+                    row.names = c(" ")
+                )
+            )
+        )
+    } else if ("basic" %in% method && correction == FALSE) {
+        return(
+            list(
+                method = (
+                    "cv with Basic Bootstrap 95% CI"
+                ),
+                statistics = data.frame(
+                    est = round(est.basic * 100, digits = digits),
+                    lower = round(lower.tile.basic * 100, digits = digits),
+                    upper = round(upper.tile.basic * 100, digits = digits),
+                    row.names = c(" ")
+                )
+            )
+            )
+    } else if ("basic" %in% method && correction == TRUE) {
+        return(
+            list(
+                method = (
+                    "Corrected cv with Basic Bootstrap 95% CI"
+                ),
+                statistics = data.frame(
+                    est = round(est.basic * 100, digits = digits),
+                    lower = round(lower.tile.basic * 100, digits = digits),
+                    upper = round(upper.tile.basic * 100, digits = digits),
+                    row.names = c(" ")
+                )
+            )
+        )
+    } else if ("percent" %in% method && correction == FALSE) {
+        return(
+            list(
+                method = (
+                    "cv with Bootstrap Percentile 95% CI"
+                ),
+                statistics = data.frame(
+                    est = round(est.percent * 100, digits = digits),
+                    lower = round(lower.tile.percent * 100, digits = digits),
+                    upper = round(upper.tile.percent * 100, digits = digits),
+                    row.names = c(" ")
+                )
+            )
+            )
+    } else if ("percent" %in% method && correction == TRUE) {
+        return(
+            list(
+                method = (
+                    "Corrected cv with Bootstrap Percentile 95% CI"
+                ),
+                statistics = data.frame(
+                    est = round(est.percent * 100, digits = digits),
+                    lower = round(lower.tile.percent * 100, digits = digits),
+                    upper = round(upper.tile.percent * 100, digits = digits),
+                    row.names = c(" ")
+                )
+            )
+        )
+    } else if ("bca" %in% method && correction == FALSE) {
+        return(
+            list(
+                method = (
+                    "cv with Adjusted Bootstrap Percentile (BCa) 95% CI"
+                ),
+                statistics = data.frame(
+                    est = round(est.bca * 100, digits = digits),
+                    lower = round(lower.tile.bca * 100, digits = digits),
+                    upper = round(upper.tile.bca * 100, digits = digits),
+                    row.names = c(" ")
+                )
+            )
+            )
+    } else if ("bca" %in% method && correction == TRUE) {
+        return(
+            list(
+                method = (
+                "Corrected cv with Adjusted Bootstrap Percentile (BCa) 95% CI"
+                ),
+                statistics = data.frame(
+                    est = round(est.bca * 100, digits = digits),
+                    lower = round(lower.tile.bca * 100, digits = digits),
+                    upper = round(upper.tile.bca * 100, digits = digits),
                     row.names = c(" ")
                 )
             )
