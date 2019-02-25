@@ -98,7 +98,7 @@ cqv(
 ## cqv with bootstrap percentile 95% CI                45.625 17.342 71.406
 ## cqv with adjusted bootstrap percentile (BCa) 95% CI 45.625 22.110 81.573
 ```
-## Documnetation
+## Documnetation    
 ```r
 browseVignettes("DescObs")
 ```
