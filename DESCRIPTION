@@ -2,7 +2,8 @@ Package: DescObs
 Type: Package
 Title: Versatile Exploration of Data
 Version: 0.1.0
-Author: Maani Beigy
+Authors@R: person("Maani", "Beigy", email = "manibeygi@gmail.com", 
+                  role = c("aut", "cre"))
 Maintainer: Maani Beigy <manibeygi@gmail.com>
 Description: Provides some easy-to-use functions to extract and visualize the
     output of descriptive data analysis for more sophisticated approaches e.g.,
@@ -14,7 +15,20 @@ Description: Provides some easy-to-use functions to extract and visualize the
     statistical applications. We will try to provide multi-control knob tools,
     by means of various options and incorporating the most available rigorous 
     methods.
-Imports: dplyr, SciViews, boot, MBESS
+Depends: 
+    R (>= 3.1.2),
+    dplyr (>= 0.8.0.1)
+Imports: dplyr, 
+  SciViews, 
+  boot, 
+  MBESS
+Suggests: testthat,
+    knitr,
+    rmarkdown,
+    covr
+VignetteBuilder: knitr
+URL: https://github.com/MaaniBeigy/DescObs
+BugReports: https://github.com/MaaniBeigy/DescObs/issues
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
