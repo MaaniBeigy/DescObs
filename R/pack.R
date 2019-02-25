@@ -493,8 +493,9 @@
 #     sep = "|",
 #     header = TRUE
 # )
-# cqv(x = df1$cardioadm, na.rm = TRUE, digits = 2, method = "norm", R = 1000)
-#
+# cv(x = df1$Hosp_BOR, na.rm = TRUE, digits = 3, method = "norm", R = 1000,
+#    alpha = 0.05, correction = TRUE)
+
 # shortest_length <- read.csv(
 #     file = paste0(dir, "/data/shortest_length.csv"),
 #     encoding = "UTF-8",

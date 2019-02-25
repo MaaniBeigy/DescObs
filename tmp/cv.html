@@ -416,8 +416,46 @@ Then, equal-tailed 95% CI for <span class="math inline">\(x\)</span> is:</p>
 ## [1] &quot;Corrected cv with Basic Bootstrap 95% CI&quot;
 ## 
 ## $statistics
-##      est  lower  upper
-##   58.058 38.454 78.265</code></pre>
+##      est  lower upper
+##   58.058 35.939 77.65</code></pre>
+</div>
+<div id="all-available-methods" class="section level3">
+<h3>All Available Methods</h3>
+<p>In conclusion, we can observe CIs calculated by all available methods:</p>
+<pre class="r"><code>cv(
+    x, 
+    na.rm = TRUE, 
+    digits = 3, 
+    method = &quot;all&quot;, 
+    correction = FALSE, 
+    alpha = 0.05
+)</code></pre>
+<pre><code>## $method
+## [1] &quot;All methods&quot;
+## 
+## $statistics
+##                            est  lower   upper
+## kelley               0.5777352 41.467  98.510
+## mckay                0.5777352 41.441 108.482
+## miller               0.5777352 34.053  81.494
+## vangel               0.5777352 41.264 105.424
+## mahmoudvand_hassani  0.5777352 43.476  82.857
+## equal_tailed         0.5777352 43.936  84.382
+## shortest_length      0.5777352 42.014  81.012
+## normal_approximation 0.5777352 44.533  85.272
+## norm                 0.5777352 38.913  77.691
+## basic                0.5777352 36.945  77.140
+##                                                        description
+## kelley                                       cv with Kelley 95% CI
+## mckay                                         cv with McKay 95% CI
+## miller                                       cv with Miller 95% CI
+## vangel                                       cv with Vangel 95% CI
+## mahmoudvand_hassani             cv with Mahmoudvand-Hassani 95% CI
+## equal_tailed                           cv with Equal-Tailed 95% CI
+## shortest_length                     cv with Shortest-Length 95% CI
+## normal_approximation           cv with Normal Approximation 95% CI
+## norm                 cv with Normal Approximation Bootstrap 95% CI
+## basic                               cv with Basic Bootstrap 95% CI</code></pre>
 </div>
 </div>
 <div id="references" class="section level1 unnumbered">
