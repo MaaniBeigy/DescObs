@@ -99,8 +99,10 @@ cqv(
 ## cqv with adjusted bootstrap percentile (BCa) 95% CI 45.625 22.110 81.573
 ```
 ## Documentation    
-Download the DescObs_0.1.0.tar.gz file. Install `DescObs` from the Packages >> 
-Install >> Package Archive File (.tar.gz) >> Browse >> DescObs_0.1.0.tar.gz
+Download the [DescObs_0.1.0.tar.gz](
+https://github.com/MaaniBeigy/DescObs/raw/master/DescObs_0.1.0.tar.gz). Install `DescObs` from the Packages >> Install >> Package Archive File (.tar.gz) >> Browse >> DescObs_0.1.0.tar.gz
+
+
 ```r
 browseVignettes("DescObs")
 ```
