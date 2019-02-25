@@ -986,18 +986,18 @@ cv <- function(
                         # "bca"  # 12
                     ),
                     est = c(
-                        cv,
-                        cv,
-                        cv,
-                        cv,
-                        cv,
-                        cv,
-                        cv,
-                        cv,
-                        cv,
-                        # cv,
-                        # cv,
-                        cv
+                        round(cv * 100, digits = digits),
+                        round(cv * 100, digits = digits),
+                        round(cv * 100, digits = digits),
+                        round(cv * 100, digits = digits),
+                        round(cv * 100, digits = digits),
+                        round(cv * 100, digits = digits),
+                        round(cv * 100, digits = digits),
+                        round(cv * 100, digits = digits),
+                        round(cv * 100, digits = digits),
+                        # round(cv * 100, digits = digits),
+                        # round(cv * 100, digits = digits),
+                        round(cv * 100, digits = digits)
                         ),
                     lower = c(
                         round(lower.tile.kelley * 100, digits = digits),
@@ -1070,18 +1070,18 @@ cv <- function(
                         # "bca"  # 12
                     ),
                     est = c(
-                        cv_corr,
-                        cv_corr,
-                        cv_corr,
-                        cv_corr,
-                        cv_corr,
-                        cv_corr,
-                        cv_corr,
-                        cv_corr,
-                        cv_corr,
-                        # cv_corr,
-                        # cv_corr,
-                        cv_corr
+                        round(cv_corr * 100, digits = digits),
+                        round(cv_corr * 100, digits = digits),
+                        round(cv_corr * 100, digits = digits),
+                        round(cv_corr * 100, digits = digits),
+                        round(cv_corr * 100, digits = digits),
+                        round(cv_corr * 100, digits = digits),
+                        round(cv_corr * 100, digits = digits),
+                        round(cv_corr * 100, digits = digits),
+                        round(cv_corr * 100, digits = digits),
+                        # round(cv_corr * 100, digits = digits),
+                        # round(cv_corr * 100, digits = digits),
+                        round(cv_corr * 100, digits = digits)
                     ),
                     lower = c(
                         round(lower.tile.kelley * 100, digits = digits),

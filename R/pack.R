@@ -468,7 +468,7 @@
 #
 # cqv(x = x)
 #
-# # cqv(x = x, na.rm = TRUE, digits = 2, CI = "khs")
+# cqv(x = x, na.rm = TRUE, digits = 3, method = "all")
 #
 # #
 #
