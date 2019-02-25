@@ -11,7 +11,7 @@ Despite the growing body of these packages and repositories which have been
 quite useful for scientists, the redundancy and multiplicity of them
 make it sometimes very difficult to choose between them. For instance, the 
 abundant methods available for the calculation of confidence intervals of a 
-dispersion measure like coefficient of variation (cv) or coefficient of quartile variation (cqv) are not achievable by a **single function**.
+dispersion measure like coefficient of variation (cv) or coefficient of quartile variation (cqv) have not yet achieved.
 ## Aims
 The authors' intention is to create a toolbox to facilitate the use of various 
 descriptive statistical functions and resources in favor of an easier, 
