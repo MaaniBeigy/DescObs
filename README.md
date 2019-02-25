@@ -2,7 +2,7 @@
 Tools for Versatile Exploration of Data.
 
 `DescObs` stands for **descriptive observation**. 
-We do not want just to see, we *observe*! 
+We do not just see, we *observe*! 
 
 # Overview
 ## Background
