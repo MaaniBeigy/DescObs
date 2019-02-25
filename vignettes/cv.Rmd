@@ -2,9 +2,13 @@
 title: "Versatile Exploration of Data: cv"
 author: "Maani Beigy"
 date: "February 18, 2019"
-output: html_document
+output: rmarkdown::html_vignette
 bibliography: DescObs.bib
 csl: apa.csl
+vignette: >
+  %\VignetteIndexEntry{cv}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}
