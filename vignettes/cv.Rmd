@@ -2,7 +2,8 @@
 title: "Versatile Exploration of Data: cv"
 author: "Maani Beigy"
 date: "February 18, 2019"
-output: rmarkdown::html_vignette
+output: 
+    rmarkdown::html_vignette
 bibliography: DescObs.bib
 csl: apa.csl
 vignette: >
