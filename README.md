@@ -34,8 +34,9 @@ devtools::install_github('MaaniBeigy/DescObs')
 \* Pull request welcome.     
 \* This package is inspired by `dplyr`, `SciView`, `boot`, and `MBESS`.     
 ## Dependencies
+To load the required libraries:
 ```r
-# load required libraries
+# define required libraries
 required.packages <- c("dplyr", "SciViews", "boot", "MBESS")
 # function of installing the uninstalled required packages
 if (length(setdiff(required.packages, rownames(installed.packages()))) > 0) {
