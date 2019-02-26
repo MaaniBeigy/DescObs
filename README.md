@@ -92,7 +92,7 @@ cqv(
 ## 
 ## $statistics
 ##           est lower upper                                         description
-## bonnet  45.62 24.78 77.33                              cqv with Bonett 95% CI
+## bonett  45.62 24.78 77.33                              cqv with Bonett 95% CI
 ## norm    45.62 20.59 69.47                cqv with normal approximation 95% CI
 ## basic   45.62 20.81 73.91                     cqv with basic bootstrap 95% CI
 ## percent 45.62 17.33 70.43                cqv with bootstrap percentile 95% CI

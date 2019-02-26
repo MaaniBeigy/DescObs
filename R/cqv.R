@@ -358,7 +358,7 @@ cqv <- function(
                 method = "All methods",
                 statistics = data.frame(
                     row.names = c(
-                        "bonnet",
+                        "bonett",
                         "norm",
                         "basic",
                         "percent",
