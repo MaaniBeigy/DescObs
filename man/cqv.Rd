@@ -15,7 +15,7 @@ stripped before the computation proceeds.}
 \item{digits}{integer indicating the number of decimal places to be used.}
 
 \item{method}{a scalar representing the type of confidence intervals
-required. The value should be any of the values "Bonett", "norm",
+required. The value should be any of the values "bonett", "norm",
 "basic", "perc", "bca" or "all".}
 
 \item{R}{integer indicating the number of bootstrap replicates.}
@@ -35,7 +35,7 @@ An object of type "list" which contains the estimate, the
        \strong{est:}{
        \code{\deqn{((q3-q1)/(q3 + q1))*100}}
        }
-       \strong{Bonett's 95\% CI:}{
+       \strong{Bonett 95\% CI:}{
        \code{\deqn{  exp{ln(D/S)C +/- (z(1 - alpha/2) * sqrt(v))}, }}
        where \eqn{C = n/(n - 1)} is a centering adjustment which helps to
        equalize the tail error probabilities. For this confidence interval,
