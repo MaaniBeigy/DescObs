@@ -267,7 +267,8 @@ cqv <- function(
             list(
                 method = "cqv = (q3-q1)/(q3+q1)",
                 statistics = data.frame(
-                    est = cqv
+                    est = cqv,
+                    row.names = c(" ")
                 )
             )
         )
@@ -278,7 +279,8 @@ cqv <- function(
                 statistics = data.frame(
                     est = cqv,
                     lower = lower,
-                    upper = upper
+                    upper = upper,
+                    row.names = c(" ")
                     )
                 )
             )
@@ -289,7 +291,8 @@ cqv <- function(
                 statistics = data.frame(
                     est = cqv,
                     lower = lower,
-                    upper = upper
+                    upper = upper,
+                    row.names = c(" ")
                     )
                 )
             )
@@ -300,7 +303,8 @@ cqv <- function(
                 statistics = data.frame(
                     est = cqv,
                     lower = lower,
-                    upper = upper
+                    upper = upper,
+                    row.names = c(" ")
                     )
                 )
             )
@@ -311,7 +315,8 @@ cqv <- function(
                 statistics = data.frame(
                     est = cqv,
                     lower = lower,
-                    upper = upper
+                    upper = upper,
+                    row.names = c(" ")
                     )
                 )
             )
@@ -322,7 +327,8 @@ cqv <- function(
                 statistics = data.frame(
                     est = cqv,
                     lower = lower,
-                    upper = upper
+                    upper = upper,
+                    row.names = c(" ")
                     )
                 )
             )
@@ -341,21 +347,22 @@ cqv <- function(
                 statistics = data.frame(
                     est = cqv,
                     lower = round(lower.tile * 100, digits = digits),
-                    upper = round(upper.tile * 100, digits = digits)
+                    upper = round(upper.tile * 100, digits = digits),
+                    row.names = c(" ")
                 )
             )
         )
     } else if (method == "all" && cqv != 100) {
         return(
             list(
-                method = "All Bootstrap methods",
+                method = "All methods",
                 statistics = data.frame(
                     row.names = c(
-                        "cqv with Bonett 95% CI",
-                        "cqv with normal approximation 95% CI",
-                        "cqv with basic bootstrap 95% CI",
-                        "cqv with bootstrap percentile 95% CI",
-                        "cqv with adjusted bootstrap percentile (BCa) 95% CI"
+                        "bonnet",
+                        "norm",
+                        "basic",
+                        "percent",
+                        "bca"
                     ),
                     est = c(cqv, cqv, cqv, cqv, cqv),
                     lower = c(
@@ -371,7 +378,14 @@ cqv <- function(
                         round(boot.basic.ci$basic[5], digits = digits),
                         round(boot.perc.ci$percent[5], digits = digits),
                         round(boot.bca.ci$bca[5], digits = digits)
-                        )
+                        ),
+                    description = c(
+                        "cqv with Bonett 95% CI",
+                        "cqv with normal approximation 95% CI",
+                        "cqv with basic bootstrap 95% CI",
+                        "cqv with bootstrap percentile 95% CI",
+                        "cqv with adjusted bootstrap percentile (BCa) 95% CI"
+                    )
                     )
                 )
             )

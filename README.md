@@ -91,12 +91,12 @@ cqv(
 ## [1] "All Bootstrap methods"
 ## 
 ## $statistics
-##                                                       est  lower  upper
-## cqv with Bonett's 95% CI                            45.625 24.785 77.329
-## cqv with normal approximation 95% CI                45.625 20.302 69.676
-## cqv with basic bootstrap 95% CI                     45.625 19.844 73.908
-## cqv with bootstrap percentile 95% CI                45.625 17.342 71.406
-## cqv with adjusted bootstrap percentile (BCa) 95% CI 45.625 22.110 81.573
+##           est lower upper                                         description
+## bonnet  45.62 24.78 77.33                              cqv with Bonett 95% CI
+## norm    45.62 20.59 69.47                cqv with normal approximation 95% CI
+## basic   45.62 20.81 73.91                     cqv with basic bootstrap 95% CI
+## percent 45.62 17.33 70.43                cqv with bootstrap percentile 95% CI
+## bca     45.62 23.00 78.56 cqv with adjusted bootstrap percentile (BCa) 95% CI
 ```
 ## Documentation    
 Download the [DescObs_0.1.0.tar.gz](

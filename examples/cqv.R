@@ -4,7 +4,7 @@ x <- c(
 )
 cqv(x)
 cqv(x, na.rm = TRUE, digits = 2)
-cqv(x, na.rm = TRUE, digits = 2, method = "Bonett")
+cqv(x, na.rm = TRUE, digits = 2, method = "bonett")
 cqv(x, na.rm = TRUE, digits = 2, method = "norm")
 cqv(x, na.rm = TRUE, digits = 2, method = "basic")
 cqv(x, na.rm = TRUE, digits = 2, method = "perc")
