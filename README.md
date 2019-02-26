@@ -33,7 +33,7 @@ devtools::install_github('MaaniBeigy/DescObs')
 \* Note that this package is still under development. Currently, `cv` and `cqv`      are functional.     
 \* Pull request welcome.     
 \* This package is inspired by `dplyr`, `SciView`, `boot`, and `MBESS`.     
-
+## Dependencies
 ```r
 # load required libraries
 required.packages <- c("dplyr", "SciViews", "boot", "MBESS")
@@ -46,7 +46,9 @@ required.packages <- c(required.packages, "DescObs")
 # loading the required packages
 lapply(required.packages, require, character.only = TRUE)
 ```
-Here, we want to observe **all** available *confidence intervals* for the `cv` of variable *x*:     
+## Examples
+Here, we want to observe **all** available *confidence intervals* for the `cv` 
+of variable *x*:     
 ```r
 x <- c(
     0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
