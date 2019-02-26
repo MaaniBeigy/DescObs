@@ -39,7 +39,7 @@ are model-based hence their usage depends the assumptions regarding the distribu
 
 ### Kelley Confidence Interval        
 
-Let us assume that *cv* follows a noncentral *t* distribution, when the parent  population of the scores is *normally-distributed*, with noncentrality 
+Let us assume that *CV* follows a noncentral *t* distribution, when the parent  population of the scores is *normally-distributed*, with noncentrality 
 ($\lambda$) parameter:   
 $$
 \lambda = \frac{\sqrt{n}}{cv}
@@ -1245,7 +1245,7 @@ cv(
 )
 ```
 ### Vangel Confidence Interval      
-Vangel [@Vangel1996] introduced the following CI for 
+Vangel [@Vangel1996] proposed the following CI for 
 $cv$; which is a modification on McKay’s CI:
 $$
 \biggl(cv\left[\biggl(\frac{u_1+1}{v}-1\biggr)(cv)^{2}+\frac{u_1}{v}\right]^{-1/2}
@@ -1264,7 +1264,7 @@ cv(
 )
 ```
 ### Mahmoudvand-Hassani Confidence Interval   
-Mahmoudvand and Hassani [@Mahmoudvand2009] introduced the following CI for 
+Mahmoudvand and Hassani [@Mahmoudvand2009] proposed the following CI for 
 $cv$; which is obtained using ranked set sampling *(RSS)*:    
 $$
 \biggl(\frac{cv}{2-C_n+Z_{1-\alpha/2}\sqrt{1-C_n^2}}
@@ -1290,7 +1290,7 @@ cv(
 )
 ```
 ### Normal Approximation Confidence Interval     
-Wararit Panichkitkosolkul [@Panichkitkosolkul2013] introduced the following CI for 
+Wararit Panichkitkosolkul [@Panichkitkosolkul2013] proposed the following CI for 
 $cv$; which is a *normal approximation*: 
 $$
 \biggl(\frac{cv}{C_{n+1}+Z_{1-\alpha/2}\sqrt{1-C_{n+1}^2}}

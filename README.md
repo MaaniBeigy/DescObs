@@ -1,4 +1,4 @@
-# DescObs
+# DescObs ![DescObs](eye.png)
 Tools for Versatile Exploration of Data.
 
 `DescObs` stands for **descriptive observation**. 

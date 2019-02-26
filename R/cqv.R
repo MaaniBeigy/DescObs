@@ -6,7 +6,7 @@
 #'              stripped before the computation proceeds.
 #' @param digits integer indicating the number of decimal places to be used.
 #' @param method a scalar representing the type of confidence intervals
-#'           required. The value should be any of the values "Bonett", "norm",
+#'           required. The value should be any of the values "bonett", "norm",
 #'           "basic", "perc", "bca" or "all".
 #' @param R integer indicating the number of bootstrap replicates.
 #' @details \describe{
@@ -33,7 +33,7 @@
 #'        \strong{est:}{
 #'        \code{\deqn{((q3-q1)/(q3 + q1))*100}}
 #'        }
-#'        \strong{Bonett's 95\% CI:}{
+#'        \strong{Bonett 95\% CI:}{
 #'        \code{\deqn{  exp{ln(D/S)C +/- (z(1 - alpha/2) * sqrt(v))}, }}
 #'        where \eqn{C = n/(n - 1)} is a centering adjustment which helps to
 #'        equalize the tail error probabilities. For this confidence interval,
@@ -195,7 +195,7 @@ cqv <- function(
 
     if (is.null(method)) {
         boot.cqv.ci <- NA
-    } else if (method == "Bonett") {
+    } else if (method == "bonett") {
         boot.cqv.ci <- NA
     } else if (method == "norm") {
         boot.norm.ci <- boot::boot.ci(boot.cqv, conf = 0.95, type = "norm")
@@ -216,7 +216,7 @@ cqv <- function(
         cqv <- round(
             100 * ((q3 - q1)/(q3 + q1)), digits = digits
         )
-    } else if (method == "Bonett") {
+    } else if (method == "bonett") {
         cqv <- round(
             100 * ((q3 - q1)/(q3 + q1)), digits = digits
         )
@@ -245,7 +245,7 @@ cqv <- function(
     if (is.null(method)) {
         lower <- NA
         upper <- NA
-    } else if (method == "Bonett") {
+    } else if (method == "bonett") {
         lower <- round(lower.tile * 100, digits = digits)
         upper <- round(upper.tile * 100, digits = digits)
     } else if (method == "norm") {
@@ -271,10 +271,10 @@ cqv <- function(
                 )
             )
         )
-    } else if (method == "Bonett" && cqv != 100) {
+    } else if (method == "bonett" && cqv != 100) {
         return(
             list(
-                method = "cqv with Bonett's 95% CI",
+                method = "cqv with Bonett 95% CI",
                 statistics = data.frame(
                     est = cqv,
                     lower = lower,
@@ -328,7 +328,7 @@ cqv <- function(
             )
     } else if (
         (
-    method == "norm" | method == "Bonett" | method == "basic" | method == "perc" |
+    method == "norm" | method == "bonett" | method == "basic" | method == "perc" |
     method == "bca" | method == "all"
     ) && cqv == 100
         ) {
@@ -337,7 +337,7 @@ cqv <- function(
         )
         return(
             list(
-                method = "cqv with Bonett's 95% CI",
+                method = "cqv with Bonett 95% CI",
                 statistics = data.frame(
                     est = cqv,
                     lower = round(lower.tile * 100, digits = digits),
@@ -351,7 +351,7 @@ cqv <- function(
                 method = "All Bootstrap methods",
                 statistics = data.frame(
                     row.names = c(
-                        "cqv with Bonett's 95% CI",
+                        "cqv with Bonett 95% CI",
                         "cqv with normal approximation 95% CI",
                         "cqv with basic bootstrap 95% CI",
                         "cqv with bootstrap percentile 95% CI",
