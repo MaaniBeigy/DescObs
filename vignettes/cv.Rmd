@@ -71,7 +71,7 @@ cv <- function(
     na.rm = FALSE,  # indicating whether NA values should be stripped
     digits = NULL,  # digits of output after rounding. default is 4
     method = NULL,  # method for the computation of confidence interval (CI)
-    correction = TRUE,  # indicating whether to compute the unbiased statistics
+    correction = FALSE,  # indicating whether to compute the unbiased statistics
     alpha = 0.05,  # The allowed type I error probability
     R = NULL,  # integer indicating the number of bootstrap replicates
     ...
@@ -96,16 +96,6 @@ cv <- function(
         R = 1000
     }
     digits <- digits  # digits required for rounding
-    method <- tolower(method)  # convert user's input to lower-case
-    method <- match.arg(  # match the user's input with available methods
-        arg = method,
-        choices = c(
-            "kelley", "mckay", "miller", "vangel", "mahmoudvand_hassani",
-            "equal_tailed", "shortest_length", "normal_approximation",
-            "norm","basic", "perc", "bca", "all"
-        ),
-        several.ok = TRUE
-    )
     shortest_length <- data.frame(  # "a" and "b" values for shortest-length CI
         v = c(  # degrees of freedom
             2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
@@ -189,9 +179,6 @@ cv <- function(
             )
         }
     }
-    if (is.na(method)) {
-        stop("invalid confidence interval method")
-    }
     cv <- (
         sd(x, na.rm = na.rm)/mean(x, na.rm = na.rm)  # coefficient of variation
     )
@@ -200,6 +187,41 @@ cv <- function(
              (1/length(x)) * cv^2) +
             (1/(2 * (length(x) - 1)^2))
     )
+    if (is.null(method) == TRUE & correction == FALSE) {
+        warning("No confidence interval method is selected")
+        return(
+            list(
+                method = "cv = sd/mean (may be biased)",
+                statistics = data.frame(
+                    est = cv,
+                    row.names = c(" ")
+                    )
+                )
+            )
+    } else if (is.null(method) == TRUE & correction == TRUE) {
+        warning("No confidence interval method is selected")
+        return(
+            list(
+                method = "Corrected (i.e., unbiased) cv",
+                statistics = data.frame(
+                    est = cv_corr,
+                    row.names = c(" ")
+                )
+            )
+        )
+    } else if (!is.null(method)) {
+        method <- tolower(method)  # convert user's input to lower-case
+        method <- match.arg(  # match the user's input with available methods
+            arg = method,
+            choices = c(
+                "kelley", "mckay", "miller", "vangel", "mahmoudvand_hassani",
+                "equal_tailed", "shortest_length", "normal_approximation",
+                "norm","basic", "perc", "bca", "all"
+            ),
+            several.ok = TRUE
+        )
+    }
+
 # calculating cv's bootstrap CI
     boot.cv <- boot::boot(
         x,

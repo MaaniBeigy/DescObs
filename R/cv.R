@@ -9,17 +9,125 @@
 #'               required. The value should be any of the values "kelley",
 #'               "mckay", "miller", "vangel", "mahmoudvand_hassani",
 #'               "equal_tailed", "shortest_length", "normal_approximation",
-#'               "norm","basic", "perc", "bca", or "all".
+#'               "norm","basic", or "all".
 #' @param correction returns the unbiased estimate of the coefficient of
 #'                   variation
 #' @param alpha The allowed type I error probability
 #' @param R integer indicating the number of bootstrap replicates.
+#' @details \describe{
+#'         \item{\strong{Coefficient of Variation}}{
+#'         \code{\deqn{ CV = \sigma/\mu} } where \eqn{\sigma}
+#'         and \eqn{\mu} are standard deviation and mean, respectively.
+#'         The \emph{cv} is a measure of relative dispersion representing
+#'         the degree of variability relative to the mean [1]. Since \eqn{cv} is
+#'         unitless, it is useful for comparison of variables with different
+#'         units. It is also a measure of homogeneity [1].
+#'         }
+#'         }
+#' @return An object of type "list" which contains the estimate, the
+#'         intervals, and the computation method. It has two main components:
+#' @return \describe{
+#'        \item{$method}{
+#'        A description of statistical method used for the computations.
+#'        }
+#'        \item{$statistics}{
+#'        A data frame representing three vectors: est, lower and upper limits
+#'        of \code{\eqn{(1-\alpha)}}\% confidence interval \code{(CI)};
+#'        additional description vector is provided when "all" is selected:
+#'        \cr \cr
+#'        \strong{est:}{
+#'        \code{\deqn{(sd/mean)*100}}
+#'        }
+#'        \strong{Kelley Confidence Interval:}{
+#'        Thanks to package \pkg{MBESS} [2] for the computation of confidence
+#'        limits for the noncentrality parameter from a \emph{t} distribution
+#'        \link[MBESS]{conf.limits.nct} [3].
+#'        }
+#'        \cr \cr
+#'        \strong{McKay Confidence Interval:}{
+#'        The intervals calculated by the method introduced by McKay [4],
+#'        using \code{\eqn{\chi^2}} distribution.
+#'        }
+#'        \cr \cr
+#'        \strong{Miller Confidence Interval:}{
+#'        The intervals calculated by the method introduced by Miller [5],
+#'        using the standard normal distribution.
+#'        }
+#'        \cr \cr
+#'        \strong{Vangel Confidence Interval:}{
+#'        Vangel [6] proposed a method for the calculation of CI for \emph{cv};
+#'        which is a modification on McKay’s CI.
+#'        }
+#'        \cr \cr
+#'        \strong{Mahmoudvand-Hassani Confidence Interval:}{
+#'        Mahmoudvand and Hassani [7] proposed a new CI for \emph{cv}; which
+#'        is obtained using ranked set sampling \emph{(RSS)}
+#'        }
+#'        \cr \cr
+#'        \strong{Normal Approximation Confidence Interval:}{
+#'        Wararit Panichkitkosolkul [8] proposed another CI for \emph{cv};
+#'        which is a normal approximation.
+#'        }
+#'        \cr \cr
+#'        \strong{Shortest-Length Confidence Interval:}{
+#'        Wararit Panichkitkosolkul [8] proposed another CI for \emph{cv};
+#'        which is obtained through minimizing the length of CI.
+#'        }
+#'        \cr \cr
+#'        \strong{Equal-Tailed Confidence Interval:}{
+#'        Wararit Panichkitkosolkul [8] proposed another CI for \emph{cv};
+#'        which is obtained using \code{\eqn{\chi^2}} distribution.
+#'        }
+#'        \cr \cr
+#'        \strong{Bootstrap Confidence Intervals:}{
+#'        Thanks to package \pkg{boot} by Canty & Ripley [9] we can obtain
+#'        bootstrap CI around \emph{cv}.
+#'        }
+#'        \cr \cr
+#'        }
+#'        }
+#' @example ./examples/cv.R
+#' @references [1] Albatineh, AN., Kibria, BM., Wilcox, ML., & Zogheib, B, 2014,
+#'                 Confidence interval estimation for the population coefficient
+#'                 of variation using ranked set sampling: A simulation study,
+#'                 Journal of Applied Statistics, 41(4), 733–751, DOI:
+#'                 \href{https://doi.org/10.1080/02664763.2013.847405}{
+#'                 https://doi.org/10.1080/02664763.2013.847405}
+#' @references [2] Kelley, K., 2018, MBESS: The MBESS R Package. R package
+#'                 version 4.4. 3., Retrieved from \href{
+#'                 https://cran.r-project.org/package=MBESS}{
+#'                 https://cran.r-project.org/package=MBESS}
+#' @references [3] Kelley, K., 2007, Sample size planning for the coefficient of
+#'                 variation from the accuracy in parameter estimation approach,
+#'                 Behavior Research Methods, 39(4), 755–766, DOI:
+#'                 \href{https://doi.org/10.3758/BF03192966}{
+#'                 https://doi.org/10.3758/BF03192966}
+#' @references [4] McKay, AT., 1932, Distribution of the Coefficient of
+#'                 Variation and the Extended“ t” Distribution, Journal of the
+#'                 Royal Statistical Society, 95(4), 695–698
+#' @references [5] Miller, E., 1991, Asymptotic test statistics for coefficients
+#'                 of variation, Communications in Statistics-Theory and
+#'                 Methods, 20(10), 3351–3363
+#' @references [6] Vangel, MG., 1996, Confidence intervals for a normal
+#'                 coefficient of variation, The American Statistician, 50(1),
+#'                 21–26
+#' @references [7] Mahmoudvand, R., & Hassani, H., 2009, Two new confidence
+#'                 intervals for the coefficient of variation in a normal
+#'                 distribution, Journal of Applied Statistics, 36(4), 429–442
+#' @references [8] Panichkitkosolkul, W., 2013, Confidence Intervals for the
+#'                 Coefficient of Variation in a Normal Distribution with a
+#'                 Known Population Mean, Journal of Probability and Statistics,
+#'                 2013, 1–11, \href{https://doi.org/10.1155/2013/324940}{
+#'                 https://doi.org/10.1155/2013/324940}
+#' @references [9] Canty, A., & Ripley, B., 2017, boot: Bootstrap R (S-Plus)
+#'                 Functions, R package version 1.3-20
+#' @export
 cv <- function(
     x,  # Currently there are methods for numeric vectors
     na.rm = FALSE,  # indicating whether NA values should be stripped
     digits = NULL,  # digits of output after rounding. default is 4
     method = NULL,  # method for the computation of confidence interval (CI)
-    correction = TRUE,  # indicating whether to compute the unbiased statistics
+    correction = FALSE,  # indicating whether to compute the unbiased statistics
     alpha = 0.05,  # The allowed type I error probability
     R = NULL,  # integer indicating the number of bootstrap replicates
     ...
@@ -44,16 +152,6 @@ cv <- function(
         R = 1000
     }
     digits <- digits  # digits required for rounding
-    method <- tolower(method)  # convert user's input to lower-case
-    method <- match.arg(  # match the user's input with available methods
-        arg = method,
-        choices = c(
-            "kelley", "mckay", "miller", "vangel", "mahmoudvand_hassani",
-            "equal_tailed", "shortest_length", "normal_approximation",
-            "norm","basic", "perc", "bca", "all"
-        ),
-        several.ok = TRUE
-    )
     shortest_length <- data.frame(  # "a" and "b" values for shortest-length CI
         v = c(  # degrees of freedom
             2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
@@ -137,9 +235,6 @@ cv <- function(
             )
         }
     }
-    if (is.na(method)) {
-        stop("invalid confidence interval method")
-    }
     cv <- (
         sd(x, na.rm = na.rm)/mean(x, na.rm = na.rm)  # coefficient of variation
     )
@@ -148,6 +243,41 @@ cv <- function(
              (1/length(x)) * cv^2) +
             (1/(2 * (length(x) - 1)^2))
     )
+    if (is.null(method) == TRUE & correction == FALSE) {
+        warning("No confidence interval method is selected")
+        return(
+            list(
+                method = "cv = sd/mean (may be biased)",
+                statistics = data.frame(
+                    est = round(cv*100, digits = digits),
+                    row.names = c(" ")
+                    )
+                )
+            )
+    } else if (is.null(method) == TRUE & correction == TRUE) {
+        warning("No confidence interval method is selected")
+        return(
+            list(
+                method = "Corrected (i.e., unbiased) cv",
+                statistics = data.frame(
+                    est = round(cv_corr*100, digits = digits),
+                    row.names = c(" ")
+                )
+            )
+        )
+    } else if (!is.null(method)) {
+        method <- tolower(method)  # convert user's input to lower-case
+        method <- match.arg(  # match the user's input with available methods
+            arg = method,
+            choices = c(
+                "kelley", "mckay", "miller", "vangel", "mahmoudvand_hassani",
+                "equal_tailed", "shortest_length", "normal_approximation",
+                "norm","basic", "perc", "bca", "all"
+            ),
+            several.ok = TRUE
+        )
+    }
+
 # calculating cv's bootstrap CI
     boot.cv <- boot::boot(
         x,
