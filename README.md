@@ -30,7 +30,7 @@ The `DescObs` is available on github. To install it in `R`, use:
 ```r
 devtools::install_github('MaaniBeigy/DescObs')  
 ```
-\* Note that this package is still under development. Currently, `cv` and `cqv`      are functional.     
+\* Note that this package is in-development. Currently, `cv` and `cqv`      are functional.     
 \* Pull request welcome.     
 \* This package is inspired by `dplyr`, `SciView`, `boot`, and `MBESS`.     
 ## Dependencies
