@@ -1,10 +1,18 @@
 #' @title Versatile Remove Objects
+#' @name rm.versatile
+#' @description Versatile function to remove objects.
+#' @param save.objects an optional list naming objects to be saved (\emph{i.e.,}
+#'                     not to be removed).
+#' @param save.patterns x
+#' @export
 rm.versatile <- function(
     save.objects = NULL,
     save.patterns = NULL,
     rm.objects = NULL,
     rm.patterns = NULL,
-    modes = list("integer", "double", "character", "list")
+    modes = list("integer", "double", "character", "list"),
+    envir = .GlobalEnv,
+    inherits = FALSE
 ) {
     save.objects = unlist(save.objects)
     save.patterns = unlist(save.patterns)
@@ -18,6 +26,8 @@ rm.versatile <- function(
         ),
         several.ok = TRUE
     )
+    envir = envir
+    inherits = inherits
     if (
         (is.null(save.patterns) | is.na(save.patterns)) &&
         (is.null(save.objects) | is.na(save.objects)) &&
@@ -121,7 +131,8 @@ rm.versatile <- function(
         } else {
             rm(
                 list = setdiff(ls(envir = .GlobalEnv), save.formula),
-                envir = .GlobalEnv
+                envir = .GlobalEnv,
+                inherits = inherits
             )
             message("Done!")
         }
@@ -222,7 +233,8 @@ rm.versatile <- function(
         } else {
             rm(
                 list = rm.formula,
-                envir = .GlobalEnv
+                envir = .GlobalEnv,
+                inherits = inherits
             )
             message("Done!")
         }
@@ -410,7 +422,8 @@ rm.versatile <- function(
             rm(
                 list = union(
                     setdiff(ls(envir = .GlobalEnv), save.formula),
-                    rm.formula
+                    rm.formula,
+                    inherits = inherits
                 ),
                 envir = .GlobalEnv
             )

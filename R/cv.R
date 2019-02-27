@@ -39,9 +39,9 @@
 #'        \code{\deqn{(sd/mean)*100}}
 #'        }
 #'        \strong{Kelley Confidence Interval:}{
-#'        Thanks to package \pkg{MBESS} [2] for the computation of confidence
-#'        limits for the noncentrality parameter from a \emph{t} distribution
-#'        \link[MBESS]{conf.limits.nct} [3].
+#'        Thanks to package \link[MBESS]{MBESS} [2] for the
+#'        computation of confidence limits for the noncentrality parameter from
+#'        a \emph{t} distribution \link[MBESS]{conf.limits.nct} [3].
 #'        }
 #'        \cr \cr
 #'        \strong{McKay Confidence Interval:}{
@@ -81,7 +81,7 @@
 #'        \cr \cr
 #'        \strong{Bootstrap Confidence Intervals:}{
 #'        Thanks to package \pkg{boot} by Canty & Ripley [9] we can obtain
-#'        bootstrap CI around \emph{cv}.
+#'        bootstrap CI around \emph{cv} using \link[boot]{boot.ci}.
 #'        }
 #'        \cr \cr
 #'        }
