@@ -1,3 +1,4 @@
+# First let us making some objects
 a <- 1
 b <- "female"
 c <- FALSE
@@ -20,11 +21,13 @@ matrix.a <- matrix(1:10, nrow = 2, ncol = 5)
 matrix2 <- matrix(1:100, ncol = 2)
 x <- c("a", "b", "c", "d")
 y <- c("d", "e", "f")
+# Remove objects by rm.versatile
 rm.versatile(
     save.objects = list("a", "b", "c"),
     save.patterns = list("df", "data"),
     rm.objects = list("x", "y"),
     rm.patterns = list("matrix")
 )
+# List objects
 ls()
 

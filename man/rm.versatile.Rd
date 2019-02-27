@@ -35,7 +35,23 @@ and/or rm.patterns. For example "logical", "integer", "double",
 \description{
 Versatile function to remove objects.
 }
+\details{
+The \link[base]{rm} function is not a versatile function because it
+         cannot handle exceptional objects or string patterns to skip or
+         remove. Moreover, \emph{rm} gives no warning before removing the
+         objects and is not interactive. Also, the \code{pattern} argument
+         of ls() object cannot handle multiple patterns or multiple
+         \link[base:regex]{regular expressions}. This function has been
+         developed for sake of versatility, where you can determine
+         exceptional objects and patterns for saving and/or removing objects.
+         Also, you receive proper message regarding the final approval of
+         removing objects. The search strategy of rm.versatile is based upon
+         \link[utils]{apropos} function; which enables you to determine the
+         type or storage mode of the objects (\emph{e.g.,} double, integer,
+         character, \emph{etc.}).
+}
 \examples{
+# First let us making some objects
 a <- 1
 b <- "female"
 c <- FALSE
@@ -58,12 +74,14 @@ matrix.a <- matrix(1:10, nrow = 2, ncol = 5)
 matrix2 <- matrix(1:100, ncol = 2)
 x <- c("a", "b", "c", "d")
 y <- c("d", "e", "f")
+# Remove objects by rm.versatile
 rm.versatile(
     save.objects = list("a", "b", "c"),
     save.patterns = list("df", "data"),
     rm.objects = list("x", "y"),
     rm.patterns = list("matrix")
 )
+# List objects
 ls()
 
 }
