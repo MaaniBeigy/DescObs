@@ -2,19 +2,21 @@
 % Please edit documentation in R/rm.versatile.R
 \name{rm.versatile}
 \alias{rm.versatile}
-\title{Versatile Remove Objects}
+\title{Versatile Function for Removing Objects}
 \usage{
 rm.versatile(save.objects = NULL, save.patterns = NULL,
   rm.objects = NULL, rm.patterns = NULL, modes = list("integer",
-  "double", "character", "list"), envir = .GlobalEnv, inherits = FALSE)
+  "double", "character", "list"), envir = .GlobalEnv, inherits = FALSE,
+  ...)
 }
 \arguments{
 \item{save.objects}{an optional list naming objects to be saved (\emph{i.e.,}
 not to be removed).}
 
 \item{save.patterns}{an optional list of string patterns or
-\link[base]{regex} which specifies the objects to be
-saved (\emph{i.e.,} not to be removed).}
+\link[base:regex]{regular expressions} which specifies
+the objects to be saved (\emph{i.e.,} not to be removed)
+.}
 
 \item{rm.objects}{a list naming objects to be removed.}
 
@@ -36,19 +38,19 @@ and/or rm.patterns. For example "logical", "integer", "double",
 Versatile function to remove objects.
 }
 \details{
-The \link[base]{rm} function is not a versatile function because it
-         cannot handle exceptional objects or string patterns to skip or
-         remove. Moreover, \emph{rm} gives no warning before removing the
-         objects and is not interactive. Also, the \code{pattern} argument
-         of ls() object cannot handle multiple patterns or multiple
-         \link[base:regex]{regular expressions}. This function has been
-         developed for sake of versatility, where you can determine
-         exceptional objects and patterns for saving and/or removing objects.
-         Also, you receive proper message regarding the final approval of
-         removing objects. The search strategy of rm.versatile is based upon
-         \link[utils]{apropos} function; which enables you to determine the
-         type or storage mode of the objects (\emph{e.g.,} double, integer,
-         character, \emph{etc.}).
+The traditional \link[base]{rm} function from \pkg{base}is not a
+         versatile function because it cannot handle exceptional objects or
+         string patterns to skip or remove. Moreover, \emph{rm} gives no
+         warning before removing the objects and is not interactive. Also,
+         the \code{pattern} argument of \code{ls()} function cannot handle
+         multiple patterns or multiple \link[base:regex]{regular expressions}
+         . This function has been developed for sake of versatility,
+         where you can determine exceptional objects and patterns for saving
+         and/or removing objects. Also, you receive proper message regarding
+         the final approval of removing objects. The search strategy of
+         rm.versatile is based upon \link[utils]{apropos} function, which
+         enables you to determine the type or storage mode of the objects
+         (\emph{e.g.,} double, integer, character, \emph{etc.}).
 }
 \examples{
 # First let us making some objects
@@ -83,5 +85,4 @@ rm.versatile(
 )
 # List objects
 ls()
-
 }
