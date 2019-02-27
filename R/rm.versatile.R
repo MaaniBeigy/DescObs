@@ -3,7 +3,21 @@
 #' @description Versatile function to remove objects.
 #' @param save.objects an optional list naming objects to be saved (\emph{i.e.,}
 #'                     not to be removed).
-#' @param save.patterns x
+#' @param save.patterns an optional list of string patterns or
+#'                      \link[base]{regex} which specifies the objects to be
+#'                      saved (\emph{i.e.,} not to be removed).
+#' @param rm.objects a list naming objects to be removed.
+#' @param rm.patterns an optional list of string patterns or
+#'                      \link[base]{regex} which specifies the objects to be
+#'                      removed.
+#' @param modes a list to set the type or storage mode of the save.patterns
+#'              and/or rm.patterns. For example "logical", "integer", "double",
+#'              "complex", "raw", "character", "list", "expression", "name",
+#'              "symbol" and "function".
+#' @param envir the \link[base]{environment} to use. Default is set to
+#'              .GlobalEnv
+#' @param inherits should the enclosing frames of the environment be inspected?
+#' @example ./examples/rm.versatile.R
 #' @export
 rm.versatile <- function(
     save.objects = NULL,
@@ -422,10 +436,10 @@ rm.versatile <- function(
             rm(
                 list = union(
                     setdiff(ls(envir = .GlobalEnv), save.formula),
-                    rm.formula,
-                    inherits = inherits
+                    rm.formula
                 ),
-                envir = .GlobalEnv
+                envir = .GlobalEnv,
+                inherits = inherits
             )
             message("Done!")
         }
