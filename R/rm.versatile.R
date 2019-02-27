@@ -18,7 +18,7 @@
 #' @param envir the \link[base]{environment} to use. Default is set to
 #'              .GlobalEnv
 #' @param inherits should the enclosing frames of the environment be inspected?
-#' @details The traditional \link[base]{rm} function from \pkg{base}is not a
+#' @details The traditional \link[base]{rm} function from \pkg{base} is not a
 #'          versatile function because it cannot handle exceptional objects or
 #'          string patterns to skip or remove. Moreover, \emph{rm} gives no
 #'          warning before removing the objects and is not interactive. Also,

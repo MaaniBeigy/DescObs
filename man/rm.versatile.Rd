@@ -38,7 +38,7 @@ and/or rm.patterns. For example "logical", "integer", "double",
 Versatile function to remove objects.
 }
 \details{
-The traditional \link[base]{rm} function from \pkg{base}is not a
+The traditional \link[base]{rm} function from \pkg{base} is not a
          versatile function because it cannot handle exceptional objects or
          string patterns to skip or remove. Moreover, \emph{rm} gives no
          warning before removing the objects and is not interactive. Also,
@@ -85,4 +85,5 @@ rm.versatile(
 )
 # List objects
 ls()
+
 }
