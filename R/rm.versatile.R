@@ -1,0 +1,420 @@
+#' @title Versatile Remove Objects
+rm.versatile <- function(
+    save.objects = NULL,
+    save.patterns = NULL,
+    rm.objects = NULL,
+    rm.patterns = NULL,
+    modes = list("integer", "double", "character", "list")
+) {
+    save.objects = unlist(save.objects)
+    save.patterns = unlist(save.patterns)
+    rm.objects = unlist(rm.objects)
+    rm.patterns = unlist(rm.patterns)
+    mode <- match.arg(  # match the user's input with available methods
+        arg = unlist(modes),
+        choices = c(
+            "logical", "integer", "double", "complex", "raw", "character",
+            "list", "expression", "name", "symbol", "function"
+        ),
+        several.ok = TRUE
+    )
+    if (
+        (is.null(save.patterns) | is.na(save.patterns)) &&
+        (is.null(save.objects) | is.na(save.objects)) &&
+        (is.null(rm.objects) | is.na(rm.objects)) &&
+        (is.null(rm.patterns) | is.na(rm.patterns))
+    ) {
+        stop("You have selected neither save nor remove objects/patterns!")
+    } else if ((!is.null(save.patterns) | !is.na(save.patterns)) ||
+               (!is.null(save.objects) | !is.na(save.objects))
+    ) {
+        if ("integer" %in% mode) {
+            save.mode.integer <- unlist(lapply(
+                save.patterns, apropos, mode = "integer")
+            )
+        } else if (!("integer" %in% mode)) {
+            save.mode.integer <- NULL
+        }
+        if ("double" %in% mode) {
+            save.mode.double <- unlist(lapply(
+                save.patterns, apropos, mode = "double")
+            )
+        } else if (!("double" %in% mode)) {
+            save.mode.double <- NULL
+        }
+        if ("character" %in% mode) {
+            save.mode.character <- unlist(
+                lapply(save.patterns, apropos, mode = "character")
+            )
+        } else if (!("character" %in% mode)) {
+            save.mode.character <- NULL
+        }
+        if ("list" %in% mode) {
+            save.mode.list <- unlist(
+                lapply(save.patterns, apropos, mode = "list")
+            )
+        } else if (!("list" %in% mode)) {
+            save.mode.list <- NULL
+        }
+        if ("logical" %in% mode) {
+            save.mode.logical <- unlist(lapply(
+                save.patterns, apropos, mode = "logical")
+            )
+        } else if (!("logical" %in% mode)) {
+            save.mode.logical <- NULL
+        }
+        if ("complex" %in% mode) {
+            save.mode.complex <- unlist(lapply(
+                save.patterns, apropos, mode = "complex")
+            )
+        } else if (!("complex" %in% mode)) {
+            save.mode.complex <- NULL
+        }
+        if ("raw" %in% mode) {
+            save.mode.raw <- unlist(
+                lapply(save.patterns, apropos, mode = "raw")
+            )
+        } else if (!("raw" %in% mode)) {
+            save.mode.raw <- NULL
+        }
+        if ("expression" %in% mode) {
+            save.mode.expression <- unlist(
+                lapply(save.patterns, apropos, mode = "expression")
+            )
+        } else if (!("expression" %in% mode)) {
+            save.mode.expression <- NULL
+        }
+        if ("name" %in% mode) {
+            save.mode.name <- unlist(
+                lapply(save.patterns, apropos, mode = "name")
+            )
+        } else if (!("name" %in% mode)) {
+            save.mode.name <- NULL
+        }
+        if ("symbol" %in% mode) {
+            save.mode.symbol <- unlist(
+                lapply(save.patterns, apropos, mode = "symbol")
+            )
+        } else if (!("symbol" %in% mode)) {
+            save.mode.symbol <- NULL
+        }
+        if ("function" %in% mode) {
+            save.mode.function <- unlist(lapply(
+                save.patterns, apropos, mode = "function")
+            )
+        } else if (!("function" %in% mode)) {
+            save.mode.function <- NULL
+        }
+        save.formula = c(
+            c(save.objects),
+            c(save.mode.logical, save.mode.integer, save.mode.double,
+              save.mode.complex, save.mode.raw, save.mode.character,
+              save.mode.list, save.mode.expression, save.mode.name,
+              save.mode.symbol, save.mode.function)
+        )
+        print(setdiff(ls(envir = .GlobalEnv), save.formula))
+        ANSWER <- readline(
+            "Are you a sure you want to remove these objects? [yes/no]"
+        )
+        if (substr(ANSWER, 1, 1) == "n") {
+            cat("OK, change your patterns and exceptional objects")
+        } else {
+            rm(
+                list = setdiff(ls(envir = .GlobalEnv), save.formula),
+                envir = .GlobalEnv
+            )
+            message("Done!")
+        }
+    } else if (
+        (!is.null(rm.objects) | !is.na(rm.objects)) ||
+        (!is.null(rm.patterns) | !is.na(rm.patterns))
+    ) {
+        if ("integer" %in% mode) {
+            rm.mode.integer <- unlist(lapply(
+                rm.patterns, apropos, mode = "integer")
+            )
+        } else if (!("integer" %in% mode)) {
+            rm.mode.integer <- NULL
+        }
+        if ("double" %in% mode) {
+            rm.mode.double <- unlist(lapply(
+                rm.patterns, apropos, mode = "double")
+            )
+        } else if (!("double" %in% mode)) {
+            rm.mode.double <- NULL
+        }
+        if ("character" %in% mode) {
+            rm.mode.character <- unlist(
+                lapply(rm.patterns, apropos, mode = "character")
+            )
+        } else if (!("character" %in% mode)) {
+            rm.mode.character <- NULL
+        }
+        if ("list" %in% mode) {
+            rm.mode.list <- unlist(
+                lapply(rm.patterns, apropos, mode = "list")
+            )
+        } else if (!("list" %in% mode)) {
+            rm.mode.list <- NULL
+        }
+        if ("logical" %in% mode) {
+            rm.mode.logical <- unlist(lapply(
+                rm.patterns, apropos, mode = "logical")
+            )
+        } else if (!("logical" %in% mode)) {
+            rm.mode.logical <- NULL
+        }
+        if ("complex" %in% mode) {
+            rm.mode.complex <- unlist(lapply(
+                rm.patterns, apropos, mode = "complex")
+            )
+        } else if (!("complex" %in% mode)) {
+            rm.mode.complex <- NULL
+        }
+        if ("raw" %in% mode) {
+            rm.mode.raw <- unlist(
+                lapply(rm.patterns, apropos, mode = "raw")
+            )
+        } else if (!("raw" %in% mode)) {
+            rm.mode.raw <- NULL
+        }
+        if ("expression" %in% mode) {
+            rm.mode.expression <- unlist(
+                lapply(rm.patterns, apropos, mode = "expression")
+            )
+        } else if (!("expression" %in% mode)) {
+            rm.mode.expression <- NULL
+        }
+        if ("name" %in% mode) {
+            rm.mode.name <- unlist(
+                lapply(rm.patterns, apropos, mode = "name")
+            )
+        } else if (!("name" %in% mode)) {
+            rm.mode.name <- NULL
+        }
+        if ("symbol" %in% mode) {
+            rm.mode.symbol <- unlist(
+                lapply(rm.patterns, apropos, mode = "symbol")
+            )
+        } else if (!("symbol" %in% mode)) {
+            rm.mode.symbol <- NULL
+        }
+        if ("function" %in% mode) {
+            rm.mode.function <- unlist(lapply(
+                rm.patterns, apropos, mode = "function")
+            )
+        } else if (!("function" %in% mode)) {
+            rm.mode.function <- NULL
+        }
+        rm.formula = c(
+            c(rm.objects),
+            c(rm.mode.logical, rm.mode.integer, rm.mode.double,
+              rm.mode.complex, rm.mode.raw, rm.mode.character,
+              rm.mode.list, rm.mode.expression, rm.mode.name,
+              rm.mode.symbol, rm.mode.function)
+        )
+        print(rm.formula)
+        ANSWER <- readline(
+            "Are you a sure you want to remove these objects? [yes/no]"
+        )
+        if (substr(ANSWER, 1, 1) == "n") {
+            cat("OK, change your patterns and remove objects")
+        } else {
+            rm(
+                list = rm.formula,
+                envir = .GlobalEnv
+            )
+            message("Done!")
+        }
+    } else if (
+        ((!is.null(save.patterns) | !is.na(save.patterns)) ||
+         (!is.null(save.objects) | !is.na(save.objects))) &&
+        ((!is.null(rm.objects) | !is.na(rm.objects)) ||
+         (!is.null(rm.patterns) | !is.na(rm.patterns)))
+    ) {
+        if ("integer" %in% mode) {
+            save.mode.integer <- unlist(lapply(
+                save.patterns, apropos, mode = "integer")
+            )
+        } else if (!("integer" %in% mode)) {
+            save.mode.integer <- NULL
+        }
+        if ("double" %in% mode) {
+            save.mode.double <- unlist(lapply(
+                save.patterns, apropos, mode = "double")
+            )
+        } else if (!("double" %in% mode)) {
+            save.mode.double <- NULL
+        }
+        if ("character" %in% mode) {
+            save.mode.character <- unlist(
+                lapply(save.patterns, apropos, mode = "character")
+            )
+        } else if (!("character" %in% mode)) {
+            save.mode.character <- NULL
+        }
+        if ("list" %in% mode) {
+            save.mode.list <- unlist(
+                lapply(save.patterns, apropos, mode = "list")
+            )
+        } else if (!("list" %in% mode)) {
+            save.mode.list <- NULL
+        }
+        if ("logical" %in% mode) {
+            save.mode.logical <- unlist(lapply(
+                save.patterns, apropos, mode = "logical")
+            )
+        } else if (!("logical" %in% mode)) {
+            save.mode.logical <- NULL
+        }
+        if ("complex" %in% mode) {
+            save.mode.complex <- unlist(lapply(
+                save.patterns, apropos, mode = "complex")
+            )
+        } else if (!("complex" %in% mode)) {
+            save.mode.complex <- NULL
+        }
+        if ("raw" %in% mode) {
+            save.mode.raw <- unlist(
+                lapply(save.patterns, apropos, mode = "raw")
+            )
+        } else if (!("raw" %in% mode)) {
+            save.mode.raw <- NULL
+        }
+        if ("expression" %in% mode) {
+            save.mode.expression <- unlist(
+                lapply(save.patterns, apropos, mode = "expression")
+            )
+        } else if (!("expression" %in% mode)) {
+            save.mode.expression <- NULL
+        }
+        if ("name" %in% mode) {
+            save.mode.name <- unlist(
+                lapply(save.patterns, apropos, mode = "name")
+            )
+        } else if (!("name" %in% mode)) {
+            save.mode.name <- NULL
+        }
+        if ("symbol" %in% mode) {
+            save.mode.symbol <- unlist(
+                lapply(save.patterns, apropos, mode = "symbol")
+            )
+        } else if (!("symbol" %in% mode)) {
+            save.mode.symbol <- NULL
+        }
+        if ("function" %in% mode) {
+            save.mode.function <- unlist(lapply(
+                save.patterns, apropos, mode = "function")
+            )
+        } else if (!("function" %in% mode)) {
+            save.mode.function <- NULL
+        }
+        save.formula = c(
+            c(save.objects),
+            c(save.mode.logical, save.mode.integer, save.mode.double,
+              save.mode.complex, save.mode.raw, save.mode.character,
+              save.mode.list, save.mode.expression, save.mode.name,
+              save.mode.symbol, save.mode.function)
+        )
+        if ("integer" %in% mode) {
+            rm.mode.integer <- unlist(lapply(
+                rm.patterns, apropos, mode = "integer")
+            )
+        } else if (!("integer" %in% mode)) {
+            rm.mode.integer <- NULL
+        }
+        if ("double" %in% mode) {
+            rm.mode.double <- unlist(lapply(
+                rm.patterns, apropos, mode = "double")
+            )
+        } else if (!("double" %in% mode)) {
+            rm.mode.double <- NULL
+        }
+        if ("character" %in% mode) {
+            rm.mode.character <- unlist(
+                lapply(rm.patterns, apropos, mode = "character")
+            )
+        } else if (!("character" %in% mode)) {
+            rm.mode.character <- NULL
+        }
+        if ("list" %in% mode) {
+            rm.mode.list <- unlist(
+                lapply(rm.patterns, apropos, mode = "list")
+            )
+        } else if (!("list" %in% mode)) {
+            rm.mode.list <- NULL
+        }
+        if ("logical" %in% mode) {
+            rm.mode.logical <- unlist(lapply(
+                rm.patterns, apropos, mode = "logical")
+            )
+        } else if (!("logical" %in% mode)) {
+            rm.mode.logical <- NULL
+        }
+        if ("complex" %in% mode) {
+            rm.mode.complex <- unlist(lapply(
+                rm.patterns, apropos, mode = "complex")
+            )
+        } else if (!("complex" %in% mode)) {
+            rm.mode.complex <- NULL
+        }
+        if ("raw" %in% mode) {
+            rm.mode.raw <- unlist(
+                lapply(rm.patterns, apropos, mode = "raw")
+            )
+        } else if (!("raw" %in% mode)) {
+            rm.mode.raw <- NULL
+        }
+        if ("expression" %in% mode) {
+            rm.mode.expression <- unlist(
+                lapply(rm.patterns, apropos, mode = "expression")
+            )
+        } else if (!("expression" %in% mode)) {
+            rm.mode.expression <- NULL
+        }
+        if ("name" %in% mode) {
+            rm.mode.name <- unlist(
+                lapply(rm.patterns, apropos, mode = "name")
+            )
+        } else if (!("name" %in% mode)) {
+            rm.mode.name <- NULL
+        }
+        if ("symbol" %in% mode) {
+            rm.mode.symbol <- unlist(
+                lapply(rm.patterns, apropos, mode = "symbol")
+            )
+        } else if (!("symbol" %in% mode)) {
+            rm.mode.symbol <- NULL
+        }
+        if ("function" %in% mode) {
+            rm.mode.function <- unlist(lapply(
+                rm.patterns, apropos, mode = "function")
+            )
+        } else if (!("function" %in% mode)) {
+            rm.mode.function <- NULL
+        }
+        rm.formula = c(
+            c(rm.objects),
+            c(rm.mode.logical, rm.mode.integer, rm.mode.double,
+              rm.mode.complex, rm.mode.raw, rm.mode.character,
+              rm.mode.list, rm.mode.expression, rm.mode.name,
+              rm.mode.symbol, rm.mode.function)
+        )
+        print(union(setdiff(ls(envir = .GlobalEnv), save.formula), rm.formula))
+        ANSWER <- readline(
+            "Are you a sure you want to remove these objects? [yes/no]"
+        )
+        if (substr(ANSWER, 1, 1) == "n") {
+            cat("OK, change your patterns and objects")
+        } else {
+            rm(
+                list = union(
+                    setdiff(ls(envir = .GlobalEnv), save.formula),
+                    rm.formula
+                ),
+                envir = .GlobalEnv
+            )
+            message("Done!")
+        }
+    }
+}
