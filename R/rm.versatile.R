@@ -22,13 +22,14 @@
 #'          versatile function because it cannot handle exceptional objects or
 #'          string patterns to skip or remove. Moreover, \emph{rm} gives no
 #'          warning before removing the objects and is not interactive. Also,
-#'          the \code{pattern} argument of \code{ls()} function cannot handle
-#'          multiple patterns or multiple \link[base:regex]{regular expressions}
-#'          . This function has been developed for sake of versatility,
-#'          where you can determine exceptional objects and patterns for saving
-#'          and/or removing objects. Also, you receive proper message regarding
-#'          the final approval of removing objects. The search strategy of
-#'          rm.versatile is based upon \link[utils]{apropos} function, which
+#'          the \emph{pattern} argument of \link[base]{ls} function cannot
+#'          handle multiple patterns or multiple
+#'          \link[base:regex]{regular expressions}. This function has been
+#'          developed for sake of versatility, where you can determine
+#'          exceptional objects and patterns for saving and/or removing objects.
+#'          Also, you receive proper message regarding the final approval of
+#'          removing objects. The search strategy of \code{rm.versatile} is
+#'          based upon \link[utils]{apropos} function, which
 #'          enables you to determine the type or storage mode of the objects
 #'          (\emph{e.g.,} double, integer, character, \emph{etc.}).
 #' @example ./examples/rm.versatile.R

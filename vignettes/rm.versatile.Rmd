@@ -1037,3 +1037,47 @@ rm.versatile(
 # check the remaining objects
 ls()
 ```
+\* Note that the type of `matrix` objects is not `list`. Matrices are stored as `integer`, hence are not removed from the environment. But we do not want to change the `modes` argument because there are various integer type vectors in 
+our environment that are needed. One way to get rid of them is:
+```{r echo=FALSE, warning=FALSE, message=FALSE, include = FALSE}
+id <- c(1,2,3,4)
+gender <- c("male","female","female","male")
+time <- c(2018,2019,2018,2017)
+df <- data.frame(id, gender, time)
+myvalues <- c(2017,2018,2019)
+for (i in 1:100) {
+    assign(paste0("dfy",i), df[df$time == myvalues[i],])
+}
+a <- 1
+b <- "female"
+c <- FALSE
+d <- 4:10
+e <- 5
+f <- 6
+g <- 7
+df1 <- 8
+df2 <- 9
+dfcol <- 10
+dff1 <- 11
+dfff3 <- 12
+mydata1 <- 13
+mymydata <- 14
+dataframe1 <- data.frame(
+    gender = c("F", "M", "M", "F"),
+    score = c(10, 12, 14, 18)
+    )
+matrix.a <- matrix(1:10, nrow = 2, ncol = 5)
+matrix2 <- matrix(1:100, ncol = 2)
+x <- c("a", "b", "c", "d")
+y <- c("d", "e", "f")
+```
+```{r eval = TRUE, warning=TRUE, message=TRUE}
+rm.versatile(
+    rm.objects = list("matrix.a", "matrix2"),
+    rm.patterns = list("df", "matrix", "dataframe"),
+    modes = list("list")
+)
+# check the remaining objects
+ls()
+```
+
