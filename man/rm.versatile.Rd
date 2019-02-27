@@ -21,8 +21,8 @@ the objects to be saved (\emph{i.e.,} not to be removed)
 \item{rm.objects}{a list naming objects to be removed.}
 
 \item{rm.patterns}{an optional list of string patterns or
-\link[base]{regex} which specifies the objects to be
-removed.}
+\link[base:regex]{regular expressions}
+which specifies the objects to be removed.}
 
 \item{modes}{a list to set the type or storage mode of the save.patterns
 and/or rm.patterns. For example "logical", "integer", "double",

@@ -9,8 +9,8 @@
 #'                      .
 #' @param rm.objects a list naming objects to be removed.
 #' @param rm.patterns an optional list of string patterns or
-#'                      \link[base]{regex} which specifies the objects to be
-#'                      removed.
+#'                      \link[base:regex]{regular expressions}
+#'                      which specifies the objects to be removed.
 #' @param modes a list to set the type or storage mode of the save.patterns
 #'              and/or rm.patterns. For example "logical", "integer", "double",
 #'              "complex", "raw", "character", "list", "expression", "name",

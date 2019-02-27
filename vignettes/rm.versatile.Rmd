@@ -1031,7 +1031,8 @@ y <- c("d", "e", "f")
 ls()
 # let us remove the data frames
 rm.versatile(
-    rm.patterns = list("df", "matrix", "dataframe")
+    rm.patterns = list("df", "matrix", "dataframe"),
+    modes = list("list")
 )
 # check the remaining objects
 ls()
