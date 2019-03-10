@@ -42,20 +42,23 @@
 #'        }
 #'        \cr \cr
 #'        \strong{Normal approximation 95\% CI:}{
-#'        The intervals calculated by the normal approximation [3, 4].
+#'        The intervals calculated by the normal approximation [3, 4],
+#'        using \link[boot]{boot.ci}.
 #'        }
 #'        \cr \cr
 #'        \strong{Basic bootstrap 95\% CI:}{
-#'        The intervals calculated by the basic bootstrap method [3, 4].
+#'        The intervals calculated by the basic bootstrap method [3, 4],
+#'        using \link[boot]{boot.ci}.
 #'        }
 #'        \cr \cr
 #'        \strong{Bootstrap percentile 95\% CI:}{
-#'        The intervals calculated by the bootstrap percentile method [3, 4].
+#'        The intervals calculated by the bootstrap percentile method [3, 4],
+#'        using \link[boot]{boot.ci}.
 #'        }
 #'        \cr \cr
 #'        \strong{Adjusted bootstrap percentile (BCa) 95\% CI:}{
 #'        The intervals calculated by the adjusted bootstrap percentile
-#'        (BCa) method [3, 4].
+#'        (BCa) method [3, 4], using \link[boot]{boot.ci}.
 #'        }
 #'        }
 #'        }

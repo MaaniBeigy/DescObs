@@ -1,4 +1,20 @@
-# QuantIndex
+#' @title R6 Sample Quantiles
+#' @name QuantIndex
+#' @description The R6 class \code{QuantIndex} produces the sample quantiles
+#'              corresponding to the given probabilities. It uses
+#'              \link[stats]{quantile} from the package \pkg{stats}.
+#' @usage \code{QuantIndex$new(x, ...)}
+#'
+#' ## Default R6 method:
+#' \code{QuantIndex$new(x, na.rm = TRUE, digits = 4,
+#'                probs = 0.5, ...)$qx()}
+#' @param x An \code{R} object. Currently there are methods for numeric vectors
+#' @param na.rm a logical value indicating whether \code{NA} values should be
+#'              stripped before the computation proceeds.
+#' @param digits integer indicating the number of decimal places to be used.
+#' @param probs numeric vector of probabilities with values in \code{[0,1]}.
+#' @example ./examples/QuantIndex.R
+#' @export
 QuantIndex <- R6::R6Class(
     classname = "QuantIndex",
     public = list(
@@ -54,7 +70,7 @@ QuantIndex <- R6::R6Class(
                 unname(
                     quantile(
                         self$x,
-                        probs = self$probs,  # third quartile (0.75 percentile)
+                        probs = self$probs,
                         na.rm = self$na.rm
                         )
                     )
