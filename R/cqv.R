@@ -121,7 +121,7 @@ cqv <- function(
     if (q3 == 0) {  # to avoid NaNs when q3 and q1 are zero
         warning(
             "cqv is NaN because q3 and q1 are 0, max was used instead of q3"
-            )
+        )
         q3 <- max(x, na.rm = na.rm)
     }
     a <- ceiling(
@@ -151,9 +151,9 @@ cqv <- function(
     S <- q3 + q1
     v <- (
         (1/(16 * length(x))) * (
-        (((3/f1square) + (3/f3square) - (2/sqrt(f1square * f3square))) / D^2) +
-        (((3/f1square) + (3/f3square) + (2/sqrt(f1square * f3square))) / S^2) -
-        ((2 * ((3/f3square) - (3/f1square)))/(D*S))
+            (((3/f1square) + (3/f3square) - (2/sqrt(f1square * f3square))) / D^2) +
+                (((3/f1square) + (3/f3square) + (2/sqrt(f1square * f3square))) / S^2) -
+                ((2 * ((3/f3square) - (3/f1square)))/(D*S))
         )
     )
     ccc <- length(x)/(length(x) - 1)
@@ -281,9 +281,9 @@ cqv <- function(
                     lower = lower,
                     upper = upper,
                     row.names = c(" ")
-                    )
                 )
             )
+        )
     } else if (method == "norm" && cqv != 100) {
         return(
             list(
@@ -293,9 +293,9 @@ cqv <- function(
                     lower = lower,
                     upper = upper,
                     row.names = c(" ")
-                    )
                 )
             )
+        )
     } else if (method == "basic" && cqv != 100) {
         return(
             list(
@@ -305,9 +305,9 @@ cqv <- function(
                     lower = lower,
                     upper = upper,
                     row.names = c(" ")
-                    )
                 )
             )
+        )
     } else if (method == "perc" && cqv != 100) {
         return(
             list(
@@ -317,9 +317,9 @@ cqv <- function(
                     lower = lower,
                     upper = upper,
                     row.names = c(" ")
-                    )
                 )
             )
+        )
     } else if (method == "bca" && cqv != 100) {
         return(
             list(
@@ -329,17 +329,17 @@ cqv <- function(
                     lower = lower,
                     upper = upper,
                     row.names = c(" ")
-                    )
                 )
             )
+        )
     } else if (
         (
-    method == "norm" | method == "bonett" | method == "basic" | method == "perc" |
-    method == "bca" | method == "all"
-    ) && cqv == 100
-        ) {
+            method == "norm" | method == "bonett" | method == "basic" | method == "perc" |
+            method == "bca" | method == "all"
+        ) && cqv == 100
+    ) {
         warning(
-"All values of t are equal to  100 \n Cannot calculate confidence intervals \n"
+            "All values of t are equal to  100 \n Cannot calculate confidence intervals \n"
         )
         return(
             list(
@@ -378,7 +378,7 @@ cqv <- function(
                         round(boot.basic.ci$basic[5], digits = digits),
                         round(boot.perc.ci$percent[5], digits = digits),
                         round(boot.bca.ci$bca[5], digits = digits)
-                        ),
+                    ),
                     description = c(
                         "cqv with Bonett 95% CI",
                         "cqv with normal approximation 95% CI",
@@ -386,9 +386,9 @@ cqv <- function(
                         "cqv with bootstrap percentile 95% CI",
                         "cqv with adjusted bootstrap percentile (BCa) 95% CI"
                     )
-                    )
                 )
             )
+        )
     } else {
         stop("method for confidence interval is not available")
         return(NA_real_)
