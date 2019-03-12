@@ -30,15 +30,17 @@ BootCoefQuartVar <- R6::R6Class(
             } else if (!missing(na.rm)) {
                 self$na.rm <- na.rm
             }
-            if (!missing(digits)) {
-                self$digits <- digits
+            if (missing(digits)) {
+                self$digits <- 4
             } else if (is.null(digits)) {
                 self$digits <- 4
+            } else if (!missing(digits)) {
+                self$digits <- digits
             }
-            if (!missing(R)) {
-                self$R <- R
-            } else if (is.null(R)) {
+            if (missing(R)) {
                 self$R <- 1000
+            } else if (!missing(R)) {
+                self$R <- R
             }
         },
         boot_cqv = function(
