@@ -152,6 +152,9 @@ BootCoefQuartVar <- R6::R6Class(
                 )
             }
         }
-        )
+        ),
+    active = list(
+        super_ = function() {super}
+    )
 )
 

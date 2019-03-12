@@ -1,0 +1,182 @@
+#' @title R6 Coefficient of Quartile Variation (cqv)
+#' @name CoefQuartVar
+#' @description The R6 class \code{QuantIndex} for the coefficient of
+#'              quartile variation (cqv)
+#' @usage \code{CoefQuartVar$new(x, ...)}
+#'
+#' ## Default R6 method:
+#' \code{CoefQuartVar$new(x, na.rm = FALSE, digits = 4 ...)$est()}
+#' @param x An \code{R} object. Currently there are methods for numeric vectors
+#' @param na.rm a logical value indicating whether \code{NA} values should be
+#'              stripped before the computation proceeds.
+#' @param digits integer indicating the number of decimal places to be used.
+#' @details \describe{
+#'         \item{\strong{Coefficient of Quartile Variation}}{
+#'         \code{\deqn{ cqv = ((q3-q1)/(q3 + q1))*100 , } } where \eqn{q3}
+#'         and \eqn{q1} are third quartile (\emph{i.e.,} 75th percentile) and
+#'         first quartile (\emph{i.e.,} 25th percentile), respectively.
+#'         The \emph{cqv} is a measure of relative dispersion that is based on
+#'         interquartile range \emph{(iqr)}. Since \eqn{cqv} is unitless, it
+#'         is useful for comparison of variables with different units. It is
+#'         also a measure of homogeneity [1, 2].
+#'         }
+#'         }
+#' @example ./examples/CoefQuartVar.R
+#' @references [1] Bonett, DG., 2006, Confidence interval for a coefficient of
+#'                 quartile variation, Computational Statistics & Data Analysis,
+#'                 50(11), 2953-7, DOI: \href{
+#'                 https://doi.org/10.1016/j.csda.2005.05.007}{
+#'                 https://doi.org/10.1016/j.csda.2005.05.007}
+#' @export
+CoefQuartVar <- R6::R6Class(
+    classname = "CoefQuartVar",
+    inherit = BootCoefQuartVar,
+    public = list(
+        x = NA,
+        na.rm = TRUE,
+        digits = NA,
+        method = NA,
+        R = NA,
+        a = ceiling(
+            (length(x)/4) - (1.96 * (((3 * length(x))/16)^(0.5)))
+        ),
+        b = round(
+            (length(x)/4) + (1.96 * (((3 * length(x))/16)^(0.5))),
+            digits = 0
+        ),
+        initialize = function(
+            x,
+            na.rm,
+            digits,
+            method,
+            R,
+            ...
+        ) {
+            # ---------------------- check NA or NAN -------------------------
+            if (!missing(x)) {
+                self$x <- x
+            } else if (!missing(x)) {
+                stop("no numeric vector is selected for input")
+            }
+            if (missing(na.rm)) {
+                self$na.rm <- FALSE
+            } else if (!missing(na.rm)) {
+                self$na.rm <- na.rm
+            }
+            if (self$na.rm == TRUE) {
+                self$x <- x[!is.na(x)]
+            } else if (anyNA(x)) {
+                stop(
+                    "missing values and NaN's not allowed if 'na.rm' is FALSE"
+                )
+            }
+            # ------------- stop if input x vector is not numeric -------------
+            if (!is.numeric(x)) {
+                stop("argument is not numeric: returning NA")
+                return(NA_real_)
+            }
+            if (!is.vector(x)) {
+                stop("x is not a vector")
+                return(NA_real_)
+            }
+            # ------------------- set digits with default = 4 -----------------
+            if (missing(digits)) {
+                self$digits <- 4
+            } else if (is.null(digits)) {
+                self$digits <- 4
+            } else if (!missing(digits)) {
+                self$digits <- digits
+            }
+            # -- set the number of bootstrap replicates with default = 1000 ---
+            if (missing(R)) {
+                self$R <- 1000
+            } else if (!missing(R)) {
+                self$R <- R
+            }
+            # ---------------- initialize cqv() i.e., cqv function ------------
+            self$est()
+            # self$qk()
+
+        },
+        # -------------- public function cqv() i.e., cqv function -------------
+        est = function(...) {
+            if (  # check if 0.75 percentile is non-zero to avoid NANs
+                super$super_$initialize(
+                    x = self$x, na.rm = TRUE, probs = 0.75
+                    ) != 0
+            ) {
+                return(
+                    round(
+                        (((super$super_$initialize(
+                            x = self$x,
+                            na.rm = TRUE,
+                            probs = 0.75,
+                            names = FALSE
+                        )) - (super$super_$initialize(
+                            x = self$x,
+                            na.rm = TRUE,
+                            probs = 0.25,
+                            names = FALSE
+                        ) )) / ((super$super_$initialize(
+                            x = self$x,
+                            na.rm = TRUE,
+                            probs = 0.75,
+                            names = FALSE
+                        )) + (super$super_$initialize(
+                            x = self$x,
+                            na.rm = TRUE,
+                            probs = 0.25,
+                            names = FALSE
+                        )))) * 100,
+                        digits = self$digits
+                    )
+                )
+            } else if (
+                super$super_$initialize(
+                    x = self$x, na.rm = TRUE, probs = 0.75
+                ) == 0
+            ) {
+                return(
+                    round(
+                        ((max(x = self$x) - (super$super_$initialize(
+                            x = self$x,
+                            na.rm = TRUE,
+                            probs = 0.25,
+                            names = FALSE
+                        ) )) / (max(x = self$x) + (super$super_$initialize(
+                            x = self$x,
+                            na.rm = TRUE,
+                            probs = 0.25,
+                            names = FALSE
+                        )))) * 100,
+                        digits = self$digits
+                    )
+                )
+            }
+        }
+        ,
+        c = function(...) {length(self$x) + 1 - self$b},
+        d = function(...) {length(self$x) + 1 - self$a},
+        Ya = function(...) {dplyr::nth(self$x, self$a, order_by = self$x)},
+        Yb = function(...) {dplyr::nth(self$x, self$b, order_by = self$x)},
+        Yc = function(...) {dplyr::nth(self$x, self$c, order_by = self$x)},
+        Yd = function(...) {dplyr::nth(self$x, self$d, order_by = self$x)},
+        star = 0,
+        alphastar = function(...) {
+            for (i in self$a:(self$b - 1)) {
+                star[i] <- (
+                    (choose(length(self$x), i)) *
+                        (0.25^(i)) * (0.75^(length(self$x) - i))
+                )
+                return(alphastar = 1 - sum(star[i], na.rm = self$na.rm))
+            }
+        }
+        )
+    ,
+    active = list(
+        super_ = function() super
+        )
+)
+
+
+
