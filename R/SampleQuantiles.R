@@ -1,7 +1,7 @@
 #' @title R6 Sample Quantiles
 #' @name SampleQuantiles
-#' @description The R6 class \code{QuantIndex} produces the sample quantiles
-#'              corresponding to the given probabilities. It uses
+#' @description The R6 class \code{SampleQuantiles} produces the sample
+#'              quantiles corresponding to the given probabilities. It uses
 #'              \link[stats]{quantile} from the package \pkg{stats}.
 #' @usage \code{SampleQuantiles$new(x, ...)}
 #'
@@ -22,14 +22,14 @@ SampleQuantiles <- R6::R6Class(
     public = list(
         x = NA,
         na.rm = FALSE,
-        digits = NA,
+        digits = NULL,
         probs = NA,
         names = TRUE,
         type = 7,
         initialize = function(
             x,
             na.rm ,
-            digits,
+            digits = NULL,
             probs,
             names,
             type,
@@ -72,12 +72,14 @@ SampleQuantiles <- R6::R6Class(
                     (self$probs < -eps | self$probs > 1 + eps)))
                 stop("'probs' outside [0,1]")
             # ------------------- set digits with default = 4 -----------------
-            if (missing(digits)) {
-                self$digits <- 4
+            if (!missing(digits)) {
+                self$digits <- digits
             } else if (is.null(digits)) {
                 self$digits <- 4
-            } else if (!missing(digits)) {
-                self$digits <- digits
+            } else if (missing(digits)) {
+                self$digits <- 4
+            } else {
+                self$digits <- 4
             }
             # ------------------ set type with default = 7 --------------------
             if (missing(type)) {

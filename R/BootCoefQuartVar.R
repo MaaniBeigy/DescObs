@@ -22,12 +22,12 @@ BootCoefQuartVar <- R6::R6Class(
     public = list(
         x = NA,
         na.rm = TRUE,
-        digits = NA,
+        digits = NULL,
         R = NA,
         initialize = function(
             x,
             na.rm,
-            digits,
+            digits = NULL,
             R,
             ...
         ) {
@@ -59,12 +59,14 @@ BootCoefQuartVar <- R6::R6Class(
                 return(NA_real_)
             }
             # ------------------- set digits with default = 4 -----------------
-            if (missing(digits)) {
-                self$digits <- 4
+            if (!missing(digits)) {
+                self$digits <- digits
             } else if (is.null(digits)) {
                 self$digits <- 4
-            } else if (!missing(digits)) {
-                self$digits <- digits
+            } else if (missing(digits)) {
+                self$digits <- 4
+            } else {
+                self$digits <- 4
             }
             # -- set the number of bootstrap replicates with default = 1000 ---
             if (missing(R)) {

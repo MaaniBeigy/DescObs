@@ -1,11 +1,11 @@
 #' @title R6 Coefficient of Quartile Variation (cqv)
 #' @name CoefQuartVar
-#' @description The R6 class \code{QuantIndex} for the coefficient of
+#' @description The R6 class \code{CoefQuartVar} for the coefficient of
 #'              quartile variation (cqv)
 #' @usage \code{CoefQuartVar$new(x, ...)}
 #'
 #' ## Default R6 method:
-#' \code{CoefQuartVar$new(x, na.rm = FALSE, digits = 4 ...)$est()}
+#' \code{CoefQuartVar$new(x, na.rm = FALSE, digits = 4)$est()}
 #' @param x An \code{R} object. Currently there are methods for numeric vectors
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #'              stripped before the computation proceeds.
@@ -34,7 +34,7 @@ CoefQuartVar <- R6::R6Class(
     public = list(
         x = NA,
         na.rm = TRUE,
-        digits = NA,
+        digits = NULL,
         method = NA,
         R = NA,
         a = ceiling(
@@ -46,10 +46,8 @@ CoefQuartVar <- R6::R6Class(
         ),
         initialize = function(
             x,
+            digits = NULL,
             na.rm,
-            digits,
-            method,
-            R,
             ...
         ) {
             # ---------------------- check NA or NAN -------------------------
@@ -80,29 +78,24 @@ CoefQuartVar <- R6::R6Class(
                 return(NA_real_)
             }
             # ------------------- set digits with default = 4 -----------------
-            if (missing(digits)) {
-                self$digits <- 4
+            if (!missing(digits)) {
+                self$digits <- digits
             } else if (is.null(digits)) {
                 self$digits <- 4
-            } else if (!missing(digits)) {
-                self$digits <- digits
-            }
-            # -- set the number of bootstrap replicates with default = 1000 ---
-            if (missing(R)) {
-                self$R <- 1000
-            } else if (!missing(R)) {
-                self$R <- R
+            } else if (missing(digits)) {
+                self$digits <- 4
+            } else {
+                self$digits <- 4
             }
             # ---------------- initialize cqv() i.e., cqv function ------------
             self$est()
-            # self$qk()
-
         },
         # -------------- public function cqv() i.e., cqv function -------------
         est = function(...) {
             if (  # check if 0.75 percentile is non-zero to avoid NANs
                 super$super_$initialize(
-                    x = self$x, na.rm = TRUE, probs = 0.75
+                    x = self$x, na.rm = TRUE, probs = 0.75,
+                    digits = self$digits
                     ) != 0
             ) {
                 return(
@@ -111,29 +104,34 @@ CoefQuartVar <- R6::R6Class(
                             x = self$x,
                             na.rm = TRUE,
                             probs = 0.75,
-                            names = FALSE
+                            names = FALSE,
+                            digits = self$digits
                         )) - (super$super_$initialize(
                             x = self$x,
                             na.rm = TRUE,
                             probs = 0.25,
-                            names = FALSE
+                            names = FALSE,
+                            digits = self$digits
                         ) )) / ((super$super_$initialize(
                             x = self$x,
                             na.rm = TRUE,
                             probs = 0.75,
-                            names = FALSE
+                            names = FALSE,
+                            digits = self$digits
                         )) + (super$super_$initialize(
                             x = self$x,
                             na.rm = TRUE,
                             probs = 0.25,
-                            names = FALSE
+                            names = FALSE,
+                            digits = self$digits
                         )))) * 100,
                         digits = self$digits
                     )
                 )
             } else if (
                 super$super_$initialize(
-                    x = self$x, na.rm = TRUE, probs = 0.75
+                    x = self$x, na.rm = TRUE, probs = 0.75,
+                    digits = self$digits
                 ) == 0
             ) {
                 return(
@@ -159,8 +157,8 @@ CoefQuartVar <- R6::R6Class(
         d = function(...) {length(self$x) + 1 - self$a},
         Ya = function(...) {dplyr::nth(self$x, self$a, order_by = self$x)},
         Yb = function(...) {dplyr::nth(self$x, self$b, order_by = self$x)},
-        Yc = function(...) {dplyr::nth(self$x, self$c, order_by = self$x)},
-        Yd = function(...) {dplyr::nth(self$x, self$d, order_by = self$x)},
+        Yc = function(...) {dplyr::nth(self$x, self$c(), order_by = self$x)},
+        Yd = function(...) {dplyr::nth(self$x, self$d(), order_by = self$x)},
         star = 0,
         alphastar = function(...) {
             for (i in self$a:(self$b - 1)) {

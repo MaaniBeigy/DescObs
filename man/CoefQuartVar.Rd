@@ -9,7 +9,7 @@
 \code{CoefQuartVar$new(x, ...)}
 
 ## Default R6 method:
-\code{CoefQuartVar$new(x, na.rm = FALSE, digits = 4 ...)$est()}
+\code{CoefQuartVar$new(x, na.rm = FALSE, digits = 4)$est()}
 }
 \arguments{
 \item{x}{An \code{R} object. Currently there are methods for numeric vectors}
@@ -20,7 +20,7 @@ stripped before the computation proceeds.}
 \item{digits}{integer indicating the number of decimal places to be used.}
 }
 \description{
-The R6 class \code{QuantIndex} for the coefficient of
+The R6 class \code{CoefQuartVar} for the coefficient of
              quartile variation (cqv)
 }
 \details{
@@ -41,8 +41,10 @@ x <- c(
     0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
     4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
 )
+CoefQuartVar$new(x, digits = 1)$est()
 cqv_x <- CoefQuartVar$new(x)
 cqv_x$est()
+R6::is.R6(cqv_x)
 }
 \references{
 [1] Bonett, DG., 2006, Confidence interval for a coefficient of

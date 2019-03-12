@@ -26,8 +26,8 @@ stripped before the computation proceeds.}
 algorithms explained in \link[stats]{quantile} to be used.}
 }
 \description{
-The R6 class \code{QuantIndex} produces the sample quantiles
-             corresponding to the given probabilities. It uses
+The R6 class \code{SampleQuantiles} produces the sample
+             quantiles corresponding to the given probabilities. It uses
              \link[stats]{quantile} from the package \pkg{stats}.
 }
 \examples{
@@ -36,8 +36,8 @@ x <- c(
     4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
 )
 SampleQuantiles$new(x, na.rm = TRUE, digits = 4, probs = 0.5)$qx()
-quant95 <-  SampleQuantiles$new(x, na.rm = TRUE, digits = 4, probs = 0.95)
-quant95$qx()
-R6::is.R6(quant95)
+percentile_95 <-  SampleQuantiles$new(x, na.rm = TRUE, digits = 4, probs = 0.95)
+percentile_95$qx()
+R6::is.R6(percentile_95)
 }
 \keyword{datasets}
