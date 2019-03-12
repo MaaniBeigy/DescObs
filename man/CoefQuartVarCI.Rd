@@ -20,9 +20,9 @@ stripped before the computation proceeds.}
 
 \item{digits}{integer indicating the number of decimal places to be used.}
 
-\item{method}{a scalar representing the type of confidence intervals
-required. The value should be any of the values "bonett", "norm",
-"basic", "perc", "bca" or "all".}
+\item{methods}{the available computation methods of confidence intervals are:
+"bonett_ci", "norm_ci", "basic_ci", "perc_ci", "bca_ci" or
+"all_ci".}
 
 \item{R}{integer indicating the number of bootstrap replicates.}
 }
@@ -96,6 +96,11 @@ x <- c(
 CoefQuartVarCI$new(x, digits = 2, na.rm = TRUE)$bonett_ci()
 cqv_x <- CoefQuartVarCI$new(x)
 cqv_x$bonett_ci()
+cqv_x$norm_ci()
+cqv_x$basic_ci()
+cqv_x$perc_ci()
+cqv_x$bca_ci()
+cqv_x$all_ci()
 R6::is.R6(cqv_x)
 }
 \references{

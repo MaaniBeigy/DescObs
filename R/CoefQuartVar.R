@@ -44,6 +44,7 @@ CoefQuartVar <- R6::R6Class(
             (length(x)/4) + (1.96 * (((3 * length(x))/16)^(0.5))),
             digits = 0
         ),
+        star = 0,
         initialize = function(
             x,
             digits = NULL,
@@ -159,14 +160,13 @@ CoefQuartVar <- R6::R6Class(
         Yb = function(...) {dplyr::nth(self$x, self$b, order_by = self$x)},
         Yc = function(...) {dplyr::nth(self$x, self$c(), order_by = self$x)},
         Yd = function(...) {dplyr::nth(self$x, self$d(), order_by = self$x)},
-        star = 0,
         alphastar = function(...) {
             for (i in self$a:(self$b - 1)) {
-                star[i] <- (
+                self$star[i] <- (
                     (choose(length(self$x), i)) *
                         (0.25^(i)) * (0.75^(length(self$x) - i))
                 )
-                return(alphastar = 1 - sum(star[i], na.rm = self$na.rm))
+                return(alphastar = 1 - sum(self$star[i], na.rm = self$na.rm))
             }
         }
         )

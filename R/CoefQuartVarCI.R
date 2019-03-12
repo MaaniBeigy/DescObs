@@ -11,9 +11,9 @@
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #'              stripped before the computation proceeds.
 #' @param digits integer indicating the number of decimal places to be used.
-#' @param method a scalar representing the type of confidence intervals
-#'           required. The value should be any of the values "bonett", "norm",
-#'           "basic", "perc", "bca" or "all".
+#' @param methods the available computation methods of confidence intervals are:
+#'                "bonett_ci", "norm_ci", "basic_ci", "perc_ci", "bca_ci" or
+#'                "all_ci".
 #' @param R integer indicating the number of bootstrap replicates.
 #' @details \describe{
 #'         \item{\strong{Coefficient of Quartile Variation}}{
@@ -93,7 +93,8 @@ CoefQuartVarCI <- R6::R6Class(
         na.rm = TRUE,
         digits = NULL,
         method = NA,
-        R = NA,
+        R = 1000,
+        alpha = 0.05,
         zzz = NA,
         f1square = NA,
         f3square = NA,
@@ -101,12 +102,18 @@ CoefQuartVarCI <- R6::R6Class(
         S = NA,
         v = NA,
         ccc = NA,
+        bootcqv = NA,
+        boot_norm_ci = NA,
+        boot_basic_ci = NA,
+        boot_perc_ci = NA,
+        boot_bca_ci = NA,
         initialize = function(
             x,
             na.rm,
             digits = NULL,
             method,
-            R,
+            R = 1000,
+            alpha = 0.05,
             ...
         ) {
             # ---------------------- check NA or NAN -------------------------
@@ -151,6 +158,12 @@ CoefQuartVarCI <- R6::R6Class(
                 self$R <- 1000
             } else if (!missing(R)) {
                 self$R <- R
+            }
+
+            if (missing(alpha)) {
+                self$alpha <- 0.05
+            } else if (!missing(alpha)) {
+                self$alpha <- alpha
             }
             # ------------- initialize zzz() i.e., z(1 - alpha/2) -------------
             self$zzz = function(...) {
@@ -216,6 +229,43 @@ CoefQuartVarCI <- R6::R6Class(
             # ----------- initialize internal function c = n/(n-1) ------------
             # ---------------- which is a centering adjustment ----------------
             self$ccc = function(...) {length(self$x)/(length(self$x) - 1)}
+            # ---------- initialize normal approximation bootstrap ------------
+            self$bootcqv = function(...) {
+                return(super$super_$super_$initialize(
+                    x = self$x,
+                    na.rm = self$na.rm,
+                    digits = self$digits,
+                    R = 1000
+                ))
+            }
+            self$boot_norm_ci = function(...) {
+                boot::boot.ci(
+                    self$boot_cqv(),
+                    conf = (1 - self$alpha),
+                    type = "norm"
+                    )
+            }
+            self$boot_basic_ci = function(...) {
+                boot::boot.ci(
+                    self$boot_cqv(),
+                    conf = (1 - self$alpha),
+                    type = "basic"
+                )
+            }
+            self$boot_perc_ci = function(...) {
+                boot::boot.ci(
+                    self$boot_cqv(),
+                    conf = (1 - self$alpha),
+                    type = "perc"
+                )
+            }
+            self$boot_bca_ci = function(...) {
+                boot::boot.ci(
+                    self$boot_cqv(),
+                    conf = (1 - self$alpha),
+                    type = "bca"
+                )
+            }
         }
         ,
         # ------------ public function bonett_ci() i.e., Bonett Ci ------------
@@ -244,6 +294,146 @@ CoefQuartVarCI <- R6::R6Class(
                             )
                         ),
                         row.names = c(" ")
+                    )
+                )
+            )
+        },
+        norm_ci = function(...) {
+            return(
+                list(
+                    method = "cqv with normal approximation bootstrap 95% CI",
+                    statistics = data.frame(
+                        est = super$est(),
+                        lower = round(
+                            self$boot_norm_ci()$normal[2],
+                            digits = self$digits),
+                        upper = round(
+                            self$boot_norm_ci()$normal[3],
+                            digits = self$digits),
+                        row.names = c(" ")
+                    )
+                )
+            )
+        },
+        basic_ci = function(...) {
+            return(
+                list(
+                    method = "cqv with basic bootstrap 95% CI",
+                    statistics = data.frame(
+                        est = super$est(),
+                        lower = round(
+                            self$boot_basic_ci()$basic[4],
+                            digits = self$digits),
+                        upper = round(
+                            self$boot_basic_ci()$basic[5],
+                            digits = self$digits),
+                        row.names = c(" ")
+                    )
+                )
+            )
+        },
+        perc_ci = function(...) {
+            return(
+                list(
+                    method = "cqv with bootstrap percentile 95% CI",
+                    statistics = data.frame(
+                        est = super$est(),
+                        lower = round(
+                            self$boot_perc_ci()$percent[4],
+                            digits = self$digits),
+                        upper = round(
+                            self$boot_perc_ci()$percent[5],
+                            digits = self$digits),
+                        row.names = c(" ")
+                    )
+                )
+            )
+        },
+        bca_ci = function(...) {
+            return(
+                list(
+                method = "cqv with adjusted bootstrap percentile (BCa) 95% CI",
+                    statistics = data.frame(
+                        est = super$est(),
+                        lower = round(
+                            self$boot_bca_ci()$bca[4],
+                            digits = self$digits),
+                        upper = round(
+                            self$boot_bca_ci()$bca[5],
+                            digits = self$digits),
+                        row.names = c(" ")
+                    )
+                )
+            )
+        },
+        all_ci = function(...) {
+            return(
+                list(
+                    method = "All methods",
+                    statistics = data.frame(
+                        row.names = c(
+                            "bonett",
+                            "norm",
+                            "basic",
+                            "percent",
+                            "bca"
+                        ),
+                        est = c(
+                            super$est(),
+                            super$est(),
+                            super$est(),
+                            super$est(),
+                            super$est()
+                            ),
+                        lower = c(
+                            round(
+                                (100 * exp(
+                                    ((SciViews::ln((self$D()/self$S())) *
+                                          self$ccc())) -
+                                        (self$zzz() * (self$v()^(0.5)))
+                                )), digits = self$digits
+                            ),
+                            round(
+                                self$boot_norm_ci()$normal[2],
+                                digits = self$digits),
+                            round(
+                                self$boot_basic_ci()$basic[4],
+                                digits = self$digits),
+                            round(
+                                self$boot_perc_ci()$percent[4],
+                                digits = self$digits),
+                            round(
+                                self$boot_bca_ci()$bca[4],
+                                digits = self$digits)
+                        ),
+                        upper = c(
+                            round(
+                                (100 * exp(
+                                    ((SciViews::ln((self$D()/self$S())) *
+                                          self$ccc())) +
+                                        (self$zzz() * (self$v()^(0.5)))
+                                )), digits = self$digits
+                            ),
+                            round(
+                                self$boot_norm_ci()$normal[3],
+                                digits = self$digits),
+                            round(
+                                self$boot_basic_ci()$basic[5],
+                                digits = self$digits),
+                            round(
+                                self$boot_perc_ci()$percent[5],
+                                digits = self$digits),
+                            round(
+                                self$boot_bca_ci()$bca[5],
+                                digits = self$digits)
+                        ),
+                        description = c(
+                            "cqv with Bonett 95% CI",
+                            "cqv with normal approximation 95% CI",
+                            "cqv with basic bootstrap 95% CI",
+                            "cqv with bootstrap percentile 95% CI",
+                            "cqv with adjusted bootstrap percentile (BCa) 95% CI"
+                        )
                     )
                 )
             )

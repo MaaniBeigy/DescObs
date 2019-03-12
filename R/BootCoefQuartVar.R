@@ -26,7 +26,7 @@ BootCoefQuartVar <- R6::R6Class(
         R = NA,
         initialize = function(
             x,
-            na.rm,
+            na.rm = TRUE,
             digits = NULL,
             R,
             ...
