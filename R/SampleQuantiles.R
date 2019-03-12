@@ -14,7 +14,7 @@
 #' @param digits integer indicating the number of decimal places to be used.
 #' @param probs numeric vector of probabilities with values in \code{[0,1]}.
 #' @param type an integer between 1 and 9 selecting one of the nine quantile
-#'             algorithms detailed below to be used.
+#'             algorithms explained in \link[stats]{quantile} to be used.
 #' @example ./examples/SampleQuantiles.R
 #' @export
 SampleQuantiles <- R6::R6Class(
@@ -61,7 +61,6 @@ SampleQuantiles <- R6::R6Class(
                 stop("x is not a vector")
                 return(NA_real_)
             }
-
             # -------------- check for probs being in range [0,1] -------------
             if (missing(probs)) {
                 self$probs <- 0.5
@@ -69,7 +68,7 @@ SampleQuantiles <- R6::R6Class(
                 self$probs <- probs
             }
             eps <- 100*.Machine$double.eps
-            if (any((p_ok <- !is.na(self$probs)) &
+            if (any((!is.na(self$probs)) &
                     (self$probs < -eps | self$probs > 1 + eps)))
                 stop("'probs' outside [0,1]")
             # ------------------- set digits with default = 4 -----------------
@@ -95,8 +94,8 @@ SampleQuantiles <- R6::R6Class(
                 self$names <- names
             }
             self$qx()  # initialize qx() i.e., sample quantile function
-            # ------ public function  qx() i.e., sample quantile function------
         },
+        # --------- public function  qx() i.e., sample quantile function ------
         qx = function(...) {
             return(
                     quantile(
