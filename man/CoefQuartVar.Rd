@@ -7,9 +7,6 @@
 \format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
 \code{CoefQuartVar$new(x, ...)}
-
-## Default R6 method:
-\code{CoefQuartVar$new(x, na.rm = FALSE, digits = 4)$est()}
 }
 \arguments{
 \item{x}{An \code{R} object. Currently there are methods for numeric vectors}
@@ -42,7 +39,7 @@ x <- c(
     4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
 )
 CoefQuartVar$new(x, digits = 1)$est()
-cqv_x <- CoefQuartVar$new(x)
+cqv_x <- CoefQuartVar$new(x, digits = 2)
 cqv_x$est()
 R6::is.R6(cqv_x)
 }

@@ -5,4 +5,7 @@ x <- c(
 SampleQuantiles$new(x, na.rm = TRUE, digits = 4, probs = 0.5)$qx()
 percentile_95 <-  SampleQuantiles$new(x, na.rm = TRUE, digits = 4, probs = 0.95)
 percentile_95$qx()
+percentile_75 <-  SampleQuantiles$new(x, na.rm = TRUE, probs = 0.75)
+percentile_75$qx()
 R6::is.R6(percentile_95)
+

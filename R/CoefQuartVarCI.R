@@ -4,9 +4,6 @@
 #' @description The R6 class \code{CoefQuartVarCI} for the confidence intervals of
 #'              coefficient of quartile variation (cqv)
 #' @usage \code{CoefQuartVarCI$new(x, ...)}
-#'
-#' ## Default R6 method:
-#' \code{CoefQuartVarCI$new(x, na.rm = FALSE, digits = 4)$bonett_ci()}
 #' @param x An \code{R} object. Currently there are methods for numeric vectors
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #'              stripped before the computation proceeds.
@@ -90,11 +87,10 @@ CoefQuartVarCI <- R6::R6Class(
     inherit = CoefQuartVar,
     public = list(
         x = NA,
-        na.rm = TRUE,
-        digits = NULL,
-        method = NA,
+        na.rm = FALSE,
+        digits = NA,
         R = 1000,
-        alpha = 0.05,
+        alpha = NA,
         zzz = NA,
         f1square = NA,
         f3square = NA,
@@ -103,17 +99,13 @@ CoefQuartVarCI <- R6::R6Class(
         v = NA,
         ccc = NA,
         bootcqv = NA,
-        boot_norm_ci = NA,
-        boot_basic_ci = NA,
-        boot_perc_ci = NA,
-        boot_bca_ci = NA,
+        print = NA,
         initialize = function(
             x,
-            na.rm,
-            digits = NULL,
-            method,
+            na.rm = FALSE,
+            digits = NA,
             R = 1000,
-            alpha = 0.05,
+            alpha = NA,
             ...
         ) {
             # ---------------------- check NA or NAN -------------------------
@@ -150,9 +142,8 @@ CoefQuartVarCI <- R6::R6Class(
                 self$digits <- 4
             } else if (missing(digits)) {
                 self$digits <- 4
-            } else {
-                self$digits <- 4
             }
+
             # -- set the number of bootstrap replicates with default = 1000 ---
             if (missing(R)) {
                 self$R <- 1000
@@ -160,10 +151,10 @@ CoefQuartVarCI <- R6::R6Class(
                 self$R <- R
             }
 
-            if (missing(alpha)) {
-                self$alpha <- 0.05
-            } else if (!missing(alpha)) {
+            if (!missing(alpha)) {
                 self$alpha <- alpha
+            } else if (missing(alpha)) {
+                self$alpha <- 0.05
             }
             # ------------- initialize zzz() i.e., z(1 - alpha/2) -------------
             self$zzz = function(...) {
@@ -185,14 +176,12 @@ CoefQuartVarCI <- R6::R6Class(
                     x = self$x,
                     na.rm = TRUE,
                     probs = 0.75,
-                    names = FALSE,
-                    digits = self$digits
+                    names = FALSE
                 ) - super$super_$super_$initialize(
                     x = self$x,
                     na.rm = TRUE,
                     probs = 0.25,
-                    names = FALSE,
-                    digits = self$digits
+                    names = FALSE
                 )
             }
             # ----------- initialize internal function S = q3 + q1 ------------
@@ -201,14 +190,12 @@ CoefQuartVarCI <- R6::R6Class(
                     x = self$x,
                     na.rm = TRUE,
                     probs = 0.75,
-                    names = FALSE,
-                    digits = self$digits
+                    names = FALSE
                 ) + super$super_$super_$initialize(
                     x = self$x,
                     na.rm = TRUE,
                     probs = 0.25,
-                    names = FALSE,
-                    digits = self$digits
+                    names = FALSE
                 )
             }
             # -------- initialize internal function v = var{ln(D/S)} ----------
@@ -229,52 +216,31 @@ CoefQuartVarCI <- R6::R6Class(
             # ----------- initialize internal function c = n/(n-1) ------------
             # ---------------- which is a centering adjustment ----------------
             self$ccc = function(...) {length(self$x)/(length(self$x) - 1)}
-            # ---------- initialize normal approximation bootstrap ------------
+            self$print = function(...) {
+                return(private$digits_this)
+            }
             self$bootcqv = function(...) {
-                return(super$super_$super_$initialize(
+                return(
+                super$super_$initialize(
                     x = self$x,
                     na.rm = self$na.rm,
-                    digits = self$digits,
-                    R = 1000
+                    R = self$R,
+                    alpha = self$alpha
                 ))
+                invisible(self)
             }
-            self$boot_norm_ci = function(...) {
-                boot::boot.ci(
-                    self$boot_cqv(),
-                    conf = (1 - self$alpha),
-                    type = "norm"
-                    )
-            }
-            self$boot_basic_ci = function(...) {
-                boot::boot.ci(
-                    self$boot_cqv(),
-                    conf = (1 - self$alpha),
-                    type = "basic"
-                )
-            }
-            self$boot_perc_ci = function(...) {
-                boot::boot.ci(
-                    self$boot_cqv(),
-                    conf = (1 - self$alpha),
-                    type = "perc"
-                )
-            }
-            self$boot_bca_ci = function(...) {
-                boot::boot.ci(
-                    self$boot_cqv(),
-                    conf = (1 - self$alpha),
-                    type = "bca"
-                )
-            }
+            self$bonett_ci()
+            self$bootcqv()
+            invisible(self)
         }
         ,
         # ------------ public function bonett_ci() i.e., Bonett Ci ------------
-        bonett_ci = function(x, digits) {
+        bonett_ci = function(...) {
             return(
                 list(
                     method = "cqv with Bonett 95% CI",
                     statistics = data.frame(
-                        est = super$est(),
+                        est = round(super$est(), digits = self$digits),
                         lower = (
                             round(
                                 (100 * exp(
@@ -303,7 +269,7 @@ CoefQuartVarCI <- R6::R6Class(
                 list(
                     method = "cqv with normal approximation bootstrap 95% CI",
                     statistics = data.frame(
-                        est = super$est(),
+                        est = round(super$est(), digits = self$digits),
                         lower = round(
                             self$boot_norm_ci()$normal[2],
                             digits = self$digits),
@@ -320,7 +286,7 @@ CoefQuartVarCI <- R6::R6Class(
                 list(
                     method = "cqv with basic bootstrap 95% CI",
                     statistics = data.frame(
-                        est = super$est(),
+                        est = round(super$est(), digits = self$digits),
                         lower = round(
                             self$boot_basic_ci()$basic[4],
                             digits = self$digits),
@@ -337,7 +303,7 @@ CoefQuartVarCI <- R6::R6Class(
                 list(
                     method = "cqv with bootstrap percentile 95% CI",
                     statistics = data.frame(
-                        est = super$est(),
+                        est = round(super$est(), digits = self$digits),
                         lower = round(
                             self$boot_perc_ci()$percent[4],
                             digits = self$digits),
@@ -352,9 +318,9 @@ CoefQuartVarCI <- R6::R6Class(
         bca_ci = function(...) {
             return(
                 list(
-                method = "cqv with adjusted bootstrap percentile (BCa) 95% CI",
+                    method = "cqv with adjusted bootstrap percentile (BCa) 95% CI",
                     statistics = data.frame(
-                        est = super$est(),
+                        est = round(super$est(), digits = self$digits),
                         lower = round(
                             self$boot_bca_ci()$bca[4],
                             digits = self$digits),
@@ -379,12 +345,12 @@ CoefQuartVarCI <- R6::R6Class(
                             "bca"
                         ),
                         est = c(
-                            super$est(),
-                            super$est(),
-                            super$est(),
-                            super$est(),
-                            super$est()
-                            ),
+                            round(super$est(), digits = self$digits),
+                            round(super$est(), digits = self$digits),
+                            round(super$est(), digits = self$digits),
+                            round(super$est(), digits = self$digits),
+                            round(super$est(), digits = self$digits)
+                        ),
                         lower = c(
                             round(
                                 (100 * exp(
@@ -438,8 +404,5 @@ CoefQuartVarCI <- R6::R6Class(
                 )
             )
         }
-        )
     )
-
-
-
+)

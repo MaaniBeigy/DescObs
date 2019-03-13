@@ -7,10 +7,6 @@
 \format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
 \code{SampleQuantiles$new(x, ...)}
-
-## Default R6 method:
-\code{SampleQuantiles$new(x, na.rm = FALSE, digits = 4,
-               probs = 0.5, ...)$qx()}
 }
 \arguments{
 \item{x}{An \code{R} object. Currently there are methods for numeric vectors}
@@ -38,6 +34,9 @@ x <- c(
 SampleQuantiles$new(x, na.rm = TRUE, digits = 4, probs = 0.5)$qx()
 percentile_95 <-  SampleQuantiles$new(x, na.rm = TRUE, digits = 4, probs = 0.95)
 percentile_95$qx()
+percentile_75 <-  SampleQuantiles$new(x, na.rm = TRUE, probs = 0.75)
+percentile_75$qx()
 R6::is.R6(percentile_95)
+
 }
 \keyword{datasets}

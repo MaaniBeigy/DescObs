@@ -3,9 +3,6 @@
 #' @description The R6 class \code{CoefQuartVar} for the coefficient of
 #'              quartile variation (cqv)
 #' @usage \code{CoefQuartVar$new(x, ...)}
-#'
-#' ## Default R6 method:
-#' \code{CoefQuartVar$new(x, na.rm = FALSE, digits = 4)$est()}
 #' @param x An \code{R} object. Currently there are methods for numeric vectors
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #'              stripped before the computation proceeds.
@@ -57,9 +54,7 @@ CoefQuartVar <- R6::R6Class(
             } else if (!missing(x)) {
                 stop("no numeric vector is selected for input")
             }
-            if (missing(na.rm)) {
-                self$na.rm <- FALSE
-            } else if (!missing(na.rm)) {
+            if (!missing(na.rm)) {
                 self$na.rm <- na.rm
             }
             if (self$na.rm == TRUE) {
@@ -81,12 +76,8 @@ CoefQuartVar <- R6::R6Class(
             # ------------------- set digits with default = 4 -----------------
             if (!missing(digits)) {
                 self$digits <- digits
-            } else if (is.null(digits)) {
-                self$digits <- 4
-            } else if (missing(digits)) {
-                self$digits <- 4
             } else {
-                self$digits <- 4
+                stop("please determine digits level")
             }
             # ---------------- initialize cqv() i.e., cqv function ------------
             self$est()
@@ -97,7 +88,7 @@ CoefQuartVar <- R6::R6Class(
                 super$super_$initialize(
                     x = self$x, na.rm = TRUE, probs = 0.75,
                     digits = self$digits
-                    ) != 0
+                ) != 0
             ) {
                 return(
                     round(
@@ -169,11 +160,11 @@ CoefQuartVar <- R6::R6Class(
                 return(alphastar = 1 - sum(self$star[i], na.rm = self$na.rm))
             }
         }
-        )
+    )
     ,
     active = list(
         super_ = function() super
-        )
+    )
 )
 
 

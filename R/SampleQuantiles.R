@@ -4,10 +4,6 @@
 #'              quantiles corresponding to the given probabilities. It uses
 #'              \link[stats]{quantile} from the package \pkg{stats}.
 #' @usage \code{SampleQuantiles$new(x, ...)}
-#'
-#' ## Default R6 method:
-#' \code{SampleQuantiles$new(x, na.rm = FALSE, digits = 4,
-#'                probs = 0.5, ...)$qx()}
 #' @param x An \code{R} object. Currently there are methods for numeric vectors
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #'              stripped before the computation proceeds.
@@ -40,9 +36,7 @@ SampleQuantiles <- R6::R6Class(
             } else if (!missing(x)) {
                 stop("no numeric vector is selected for input")
             }
-            if (missing(na.rm)) {
-                self$na.rm <- FALSE
-            } else if (!missing(na.rm)) {
+            if (!missing(na.rm)) {
                 self$na.rm <- na.rm
             }
             if (na.rm == TRUE) {
@@ -62,9 +56,7 @@ SampleQuantiles <- R6::R6Class(
                 return(NA_real_)
             }
             # -------------- check for probs being in range [0,1] -------------
-            if (missing(probs)) {
-                self$probs <- 0.5
-            } else if (!missing(probs)) {
+            if (!missing(probs)) {
                 self$probs <- probs
             }
             eps <- 100*.Machine$double.eps
@@ -74,19 +66,13 @@ SampleQuantiles <- R6::R6Class(
             # ------------------- set digits with default = 4 -----------------
             if (!missing(digits)) {
                 self$digits <- digits
-            } else if (is.null(digits)) {
-                self$digits <- 4
-            } else if (missing(digits)) {
-                self$digits <- 4
-            } else {
-                self$digits <- 4
             }
             # ------------------ set type with default = 7 --------------------
             if (missing(type)) {
                 self$type <- 7
-            } else if (is.null(digits)) {
+            } else if (is.null(type)) {
                 self$type <- 7
-            } else if (!missing(digits)) {
+            } else if (!missing(type)) {
                 self$type <- type
             }
             # ---------------- set names with default = TRUE ------------------
@@ -100,13 +86,13 @@ SampleQuantiles <- R6::R6Class(
         # --------- public function  qx() i.e., sample quantile function ------
         qx = function(...) {
             return(
-                    quantile(
-                        self$x,
-                        probs = self$probs,
-                        na.rm = self$na.rm,
-                        type = self$type,
-                        names = self$names
-                    )
+                quantile(
+                    self$x,
+                    probs = self$probs,
+                    na.rm = self$na.rm,
+                    type = self$type,
+                    names = self$names
+                )
             )
         }
     )
