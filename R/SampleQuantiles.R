@@ -4,11 +4,17 @@
 #'              quantiles corresponding to the given probabilities. It uses
 #'              \link[stats]{quantile} from the package \pkg{stats}.
 #' @usage \code{SampleQuantiles$new(x, ...)}
+#'
+#' ## Default R6 method:
+#' \code{SampleQuantiles$new(x, na.rm = FALSE, digits = 1,
+#'                probs = 0.5, names = TRUE, type = 7)$qx()}
 #' @param x An \code{R} object. Currently there are methods for numeric vectors
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #'              stripped before the computation proceeds.
 #' @param digits integer indicating the number of decimal places to be used.
 #' @param probs numeric vector of probabilities with values in \code{[0,1]}.
+#' @param names logical; if TRUE, the result has a \link[base]{names} attribute
+#'              regarding the percentiles.
 #' @param type an integer between 1 and 9 selecting one of the nine quantile
 #'             algorithms explained in \link[stats]{quantile} to be used.
 #' @example ./examples/SampleQuantiles.R
@@ -16,21 +22,23 @@
 SampleQuantiles <- R6::R6Class(
     classname = "SampleQuantiles",
     public = list(
+        # ---------------- determining defaults for arguments -----------------
         x = NA,
         na.rm = FALSE,
-        digits = NULL,
-        probs = NA,
+        digits = 1,
+        probs = 0.5,
         names = TRUE,
         type = 7,
+        # --------- determining constructor defaults for arguments ------------
         initialize = function(
-            x,
-            na.rm ,
-            digits = NULL,
-            probs,
-            names,
-            type,
+            x = NA,
+            na.rm = FALSE,
+            digits = 1,
+            probs = 0.5,
+            names = TRUE,
+            type = 7,
             ...) {
-            # ---------------------- check NA or NAN -------------------------
+            # ----------------------- check NA or NAN -------------------------
             if (!missing(x)) {
                 self$x <- x
             } else if (!missing(x)) {
@@ -63,22 +71,16 @@ SampleQuantiles <- R6::R6Class(
             if (any((!is.na(self$probs)) &
                     (self$probs < -eps | self$probs > 1 + eps)))
                 stop("'probs' outside [0,1]")
-            # ------------------- set digits with default = 4 -----------------
+            # ------------------- set digits with user input ------------------
             if (!missing(digits)) {
                 self$digits <- digits
             }
-            # ------------------ set type with default = 7 --------------------
-            if (missing(type)) {
-                self$type <- 7
-            } else if (is.null(type)) {
-                self$type <- 7
-            } else if (!missing(type)) {
+            # ------------------- set type with user input --------------------
+            if (!missing(type)) {
                 self$type <- type
             }
-            # ---------------- set names with default = TRUE ------------------
-            if (missing(names)) {
-                self$names <- TRUE
-            } else if (!missing(names)) {
+            # ------------------ set names with user input --------------------
+            if (!missing(names)) {
                 self$names <- names
             }
             self$qx()  # initialize qx() i.e., sample quantile function
@@ -86,13 +88,16 @@ SampleQuantiles <- R6::R6Class(
         # --------- public function  qx() i.e., sample quantile function ------
         qx = function(...) {
             return(
-                quantile(
-                    self$x,
-                    probs = self$probs,
-                    na.rm = self$na.rm,
-                    type = self$type,
-                    names = self$names
-                )
+                round(
+                    quantile(
+                        self$x,
+                        probs = self$probs,
+                        na.rm = self$na.rm,
+                        type = self$type,
+                        names = self$names
+                        ),
+                    digits = self$digits
+                    )
             )
         }
     )

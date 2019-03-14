@@ -3,6 +3,9 @@
 #' @description The R6 class \code{CoefQuartVar} for the coefficient of
 #'              quartile variation (cqv)
 #' @usage \code{CoefQuartVar$new(x, ...)}
+#'
+#' ## Default R6 method:
+#' \code{CoefQuartVar$new(x, na.rm = FALSE, digits = 1)$est()}
 #' @param x An \code{R} object. Currently there are methods for numeric vectors
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #'              stripped before the computation proceeds.
@@ -29,11 +32,11 @@ CoefQuartVar <- R6::R6Class(
     classname = "CoefQuartVar",
     inherit = BootCoefQuartVar,
     public = list(
+        # ---------------- determining defaults for arguments -----------------
         x = NA,
-        na.rm = TRUE,
-        digits = NULL,
-        method = NA,
-        R = NA,
+        na.rm = FALSE,
+        digits = 1,
+        # --------------------- adding some internal fields -------------------
         a = ceiling(
             (length(x)/4) - (1.96 * (((3 * length(x))/16)^(0.5)))
         ),
@@ -42,10 +45,11 @@ CoefQuartVar <- R6::R6Class(
             digits = 0
         ),
         star = 0,
+        # --------- determining constructor defaults for arguments ------------
         initialize = function(
-            x,
-            digits = NULL,
-            na.rm,
+            x = NA,
+            na.rm = FALSE,
+            digits = 1,
             ...
         ) {
             # ---------------------- check NA or NAN -------------------------
@@ -73,16 +77,14 @@ CoefQuartVar <- R6::R6Class(
                 stop("x is not a vector")
                 return(NA_real_)
             }
-            # ------------------- set digits with default = 4 -----------------
+            # ------------------- set digits with user input ------------------
             if (!missing(digits)) {
                 self$digits <- digits
-            } else {
-                stop("please determine digits level")
             }
-            # ---------------- initialize cqv() i.e., cqv function ------------
+            # ---------- initialize cqv estimate i.e., est() function ---------
             self$est()
         },
-        # -------------- public function cqv() i.e., cqv function -------------
+        # --------- public method of cqv estimate i.e., est() function --------
         est = function(...) {
             if (  # check if 0.75 percentile is non-zero to avoid NANs
                 super$super_$initialize(
@@ -143,8 +145,8 @@ CoefQuartVar <- R6::R6Class(
                     )
                 )
             }
-        }
-        ,
+        },
+        # ------------------- adding some internal methods --------------------
         c = function(...) {length(self$x) + 1 - self$b},
         d = function(...) {length(self$x) + 1 - self$a},
         Ya = function(...) {dplyr::nth(self$x, self$a, order_by = self$x)},
@@ -160,8 +162,8 @@ CoefQuartVar <- R6::R6Class(
                 return(alphastar = 1 - sum(self$star[i], na.rm = self$na.rm))
             }
         }
-    )
-    ,
+    ),
+    # ---- define super_ function to enable multiple levels of inheritance ----
     active = list(
         super_ = function() super
     )

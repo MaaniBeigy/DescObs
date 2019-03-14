@@ -4,6 +4,10 @@
 #' @description The R6 class \code{CoefQuartVarCI} for the confidence intervals of
 #'              coefficient of quartile variation (cqv)
 #' @usage \code{CoefQuartVarCI$new(x, ...)}
+#'
+#' ## Default R6 method:
+#' \code{CoefQuartVarCI$new(x, na.rm = FALSE, digits = 1,
+#'                R = 1000, alpha = 0.05, ...)$bonett_ci()}
 #' @param x An \code{R} object. Currently there are methods for numeric vectors
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #'              stripped before the computation proceeds.
@@ -86,11 +90,13 @@ CoefQuartVarCI <- R6::R6Class(
     classname = "CoefQuartVarCI",
     inherit = CoefQuartVar,
     public = list(
+        # ---------------- determining defaults for arguments -----------------
         x = NA,
         na.rm = FALSE,
-        digits = NA,
+        digits = 1,
         R = 1000,
-        alpha = NA,
+        alpha = 0.05,
+        # --------------------- adding some internal fields -------------------
         zzz = NA,
         f1square = NA,
         f3square = NA,
@@ -99,13 +105,13 @@ CoefQuartVarCI <- R6::R6Class(
         v = NA,
         ccc = NA,
         bootcqv = NA,
-        print = NA,
+        # --------- determining constructor defaults for arguments ------------
         initialize = function(
-            x,
+            x = NA,
             na.rm = FALSE,
-            digits = NA,
+            digits = 1,
             R = 1000,
-            alpha = NA,
+            alpha = 0.05,
             ...
         ) {
             # ---------------------- check NA or NAN -------------------------
@@ -116,8 +122,6 @@ CoefQuartVarCI <- R6::R6Class(
             }
             if (missing(na.rm)) {
                 self$na.rm <- FALSE
-            } else if (!missing(na.rm)) {
-                self$na.rm <- na.rm
             }
             if (self$na.rm == TRUE) {
                 self$x <- x[!is.na(x)]
@@ -135,26 +139,17 @@ CoefQuartVarCI <- R6::R6Class(
                 stop("x is not a vector")
                 return(NA_real_)
             }
-            # ------------------- set digits with default = 4 -----------------
+            # ------------------- set digits with user input ------------------
             if (!missing(digits)) {
                 self$digits <- digits
-            } else if (is.null(digits)) {
-                self$digits <- 4
-            } else if (missing(digits)) {
-                self$digits <- 4
             }
-
-            # -- set the number of bootstrap replicates with default = 1000 ---
-            if (missing(R)) {
-                self$R <- 1000
-            } else if (!missing(R)) {
+            # ---- set the number of bootstrap replicates with user input -----
+            if (!missing(R)) {
                 self$R <- R
             }
-
+            # ------ set the probability of type I error with user input ------
             if (!missing(alpha)) {
                 self$alpha <- alpha
-            } else if (missing(alpha)) {
-                self$alpha <- 0.05
             }
             # ------------- initialize zzz() i.e., z(1 - alpha/2) -------------
             self$zzz = function(...) {
@@ -216,9 +211,6 @@ CoefQuartVarCI <- R6::R6Class(
             # ----------- initialize internal function c = n/(n-1) ------------
             # ---------------- which is a centering adjustment ----------------
             self$ccc = function(...) {length(self$x)/(length(self$x) - 1)}
-            self$print = function(...) {
-                return(private$digits_this)
-            }
             self$bootcqv = function(...) {
                 return(
                 super$super_$initialize(
@@ -229,16 +221,17 @@ CoefQuartVarCI <- R6::R6Class(
                 ))
                 invisible(self)
             }
+            # ---- initialize the internal functions for public methods -------
             self$bonett_ci()
             self$bootcqv()
             invisible(self)
         }
         ,
-        # ------------ public function bonett_ci() i.e., Bonett Ci ------------
+        # -------------- public method bonett_ci() i.e., Bonett CI ------------
         bonett_ci = function(...) {
             return(
                 list(
-                    method = "cqv with Bonett 95% CI",
+                    method = "cqv with Bonett CI",
                     statistics = data.frame(
                         est = round(super$est(), digits = self$digits),
                         lower = (
@@ -264,10 +257,11 @@ CoefQuartVarCI <- R6::R6Class(
                 )
             )
         },
+        # -- public method norm_ci() i.e., Normal Approximation Bootstrap CI --
         norm_ci = function(...) {
             return(
                 list(
-                    method = "cqv with normal approximation bootstrap 95% CI",
+                    method = "cqv with normal approximation bootstrap CI",
                     statistics = data.frame(
                         est = round(super$est(), digits = self$digits),
                         lower = round(
@@ -281,10 +275,11 @@ CoefQuartVarCI <- R6::R6Class(
                 )
             )
         },
+        # ---------- public method basic_ci() i.e., Basic Bootstrap CI --------
         basic_ci = function(...) {
             return(
                 list(
-                    method = "cqv with basic bootstrap 95% CI",
+                    method = "cqv with basic bootstrap CI",
                     statistics = data.frame(
                         est = round(super$est(), digits = self$digits),
                         lower = round(
@@ -298,10 +293,11 @@ CoefQuartVarCI <- R6::R6Class(
                 )
             )
         },
+        # ----- public method perc_ci() i.e., Bootstrap Percentile CI ---------
         perc_ci = function(...) {
             return(
                 list(
-                    method = "cqv with bootstrap percentile 95% CI",
+                    method = "cqv with bootstrap percentile CI",
                     statistics = data.frame(
                         est = round(super$est(), digits = self$digits),
                         lower = round(
@@ -315,10 +311,11 @@ CoefQuartVarCI <- R6::R6Class(
                 )
             )
         },
+        # - public method bca_ci() i.e., Adjusted Bootstrap Percentile (BCa) CI
         bca_ci = function(...) {
             return(
                 list(
-                    method = "cqv with adjusted bootstrap percentile (BCa) 95% CI",
+                    method = "cqv with adjusted bootstrap percentile (BCa) CI",
                     statistics = data.frame(
                         est = round(super$est(), digits = self$digits),
                         lower = round(
@@ -332,6 +329,7 @@ CoefQuartVarCI <- R6::R6Class(
                 )
             )
         },
+        # --------- public method all_ci() i.e., All Bootstrap CIs ------------
         all_ci = function(...) {
             return(
                 list(
@@ -394,11 +392,11 @@ CoefQuartVarCI <- R6::R6Class(
                                 digits = self$digits)
                         ),
                         description = c(
-                            "cqv with Bonett 95% CI",
-                            "cqv with normal approximation 95% CI",
-                            "cqv with basic bootstrap 95% CI",
-                            "cqv with bootstrap percentile 95% CI",
-                            "cqv with adjusted bootstrap percentile (BCa) 95% CI"
+                            "cqv with Bonett CI",
+                            "cqv with normal approximation CI",
+                            "cqv with basic bootstrap CI",
+                            "cqv with bootstrap percentile CI",
+                            "cqv with adjusted bootstrap percentile (BCa) CI"
                         )
                     )
                 )

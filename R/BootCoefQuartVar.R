@@ -7,6 +7,10 @@
 #'              intervals for the cqv based on the \link[boot]{boot.ci} from the
 #'              package \pkg{boot}.
 #' @usage \code{BootCoefQuartVar$new(x, ...)}
+#'
+#' ## Default R6 method:
+#' \code{BootCoefQuartVar$new(x, na.rm = FALSE, digits = 1,
+#'                R = 1000, alpha = 0.05, ...)$boot_cqv()}
 #' @param x An \code{R} object. Currently there are methods for numeric vectors
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #'              stripped before the computation proceeds.
@@ -29,18 +33,20 @@ BootCoefQuartVar <- R6::R6Class(
     classname = "BootCoefQuartVar",
     inherit = SampleQuantiles,
     public = list(
+        # ---------------- determining defaults for arguments -----------------
         x = NA,
-        na.rm = NA,
-        digits = NA,
-        R = NA,
-        alpha = NA,
+        na.rm = FALSE,
+        digits = 1,
+        R = 1000,
+        alpha = 0.05,
         boot_cqv = NA,
+        # --------- determining constructor defaults for arguments ------------
         initialize = function(
-            x,
-            na.rm = NA,
-            digits = NA,
-            alpha = NA,
-            R = NA,
+            x = NA,
+            na.rm = FALSE,
+            digits = 1,
+            R = 1000,
+            alpha = 0.05,
             ...
         ) {
             # ---------------------- check NA or NAN -------------------------
@@ -68,15 +74,15 @@ BootCoefQuartVar <- R6::R6Class(
                 stop("x is not a vector")
                 return(NA_real_)
             }
-            # ------------------- set digits with default = 4 -----------------
+            # ------------------- set digits with user input ------------------
             if (!missing(digits)) {
                 self$digits <- digits
             }
-            # -- set the number of bootstrap replicates with default = 1000 ---
+            # ---- set the number of bootstrap replicates with user input -----
             if (!missing(R)) {
                 self$R <- R
             }
-            # ---- set the probability of type I error with default = 0.05 ----
+            # ------ set the probability of type I error with user input ------
             if (!missing(alpha)) {
                 self$alpha <- alpha
             }
@@ -156,7 +162,7 @@ BootCoefQuartVar <- R6::R6Class(
                 }
             }
         },
-        # -------- public functions of bootstrap confidence intervals ---------
+        # -------- public methods of bootstrap confidence intervals ---------
         boot_norm_ci = function(...) {
             return(
                 boot::boot.ci(
@@ -194,6 +200,7 @@ BootCoefQuartVar <- R6::R6Class(
             )
         }
         ),
+    # ---- define super_ function to enable multiple levels of inheritance ----
     active = list(
         super_ = function() {super}
     )
