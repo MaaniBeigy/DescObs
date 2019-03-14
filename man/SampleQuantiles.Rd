@@ -7,6 +7,10 @@
 \format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
 \code{SampleQuantiles$new(x, ...)}
+
+## Default R6 method:
+\code{SampleQuantiles$new(x, na.rm = FALSE, digits = 1,
+               probs = 0.5, names = TRUE, type = 7)$qx()}
 }
 \arguments{
 \item{x}{An \code{R} object. Currently there are methods for numeric vectors}
@@ -17,6 +21,9 @@ stripped before the computation proceeds.}
 \item{digits}{integer indicating the number of decimal places to be used.}
 
 \item{probs}{numeric vector of probabilities with values in \code{[0,1]}.}
+
+\item{names}{logical; if TRUE, the result has a \link[base]{names} attribute
+regarding the percentiles.}
 
 \item{type}{an integer between 1 and 9 selecting one of the nine quantile
 algorithms explained in \link[stats]{quantile} to be used.}
@@ -31,10 +38,10 @@ x <- c(
     0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
     4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
 )
-SampleQuantiles$new(x, na.rm = TRUE, digits = 4, probs = 0.5)$qx()
-percentile_95 <-  SampleQuantiles$new(x, na.rm = TRUE, digits = 4, probs = 0.95)
+SampleQuantiles$new(x)$qx()
+percentile_95 <-  SampleQuantiles$new(x, na.rm = TRUE, digits = 2, probs = 0.95)
 percentile_95$qx()
-percentile_75 <-  SampleQuantiles$new(x, na.rm = TRUE, probs = 0.75)
+percentile_75 <-  SampleQuantiles$new(x, na.rm = TRUE, digits = 3, probs = 0.75)
 percentile_75$qx()
 R6::is.R6(percentile_95)
 
