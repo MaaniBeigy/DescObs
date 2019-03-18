@@ -33,5 +33,5 @@ URL: https://github.com/MaaniBeigy/DescObs
 BugReports: https://github.com/MaaniBeigy/DescObs/issues
 License: GPL-3
 Encoding: UTF-8
-LazyData: true
+LazyData: false
 RoxygenNote: 6.1.1
