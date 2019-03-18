@@ -2,9 +2,15 @@
 #' @name BootCoefVar
 #' @description The R6 class \code{BootCoefVar} produces the bootstrap
 #'              resamplimg for the coeficient of variation (cv) of the
-#'              given numeric vectors. It uses \link[boot]{boot} from the
-#'              package \pkg{boot}.
+#'              given numeric vectors. It uses \link[boot]{boot} and
+#'              \link[boot]{boot.ci} from the package \pkg{boot}.
 #' @usage \code{BootCoefVar$new(x, ...)}
+#'
+#' ## Default R6 method:
+#' \code{BootCoefVar$new(x, na.rm = FALSE, digits = 1,
+#'                R = 1000, alpha = 0.05, ...)$boot_cv()}
+#' \code{BootCoefVar$new(x, na.rm = FALSE, digits = 1,
+#'                R = 1000, alpha = 0.05, ...)$boot_cv_corr()}
 #' @param x An \code{R} object. Currently there are methods for numeric vectors
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #'              stripped before the computation proceeds.
@@ -21,18 +27,21 @@
 BootCoefVar <- R6::R6Class(
     classname = "BootCoefVar",
     public = list(
+        # ---------------- determining defaults for arguments -----------------
         x = NA,
-        na.rm = TRUE,
-        digits = NULL,
-        R = NA,
-        alpha = NA,
+        na.rm = FALSE,
+        digits = 1,
+        R = 1000,
+        alpha = 0.05,
         boot_cv = NA,
+        boot_cv_corr = NA,
+        # --------- determining constructor defaults for arguments ------------
         initialize = function(
-            x,
-            na.rm = TRUE,
-            digits = NULL,
-            alpha = NA,
-            R,
+            x = NA,
+            na.rm = FALSE,
+            digits = 1,
+            R = 1000,
+            alpha = 0.05,
             ...
         ) {
             # ---------------------- check NA or NAN -------------------------
@@ -60,19 +69,19 @@ BootCoefVar <- R6::R6Class(
                 stop("x is not a vector")
                 return(NA_real_)
             }
-            # ------------------- set digits with default = 4 -----------------
+            # ------------------- set digits with user input ------------------
             if (!missing(digits)) {
                 self$digits <- digits
             }
-            # -- set the number of bootstrap replicates with default = 1000 ---
+            # ---- set the number of bootstrap replicates with user input -----
             if (!missing(R)) {
                 self$R <- R
             }
-            # ---- set the probability of type I error with default = 0.05 ----
+            # ------ set the probability of type I error with user input ------
             if (!missing(alpha)) {
                 self$alpha <- alpha
             }
-            # ----- initialize boot_cv() i.e., bootstrap of cqv function -----
+            # ------ initialize boot_cv() i.e., bootstrap of cv function ------
             self$boot_cv = function(...) {
                 return(
                     boot::boot(self$x, function(x, i) {
@@ -84,10 +93,31 @@ BootCoefVar <- R6::R6Class(
                         R = self$R
                         )
                 )
+            }
+            # - initialize boot_cv_corr() i.e., bootstrap of cv_corr function -
+            self$boot_cv_corr = function(...) {
+                return(
+                    boot::boot(self$x, function(x, i) {
+                        100 * (sd(
+                            self$x[i], na.rm = self$na.rm
+                            )/mean(
+                                self$x[i], na.rm = self$na.rm
+                                ) * ((1 - (1/(4 * (length(self$x[i]) - 1))) +
+                             (1/length(self$x)) * (
+                                 sd(
+                                     self$x[i], na.rm = self$na.rm
+                                     )/mean(
+                                         self$x[i], na.rm = self$na.rm
+                                         ))^2) + (1/(2 * (
+                                             length(self$x) - 1)^2))))
+                        },
+                        R = R
+                        )
+                )
                 }
             },
-        # -------- public functions of bootstrap confidence intervals ---------
-        boot_norm_ci = function(...) {
+        # ------- public methods of cv bootstrap confidence intervals ---------
+        boot_norm_ci_cv = function(...) {
             return(
                 boot::boot.ci(
                     self$boot_cv(),
@@ -96,7 +126,7 @@ BootCoefVar <- R6::R6Class(
                 )
             )
         },
-        boot_basic_ci = function(...) {
+        boot_basic_ci_cv = function(...) {
             return(
                 boot::boot.ci(
                     self$boot_cv(),
@@ -105,7 +135,7 @@ BootCoefVar <- R6::R6Class(
                 )
             )
         },
-        boot_perc_ci = function(...) {
+        boot_perc_ci_cv = function(...) {
             return(
                 boot::boot.ci(
                     self$boot_cv(),
@@ -114,7 +144,7 @@ BootCoefVar <- R6::R6Class(
                 )
             )
         },
-        boot_bca_ci = function(...) {
+        boot_bca_ci_cv = function(...) {
             return(
                 boot::boot.ci(
                     self$boot_cv(),
@@ -122,7 +152,48 @@ BootCoefVar <- R6::R6Class(
                     type = "bca"
                 )
             )
+        },
+        # ---- public methods of cv_corr bootstrap confidence intervals -------
+        boot_norm_ci_cv_corr = function(...) {
+            return(
+                boot::boot.ci(
+                    self$boot_cv_corr(),
+                    conf = (1 - self$alpha),
+                    type = "norm"
+                )
+            )
+        },
+        boot_basic_ci_cv_corr = function(...) {
+            return(
+                boot::boot.ci(
+                    self$boot_cv_corr(),
+                    conf = (1 - self$alpha),
+                    type = "basic"
+                )
+            )
+        },
+        boot_perc_ci_cv_corr = function(...) {
+            return(
+                boot::boot.ci(
+                    self$boot_cv_corr(),
+                    conf = (1 - self$alpha),
+                    type = "perc"
+                )
+            )
+        },
+        boot_bca_ci_cv_corr = function(...) {
+            return(
+                boot::boot.ci(
+                    self$boot_cv_corr(),
+                    conf = (1 - self$alpha),
+                    type = "bca"
+                )
+            )
         }
+    ),
+    # ---- define super_ function to enable multiple levels of inheritance ----
+    active = list(
+        super_ = function() {super}
     )
 )
 

@@ -28,7 +28,9 @@ cqv = \biggl(\frac{q_3-q_1}{q_3+q_1}\biggr)\times100
 $$
 There are different methods for the calculation of **confidence intervals (CI)** 
 for *CQV*. All of them are fruitful and have particular use cases. For sake of versatility, we cover almost all of these methods in `DescObs` package. Here, we explain them along with some examples:     
-### Bonett Confidence Interval
+
+### Bonett Confidence Interval    
+
 Bonett [@Bonett2006] introduced the following confidence interval for *CQV*:   
 $$
 \exp\{\ln{(D/S)c\  \pm\ Z_{1-\alpha/2}\sqrt{v} }\}

@@ -20,6 +20,7 @@ Depends:
     R (>= 3.1.2),
     dplyr (>= 0.8.0.1)
 Imports: dplyr, 
+  R6,
   SciViews, 
   boot, 
   MBESS

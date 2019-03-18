@@ -73,8 +73,8 @@ An object of type "list" which contains the estimate, the
        }
 }
 \description{
-The R6 class \code{CoefQuartVarCI} for the confidence intervals of
-             coefficient of quartile variation (cqv)
+The R6 class \code{CoefQuartVarCI} for the confidence intervals
+             of coefficient of quartile variation (cqv)
 }
 \details{
 \describe{

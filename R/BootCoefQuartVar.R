@@ -162,7 +162,7 @@ BootCoefQuartVar <- R6::R6Class(
                 }
             }
         },
-        # -------- public methods of bootstrap confidence intervals ---------
+        # --------- public methods of bootstrap confidence intervals ----------
         boot_norm_ci = function(...) {
             return(
                 boot::boot.ci(

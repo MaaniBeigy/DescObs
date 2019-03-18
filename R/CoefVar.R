@@ -3,6 +3,10 @@
 #' @description The R6 class \code{CoefVar} for the coefficient of
 #'              variation (cv)
 #' @usage \code{CoefVar$new(x, ...)}
+#'
+#' ## Default R6 method:
+#' \code{CoefVar$new(x, na.rm = FALSE, digits = 1)$est()}
+#' \code{CoefVar$new(x, na.rm = FALSE, digits = 1)$est_corr()}
 #' @param x An \code{R} object. Currently there are methods for numeric vectors
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #'              stripped before the computation proceeds.
@@ -26,16 +30,19 @@
 #'                 https://doi.org/10.1080/02664763.2013.847405}
 #' @export
 CoefVar <- R6::R6Class(
-    classname = "CoefQuartVar",
+    classname = "CoefVar",
     inherit = BootCoefVar,
     public = list(
+        # ---------------- determining defaults for arguments -----------------
         x = NA,
-        na.rm = TRUE,
-        digits = NULL,
+        na.rm = FALSE,
+        digits = 1,
+        est = NA,
+        # --------- determining constructor defaults for arguments ------------
         initialize = function(
-            x,
-            digits = NULL,
-            na.rm,
+            x = NA,
+            na.rm = FALSE,
+            digits = 1,
             ...
         ) {
             # ---------------------- check NA or NAN -------------------------
@@ -63,27 +70,36 @@ CoefVar <- R6::R6Class(
                 stop("x is not a vector")
                 return(NA_real_)
             }
-            # ------------------- set digits with default = 4 -----------------
+            # ------------------- set digits with user input ------------------
             if (!missing(digits)) {
                 self$digits <- digits
-            } else {
-                stop("please determine digits level")
             }
-            # ---------------- initialize cv() i.e., cqv function ------------
-            self$est()
+            # ----------- initialize cv estimate i.e., est() function ---------
+            self$est = function(...) {
+                return(
+                    round(
+                        100 * (
+                            (sd(self$x, na.rm = self$na.rm)) /
+                                (mean(self$x, na.rm = self$na.rm))
+                        ), digits = self$digits
+                    )
+                )
+            }
         },
-        # -------------- public function cv() i.e., cqv function -------------
-        est = function(...) {
+        # -- public method of corrected cv estimate i.e., est_corr() function -
+        est_corr = function(...) {
             return(
                 round(
-                    100 * (
-                        (sd(self$x, na.rm = self$na.rm)) /
-                            (mean(self$x, na.rm = self$na.rm))
-                    ), digits = self$digits
+                    100 * ((self$est()/100) * (
+                        (1 - (1/(4 * (length(self$x) - 1))) +
+                             (1/length(self$x)) * (self$est()/100)^2) +
+                            (1/(2 * (length(self$x) - 1)^2))
+                        )), digits = self$digits
+                    )
                 )
-            )
         }
     ),
+    # ---- define super_ function to enable multiple levels of inheritance ----
     active = list(
         super_ = function() super
     )

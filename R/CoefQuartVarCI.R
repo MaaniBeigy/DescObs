@@ -1,8 +1,8 @@
 #' @title R6 Confidence Intervals for the Coefficient of Quartile Variation
 #'        (cqv)
 #' @name CoefQuartVarCI
-#' @description The R6 class \code{CoefQuartVarCI} for the confidence intervals of
-#'              coefficient of quartile variation (cqv)
+#' @description The R6 class \code{CoefQuartVarCI} for the confidence intervals
+#'              of coefficient of quartile variation (cqv)
 #' @usage \code{CoefQuartVarCI$new(x, ...)}
 #'
 #' ## Default R6 method:
@@ -211,6 +211,7 @@ CoefQuartVarCI <- R6::R6Class(
             # ----------- initialize internal function c = n/(n-1) ------------
             # ---------------- which is a centering adjustment ----------------
             self$ccc = function(...) {length(self$x)/(length(self$x) - 1)}
+            # ---- initialize the internal functions for public methods -------
             self$bootcqv = function(...) {
                 return(
                 super$super_$initialize(
@@ -221,12 +222,10 @@ CoefQuartVarCI <- R6::R6Class(
                 ))
                 invisible(self)
             }
-            # ---- initialize the internal functions for public methods -------
-            self$bonett_ci()
             self$bootcqv()
+            self$bonett_ci()
             invisible(self)
-        }
-        ,
+        },
         # -------------- public method bonett_ci() i.e., Bonett CI ------------
         bonett_ci = function(...) {
             return(
