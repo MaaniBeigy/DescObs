@@ -6,3 +6,4 @@ CoefQuartVar$new(x)$est()
 cqv_x <- CoefQuartVar$new(x, digits = 2)
 cqv_x$est()
 R6::is.R6(cqv_x)
+

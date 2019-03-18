@@ -9,3 +9,4 @@ cv(x, na.rm = TRUE, method = "mahmoudvand_hassani", correction = TRUE)
 cv(x, na.rm = TRUE, digits = 3, method = "shortest_length", correction = TRUE)
 cv(x, na.rm = TRUE, digits = 3, method = "norm", correction = TRUE)
 cv(x, na.rm = TRUE, digits = 3, method = "all", correction = TRUE)
+

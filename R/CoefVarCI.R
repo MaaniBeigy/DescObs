@@ -333,7 +333,7 @@ CoefVarCI <- R6::R6Class(
             # ------ initialize some internal fields for public methods -------
             # ------ initialize est function from parent class CoefVar --------
             self$est = function(...) {super$initialize(
-                x = self$x,
+                self$x,
                 na.rm = self$na.rm,
                 digits = self$digits
             )}

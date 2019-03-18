@@ -24,3 +24,4 @@ cv_y$perc_ci()
 cv_y$bca_ci()
 cv_y$all_ci()
 R6::is.R6(cv_y)
+

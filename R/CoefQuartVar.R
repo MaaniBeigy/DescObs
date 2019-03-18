@@ -36,14 +36,6 @@ CoefQuartVar <- R6::R6Class(
         x = NA,
         na.rm = FALSE,
         digits = 1,
-        # --------------------- adding some internal fields -------------------
-        a = ceiling(
-            (length(x)/4) - (1.96 * (((3 * length(x))/16)^(0.5)))
-        ),
-        b = round(
-            (length(x)/4) + (1.96 * (((3 * length(x))/16)^(0.5))),
-            digits = 0
-        ),
         star = 0,
         # --------- determining constructor defaults for arguments ------------
         initialize = function(
@@ -147,14 +139,25 @@ CoefQuartVar <- R6::R6Class(
             }
         },
         # ------------------- adding some internal methods --------------------
-        c = function(...) {length(self$x) + 1 - self$b},
-        d = function(...) {length(self$x) + 1 - self$a},
-        Ya = function(...) {dplyr::nth(self$x, self$a, order_by = self$x)},
-        Yb = function(...) {dplyr::nth(self$x, self$b, order_by = self$x)},
+        # --------------------- adding some internal fields -------------------
+        a =  function(...) {
+            ceiling(
+            (length(self$x)/4) - (1.96 * (((3 * length(self$x))/16)^(0.5)))
+        )
+            },
+        b = function(...) {round(
+            (length(self$x)/4) + (1.96 * (((3 * length(self$x))/16)^(0.5))),
+            digits = 0
+        )
+            },
+        c = function(...) {length(self$x) + 1 - self$b()},
+        d = function(...) {length(self$x) + 1 - self$a()},
+        Ya = function(...) {dplyr::nth(self$x, self$a(), order_by = self$x)},
+        Yb = function(...) {dplyr::nth(self$x, self$b(), order_by = self$x)},
         Yc = function(...) {dplyr::nth(self$x, self$c(), order_by = self$x)},
         Yd = function(...) {dplyr::nth(self$x, self$d(), order_by = self$x)},
         alphastar = function(...) {
-            for (i in self$a:(self$b - 1)) {
+            for (i in self$a():(self$b() - 1)) {
                 self$star[i] <- (
                     (choose(length(self$x), i)) *
                         (0.25^(i)) * (0.75^(length(self$x) - i))
