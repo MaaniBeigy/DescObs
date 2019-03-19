@@ -136,19 +136,23 @@ cv <- function(
     # require(dplyr)
     # require(SciViews)
     # require(boot)
-    if (!is.numeric(x)) {  # checkpoint 1 typeof x
-        stop("argument is not numeric: returning NA")
-        return(NA_real_)
-    }
-    if (!is.vector(x)) {  # checkpoint 2 typeof x
-        stop("x is not a vector")
+    if (!is.numeric(x)) {
+        stop("argument is not a numeric vector: returning NA")
         return(NA_real_)
     }
     na.rm <- na.rm  # removes NAs if TRUE
-    if (is.null(digits)) {  # checkpoint 3 determining digits
+    if (na.rm == TRUE) {
+        x <- x[!is.na(x)]
+    } else if (anyNA(x)) {
+        stop(
+            "missing values and NaN's not allowed if 'na.rm' is FALSE"
+        )
+    }
+
+    if (is.null(digits)) {
         digits = 4
     }
-    if (is.null(R)) {  # checkpoint 4 the number of bootstrap replicates
+    if (is.null(R)) {
         R = 1000
     }
     digits <- digits  # digits required for rounding

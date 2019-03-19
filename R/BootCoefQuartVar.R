@@ -52,26 +52,22 @@ BootCoefQuartVar <- R6::R6Class(
             # ---------------------- check NA or NAN -------------------------
             if (!missing(x)) {
                 self$x <- x
-            } else if (!missing(x)) {
-                stop("no numeric vector is selected for input")
+            } else if (missing(x)) {
+                stop("object 'x' not found")
             }
             if (!missing(na.rm)) {
                 self$na.rm <- na.rm
             }
             if (na.rm == TRUE) {
                 self$x <- x[!is.na(x)]
-            } else if (anyNA(x)) {
+            } else if (anyNA(x) & self$na.rm == FALSE) {
                 stop(
                     "missing values and NaN's not allowed if 'na.rm' is FALSE"
                 )
             }
             # ------------- stop if input x vector is not numeric -------------
             if (!is.numeric(x)) {
-                stop("argument is not numeric: returning NA")
-                return(NA_real_)
-            }
-            if (!is.vector(x)) {
-                stop("x is not a vector")
+                stop("argument is not a numeric vector: returning NA")
                 return(NA_real_)
             }
             # ------------------- set digits with user input ------------------
