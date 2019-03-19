@@ -1,43 +1,55 @@
 # DescObs ![DescObs](eye.png)
-Tools for Versatile Exploration of Data.
+Tools for Versatile Exploration of Data.   
 
-`DescObs` stands for **descriptive observation**. 
-We do not just see, we *observe*! 
+`DescObs` stands for **descriptive observation**.    
+We do not just see, we *observe*!   
 
-# Overview
-## Background
+# Overview   
+
+## Background    
+
 There are lots of R packages with statistical functions of particular use cases.
 Despite the growing body of these packages and repositories which have been
 quite useful for scientists, the redundancy and multiplicity of them
 make it sometimes very difficult to choose between them. For instance, the 
 abundant methods available for the calculation of confidence intervals of a 
-dispersion measure like coefficient of variation (cv) or coefficient of quartile variation (cqv) have not yet achieved.
-## Aims
+dispersion measure like coefficient of variation (cv) or coefficient of quartile variation (cqv) have not yet achieved.    
+
+## Aims    
+
 The authors' intention is to create a toolbox to facilitate the use of various 
 descriptive statistical functions and resources in favor of an easier, 
 scientifically recognized standard for implementing R statistical applications. 
 We will try to provide **multi-control knob tools**, by means of 
-**various options** and incorporating the most available rigorous methods. 
+**various options** and incorporating the most available rigorous methods.   
 
-# Getting started
+### Convention       
+
+We are bound by the high standards of functional programming (FP) and object-oriented programming (OOP). The majority of tools provided by `DescObs` are developed as both FP functions and R6 classes, for sake of versatility, portability and efficiency.
+
+# Getting started    
+
 If you are an ubuntu user, you are going to need these non-R packages:    
 ```linux
 sudo apt install libcurl4-openssl-dev libssl-dev libxml2-dev libgsl-dev   
 ```   
 
-The `DescObs` is available on github. To install it in `R`, use:  
+The `DescObs` is available on github. To install it in `R`, use:    
 
 ```r
 devtools::install_github('MaaniBeigy/DescObs')  
 ```
-\* Note that this package is in-development. Currently, `cv` and `cqv` are functional.     
+\* Note that this package is still in-development.   
+`cv`, `cqv` and `rm.versatile` are the functions written in FP framework.   
 \* Pull request welcome.     
-\* This package is inspired by `dplyr`, `SciView`, `boot`, and `MBESS`.     
+\* This package is inspired by `dplyr`, `R6`, `SciView`, `boot`, and `MBESS`.     
 ## Dependencies     
-To load the required libraries, run:
+
+To load the required libraries, run:    
+
 ```r
 # define required libraries
-required.packages <- c("dplyr", "SciViews", "boot", "MBESS")
+required.packages <- c("dplyr", "SciViews", "boot", "MBESS", "R6")
 # function of installing the uninstalled required packages
 if (length(setdiff(required.packages, rownames(installed.packages()))) > 0) {
     install.packages(setdiff(required.packages, rownames(installed.packages())))

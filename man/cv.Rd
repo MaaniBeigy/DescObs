@@ -120,6 +120,7 @@ cv(x, na.rm = TRUE, method = "mahmoudvand_hassani", correction = TRUE)
 cv(x, na.rm = TRUE, digits = 3, method = "shortest_length", correction = TRUE)
 cv(x, na.rm = TRUE, digits = 3, method = "norm", correction = TRUE)
 cv(x, na.rm = TRUE, digits = 3, method = "all", correction = TRUE)
+
 }
 \references{
 [1] Albatineh, AN., Kibria, BM., Wilcox, ML., & Zogheib, B, 2014,
