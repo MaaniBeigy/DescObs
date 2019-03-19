@@ -40,32 +40,23 @@ The `DescObs` is available on github. To install it in `R`, use:
 devtools::install_github('MaaniBeigy/DescObs')  
 ```
 \* Note that this package is still in-development. Currently, these tools are
-available:    
+available:     
+
+|name             |is.R6.. |Description                             |
+|:----------------|:-------|:---------------------------------------|
+|CoefVar          |TRUE    |Coefficient of Variation (cv)           |
+|CoefQuartVar     |TRUE    |Coefficient of Quartile Variation (cqv) |
+|CoefVarCI        |TRUE    |Confidence Intervals for cv             |
+|CoefQuartVarCI   |TRUE    |Confidence Intervals for cqv            |
+|SampleQuantiles  |TRUE    |Sample Quantiles                        |
+|cv               |FALSE   |Coefficient of Variation                |
+|cqv              |FALSE   |Coefficient of Quartile Variation       |
+|BootCoefVar      |TRUE    |Bootstrap Resampling for cv             |
+|BootCoefQuartVar |TRUE    |Bootstrap Resampling for cqv            |
+|rm.versatile     |FALSE   |Versatile Function for Removing Objects |
 
 
-+--------------------+---------------+-------------------------------------------------------------+
-| name               | `is.R6()`     | Description        |
-+====================+===============+=============================================================+
-| `CoefVar`          | TRUE          | Coefficient of Variation (cv)                           |
-+--------------------+---------------+-------------------------------------------------------------+
-| `CoefQuartVar`     | TRUE          | Coefficient of Quartile Variation (cqv)                 |
-+--------------------+---------------+-------------------------------------------------------------+
-| `CoefVarCI`        | TRUE          | Confidence Intervals for cv                             |
-+--------------------+---------------+-------------------------------------------------------------+
-| `CoefQuartVarCI`   | TRUE          | Confidence Intervals for cqv                            |
-+--------------------+---------------+-------------------------------------------------------------+
-| `SampleQuantiles`  | TRUE          | Sample Quantiles                                        |
-+--------------------+---------------+-------------------------------------------------------------+
-| `cv`               | FALSE         | Coefficient of Variation                                |
-+--------------------+---------------+-------------------------------------------------------------+
-| `cqv`              | FALSE         | Coefficient of Quartile Variation                       |
-+--------------------+---------------+-------------------------------------------------------------+
-| `BootCoefVar`      | TRUE          | Bootstrap Resampling for cv                             |
-+--------------------+---------------+-------------------------------------------------------------+
-| `BootCoefQuartVar` | TRUE          | Bootstrap Resampling for cqv                            |
-+--------------------+---------------+-------------------------------------------------------------+
-| `rm.versatile`     | FALSE         | Versatile Function for Removing Objects                 |
-+--------------------+---------------+-------------------------------------------------------------+ 
+
 
 \* This package is inspired by `dplyr`, `R6`, `SciView`, `boot`, and `MBESS`.    
 
