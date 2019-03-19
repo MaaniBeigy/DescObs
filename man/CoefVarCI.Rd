@@ -10,7 +10,7 @@
 
 ## Default R6 method:
 \code{CoefVarCI$new(x, na.rm = FALSE, digits = 1, correction = FALSE,
-               R = 1000, alpha = 0.05, correction = FALSE)$kelley_ci()}
+               R = 1000, alpha = 0.05)$kelley_ci()}
 }
 \arguments{
 \item{x}{An \code{R} object. Currently there are methods for numeric vectors}

@@ -1,5 +1,5 @@
 #' @title Versatile Function for Removing Objects
-#' @name rm.versatile
+#' @name rm_versatile
 #' @description Versatile function to remove objects.
 #' @param save.objects an optional list naming objects to be saved (\emph{i.e.,}
 #'                     not to be removed).
@@ -28,13 +28,13 @@
 #'          developed for sake of versatility, where you can determine
 #'          exceptional objects and patterns for saving and/or removing objects.
 #'          Also, you receive proper message regarding the final approval of
-#'          removing objects. The search strategy of \code{rm.versatile} is
+#'          removing objects. The search strategy of \code{rm_versatile} is
 #'          based upon \link[utils]{apropos} function, which
 #'          enables you to determine the type or storage mode of the objects
 #'          (\emph{e.g.,} double, integer, character, \emph{etc.}).
-#' @example ./examples/rm.versatile.R
+#' @example ./examples/rm_versatile.R
 #' @export
-rm.versatile <- function(
+rm_versatile <- function(
     save.objects = NULL,
     save.patterns = NULL,
     rm.objects = NULL,

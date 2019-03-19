@@ -4,7 +4,7 @@ author: "Maani Beigy"
 date: "February 27, 2019"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{rm.versatile}
+  %\VignetteIndexEntry{rm_versatile}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -25,14 +25,14 @@ https://www.rdocumentation.org/packages/base/versions/3.5.2/topics/regex).
 This function has been developed for sake of versatility, where you can 
 determine exceptional objects and patterns for saving and/or removing objects. 
 Also, you receive proper message regarding the final approval of removing 
-objects. The search strategy of `rm.versatile` is based upon [apropos](
+objects. The search strategy of `rm_versatile` is based upon [apropos](
 https://www.rdocumentation.org/packages/utils/versions/3.5.2/topics/apropos) function, which enables you to determine the type or storage mode of the objects (*e.g.,* double, integer, character, *etc.*).   
    
 ### Examples    
 Let us experience such versatility by examples. First we need to make some 
 objects in the environment:
 ```{r echo=FALSE, warning=FALSE, message=FALSE, include = FALSE}
-rm.versatile <- function(
+rm_versatile <- function(
     save.objects = NULL,
     save.patterns = NULL,
     rm.objects = NULL,
@@ -503,7 +503,7 @@ y <- c("d", "e", "f")
 Suppose that we want to remove *all* objects **except** for "a", "b", and "c" 
 objects and those with "df" and "data" string patterns. 
 ```{r eval = TRUE, warning=TRUE, message=TRUE}
-rm.versatile(
+rm_versatile(
     save.objects = list("a", "b", "c"),
     save.patterns = list("df", "data")
 )
@@ -515,7 +515,7 @@ ls()
 Now, imagine that we want to **remove** objects "x" and "y" and those with 
 "matrix" pattern. 
 ```{r echo=FALSE, warning=FALSE, message=FALSE, include = FALSE}
-rm.versatile <- function(
+rm_versatile <- function(
     save.objects = NULL,
     save.patterns = NULL,
     rm.objects = NULL,
@@ -984,7 +984,7 @@ y <- c("d", "e", "f")
 
 ```{r eval = TRUE, warning=TRUE, message=TRUE}
 ls()
-rm.versatile(
+rm_versatile(
     rm.objects = list("x", "y"),
     rm.patterns = list("matrix")
 )
@@ -1030,7 +1030,7 @@ y <- c("d", "e", "f")
 # list the objects first
 ls()
 # let us remove the data frames
-rm.versatile(
+rm_versatile(
     rm.patterns = list("df", "matrix", "dataframe"),
     modes = list("list")
 )
@@ -1072,7 +1072,7 @@ x <- c("a", "b", "c", "d")
 y <- c("d", "e", "f")
 ```
 ```{r eval = TRUE, warning=TRUE, message=TRUE}
-rm.versatile(
+rm_versatile(
     rm.objects = list("matrix.a", "matrix2"),
     rm.patterns = list("df", "matrix", "dataframe"),
     modes = list("list")
