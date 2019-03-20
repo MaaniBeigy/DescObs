@@ -69,7 +69,7 @@ test_that(
             BootCoefQuartVar$new(x = y, na.rm = TRUE)$na.rm
         )
         expect_equal(
-            BootCoefQuartVar$new(x = y, na.rm = TRUE)$boot_cqv()$t0, 55.1
+            BootCoefQuartVar$new(x = y, na.rm = TRUE)$boot_cqv()$t0, 55.10204
         )
         expect_true(
             SampleQuantiles$new(x = y, na.rm = TRUE)$na.rm
@@ -78,10 +78,10 @@ test_that(
             SampleQuantiles$new(y, na.rm = TRUE, names = FALSE)$qx(), 4.7
         )
         expect_equal(
-            cv(y, na.rm = TRUE, method = "kelley")$statistics$est, 80.0167
+            cv(y, na.rm = TRUE, method = "kelley")$statistics$est, 80
         )
         expect_equal(
-            cqv(y, na.rm = TRUE, method = "bonett")$statistics$est, 55.102
+            cqv(y, na.rm = TRUE, method = "bonett")$statistics$est, 55.1
         )
     }
 )

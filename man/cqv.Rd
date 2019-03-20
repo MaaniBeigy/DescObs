@@ -4,7 +4,7 @@
 \alias{cqv}
 \title{Coefficient of Quartile Variation (cqv)}
 \usage{
-cqv(x, na.rm = FALSE, digits = NULL, method = NULL, R = NULL, ...)
+cqv(x, na.rm = FALSE, digits = 1, method = NULL, R = NULL, ...)
 }
 \arguments{
 \item{x}{An \code{R} object. Currently there are methods for numeric vectors}

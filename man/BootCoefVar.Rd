@@ -9,18 +9,16 @@
 \code{BootCoefVar$new(x, ...)}
 
 ## Default R6 method:
-\code{BootCoefVar$new(x, na.rm = FALSE, digits = 1,
-               R = 1000, alpha = 0.05, ...)$boot_cv()}
-\code{BootCoefVar$new(x, na.rm = FALSE, digits = 1,
-               R = 1000, alpha = 0.05, ...)$boot_cv_corr()}
+\code{BootCoefVar$new(x, na.rm = FALSE, R = 1000,
+               alpha = 0.05, ...)$boot_cv()}
+\code{BootCoefVar$new(x, na.rm = FALSE, R = 1000,
+               alpha = 0.05, ...)$boot_cv_corr()}
 }
 \arguments{
 \item{x}{An \code{R} object. Currently there are methods for numeric vectors}
 
 \item{na.rm}{a logical value indicating whether \code{NA} values should be
 stripped before the computation proceeds.}
-
-\item{digits}{integer indicating the number of decimal places to be used.}
 
 \item{alpha}{The allowed type I error probability}
 

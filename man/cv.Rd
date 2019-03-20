@@ -4,8 +4,8 @@
 \alias{cv}
 \title{Coefficient of Variation (cv)}
 \usage{
-cv(x, na.rm = FALSE, digits = NULL, method = NULL,
-  correction = FALSE, alpha = 0.05, R = NULL, ...)
+cv(x, na.rm = FALSE, digits = 1, method = NULL, correction = FALSE,
+  alpha = 0.05, R = NULL, ...)
 }
 \arguments{
 \item{x}{An \code{R} object. Currently there are methods for numeric vectors}

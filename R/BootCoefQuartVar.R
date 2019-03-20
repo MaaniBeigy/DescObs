@@ -9,12 +9,11 @@
 #' @usage \code{BootCoefQuartVar$new(x, ...)}
 #'
 #' ## Default R6 method:
-#' \code{BootCoefQuartVar$new(x, na.rm = FALSE, digits = 1,
-#'                R = 1000, alpha = 0.05, ...)$boot_cqv()}
+#' \code{BootCoefQuartVar$new(x, na.rm = FALSE, R = 1000,
+#'                alpha = 0.05, ...)$boot_cqv()}
 #' @param x An \code{R} object. Currently there are methods for numeric vectors
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #'              stripped before the computation proceeds.
-#' @param digits integer indicating the number of decimal places to be used.
 #' @param alpha The allowed type I error probability
 #' @param R integer indicating the number of bootstrap replicates.
 #' @example ./examples/BootCoefQuartVar.R
@@ -36,7 +35,6 @@ BootCoefQuartVar <- R6::R6Class(
         # ---------------- determining defaults for arguments -----------------
         x = NA,
         na.rm = FALSE,
-        digits = 1,
         R = 1000,
         alpha = 0.05,
         boot_cqv = NA,
@@ -44,7 +42,6 @@ BootCoefQuartVar <- R6::R6Class(
         initialize = function(
             x = NA,
             na.rm = FALSE,
-            digits = 1,
             R = 1000,
             alpha = 0.05,
             ...
@@ -70,10 +67,6 @@ BootCoefQuartVar <- R6::R6Class(
                 stop("argument is not a numeric vector: returning NA")
                 return(NA_real_)
             }
-            # ------------------- set digits with user input ------------------
-            if (!missing(digits)) {
-                self$digits <- digits
-            }
             # ---- set the number of bootstrap replicates with user input -----
             if (!missing(R)) {
                 self$R <- R
@@ -89,7 +82,7 @@ BootCoefQuartVar <- R6::R6Class(
                 ) {
                     return(
                         boot::boot(self$x, function(x, i) {
-                            round(((
+                            (((
                                 unname(
                                     quantile(
                                         self$x[i],
@@ -114,7 +107,7 @@ BootCoefQuartVar <- R6::R6Class(
                                     na.rm = self$na.rm
                                 )
                             )
-                            )) * 100, digits = self$digits)
+                            )) * 100)
                         },
                         R = self$R
                         )
@@ -127,7 +120,7 @@ BootCoefQuartVar <- R6::R6Class(
                     )
                     return(
                         boot::boot(self$x, function(x, i) {
-                            round(((
+                            (((
                                 unname(
                                     max(
                                         self$x[i],
@@ -150,7 +143,7 @@ BootCoefQuartVar <- R6::R6Class(
                                     na.rm = self$na.rm
                                 )
                             )
-                            )) * 100, digits = self$digits)
+                            )) * 100)
                         },
                         R = self$R
                         )

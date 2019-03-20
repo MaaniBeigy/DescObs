@@ -82,7 +82,7 @@
 cqv <- function(
     x,
     na.rm = FALSE,
-    digits = NULL,
+    digits = 1,
     method = NULL,
     R = NULL,
     ...
@@ -103,7 +103,7 @@ cqv <- function(
         )
     }
     if (is.null(digits)) {
-        digits = 4
+        digits = 1
     }
     digits = digits  # digits required for rounding
     method = method  # returns 95% confidence interval

@@ -125,7 +125,7 @@
 cv <- function(
     x,  # Currently there are methods for numeric vectors
     na.rm = FALSE,  # indicating whether NA values should be stripped
-    digits = NULL,  # digits of output after rounding. default is 4
+    digits = 1,  # digits of output after rounding. default is 4
     method = NULL,  # method for the computation of confidence interval (CI)
     correction = FALSE,  # indicating whether to compute the unbiased statistics
     alpha = 0.05,  # The allowed type I error probability
@@ -150,7 +150,7 @@ cv <- function(
     }
 
     if (is.null(digits)) {
-        digits = 4
+        digits = 1
     }
     if (is.null(R)) {
         R = 1000

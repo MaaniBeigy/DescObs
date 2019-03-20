@@ -7,14 +7,13 @@
 #' @usage \code{BootCoefVar$new(x, ...)}
 #'
 #' ## Default R6 method:
-#' \code{BootCoefVar$new(x, na.rm = FALSE, digits = 1,
-#'                R = 1000, alpha = 0.05, ...)$boot_cv()}
-#' \code{BootCoefVar$new(x, na.rm = FALSE, digits = 1,
-#'                R = 1000, alpha = 0.05, ...)$boot_cv_corr()}
+#' \code{BootCoefVar$new(x, na.rm = FALSE, R = 1000,
+#'                alpha = 0.05, ...)$boot_cv()}
+#' \code{BootCoefVar$new(x, na.rm = FALSE, R = 1000,
+#'                alpha = 0.05, ...)$boot_cv_corr()}
 #' @param x An \code{R} object. Currently there are methods for numeric vectors
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #'              stripped before the computation proceeds.
-#' @param digits integer indicating the number of decimal places to be used.
 #' @param alpha The allowed type I error probability
 #' @param R integer indicating the number of bootstrap replicates.
 #' @example ./examples/BootCoefVar.R
@@ -30,7 +29,6 @@ BootCoefVar <- R6::R6Class(
         # ---------------- determining defaults for arguments -----------------
         x = NA,
         na.rm = FALSE,
-        digits = 1,
         R = 1000,
         alpha = 0.05,
         boot_cv = NA,
@@ -39,7 +37,6 @@ BootCoefVar <- R6::R6Class(
         initialize = function(
             x = NA,
             na.rm = FALSE,
-            digits = 1,
             R = 1000,
             alpha = 0.05,
             ...
@@ -64,10 +61,6 @@ BootCoefVar <- R6::R6Class(
             if (!is.numeric(x)) {
                 stop("argument is not a numeric vector: returning NA")
                 return(NA_real_)
-            }
-            # ------------------- set digits with user input ------------------
-            if (!missing(digits)) {
-                self$digits <- digits
             }
             # ---- set the number of bootstrap replicates with user input -----
             if (!missing(R)) {
