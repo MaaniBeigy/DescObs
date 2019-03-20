@@ -47,7 +47,6 @@ cv_x$boot_norm_ci_cv_corr()
 cv_x$boot_perc_ci_cv_corr()
 cv_x$boot_bca_ci_cv_corr()
 R6::is.R6(cv_x)
-
 }
 \references{
 Canty, A., & Ripley, B, 2017, boot: Bootstrap R (S-Plus)

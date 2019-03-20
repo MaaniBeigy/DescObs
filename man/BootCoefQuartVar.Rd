@@ -42,7 +42,6 @@ cqv_x$boot_norm_ci()
 cqv_x$boot_perc_ci()
 cqv_x$boot_bca_ci()
 R6::is.R6(cqv_x)
-
 }
 \references{
 Canty, A., & Ripley, B, 2017, boot: Bootstrap R (S-Plus)

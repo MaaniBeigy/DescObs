@@ -86,7 +86,18 @@
 #'        \cr \cr
 #'        }
 #'        }
-#' @example ./R/cv_versatile_example.R
+#' @examples
+#' x <- c(
+#'     0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
+#'     4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
+#' )
+#' cv_versatile(x)
+#' cv_versatile(x, correction = TRUE)
+#' cv_versatile(x, na.rm = TRUE, digits = 3, method = "kelley", correction = TRUE)
+#' cv_versatile(x, na.rm = TRUE, method = "mahmoudvand_hassani", correction = TRUE)
+#' cv_versatile(x, na.rm = TRUE, digits = 3, method = "shortest_length", correction = TRUE)
+#' cv_versatile(x, na.rm = TRUE, digits = 3, method = "norm", correction = TRUE)
+#' cv_versatile(x, na.rm = TRUE, digits = 3, method = "all", correction = TRUE)
 #' @references [1] Albatineh, AN., Kibria, BM., Wilcox, ML., & Zogheib, B, 2014,
 #'                 Confidence interval estimation for the population coefficient
 #'                 of variation using ranked set sampling: A simulation study,
@@ -117,7 +128,7 @@
 #' @references [9] Canty, A., & Ripley, B., 2017, boot: Bootstrap R (S-Plus)
 #'                 Functions, R package version 1.3-20
 #' @export
-#' @import SciViews boot MBESS R6 stats utils dplyr
+#' @import dplyr SciViews boot MBESS R6 utils
 NULL
 cv_versatile <- function(
     x,  # Currently there are methods for numeric vectors

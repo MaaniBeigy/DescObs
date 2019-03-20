@@ -72,7 +72,7 @@ mymydata <- 14
 dataframe1 <- data.frame(
     gender = c("F", "M", "M", "F"),
     score = c(10, 12, 14, 18)
-    )
+)
 matrix.a <- matrix(1:10, nrow = 2, ncol = 5)
 matrix2 <- matrix(1:100, ncol = 2)
 x <- c("a", "b", "c", "d")
@@ -86,5 +86,4 @@ rm_versatile(
 )
 # List objects
 ls()
-
 }

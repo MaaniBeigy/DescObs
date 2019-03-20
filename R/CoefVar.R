@@ -21,13 +21,22 @@
 #'         units. It is also a measure of homogeneity [1].
 #'         }
 #'         }
-#' @example ./R/CoefVar_example.R
+#' @examples
+#' x <- c(
+#'     0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
+#'     4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
+#' )
+#' CoefVar$new(x)$est()
+#' cv_x <- CoefVar$new(x, digits = 2)
+#' cv_x$est()
+#' cv_x$est_corr()
+#' R6::is.R6(cv_x)
 #' @references [1] Albatineh, AN., Kibria, BM., Wilcox, ML., & Zogheib, B, 2014,
 #'                 Confidence interval estimation for the population coefficient
 #'                 of variation using ranked set sampling: A simulation study,
 #'                 Journal of Applied Statistics, 41(4), 733–751, DOI:
 #'                 \href{http://doi.org/10.1080/02664763.2013.847405}{http://doi.org/10.1080/02664763.2013.847405}
-#' @import SciViews boot MBESS R6 stats utils dplyr
+#' @import dplyr SciViews boot MBESS R6 utils
 #' @export
 CoefVar <- R6::R6Class(
     classname = "CoefVar",

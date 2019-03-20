@@ -62,7 +62,19 @@
 #'        }
 #'        }
 #'        }
-#' @example ./R/cqv_versatile_example.R
+#' @examples
+#' x <- c(
+#'     0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
+#'     4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
+#' )
+#' cqv_versatile(x)
+#' cqv_versatile(x, na.rm = TRUE, digits = 2)
+#' cqv_versatile(x, na.rm = TRUE, digits = 2, method = "bonett")
+#' cqv_versatile(x, na.rm = TRUE, digits = 2, method = "norm")
+#' cqv_versatile(x, na.rm = TRUE, digits = 2, method = "basic")
+#' cqv_versatile(x, na.rm = TRUE, digits = 2, method = "perc")
+#' cqv_versatile(x, na.rm = TRUE, digits = 2, method = "bca")
+#' cqv_versatile(x, na.rm = TRUE, digits = 2, method = "all")
 #' @references [1] Bonett, DG., 2006, Confidence interval for a coefficient of
 #'                 quartile variation, Computational Statistics & Data Analysis,
 #'                 50(11), 2953-7, DOI: \href{http://doi.org/10.1016/j.csda.2005.05.007}{http://doi.org/10.1016/j.csda.2005.05.007}
@@ -75,7 +87,7 @@
 #'                 Their Applications. Cambridge University Press, Cambridge.
 #'                 ISBN 0-521-57391-2
 #' @export
-#' @import SciViews boot MBESS R6 stats utils dplyr
+#' @import dplyr SciViews boot MBESS R6 utils
 NULL
 cqv_versatile <- function(
     x,

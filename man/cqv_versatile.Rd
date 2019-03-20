@@ -91,7 +91,6 @@ cqv_versatile(x, na.rm = TRUE, digits = 2, method = "basic")
 cqv_versatile(x, na.rm = TRUE, digits = 2, method = "perc")
 cqv_versatile(x, na.rm = TRUE, digits = 2, method = "bca")
 cqv_versatile(x, na.rm = TRUE, digits = 2, method = "all")
-
 }
 \references{
 [1] Bonett, DG., 2006, Confidence interval for a coefficient of

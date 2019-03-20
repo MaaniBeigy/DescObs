@@ -121,11 +121,11 @@ y <- c(
 )
 CoefVarCI$new(x = y)$kelley_ci()
 cv_y <- CoefVarCI$new(
-    x = y,
-    alpha = 0.05,
-    R = 1000,
-    digits = 2,
-    correction = TRUE
+   x = y,
+   alpha = 0.05,
+   R = 1000,
+   digits = 2,
+   correction = TRUE
 )
 cv_y$kelley_ci()
 cv_y$mckay_ci()
@@ -141,7 +141,6 @@ cv_y$perc_ci()
 cv_y$bca_ci()
 cv_y$all_ci()
 R6::is.R6(cv_y)
-
 }
 \references{
 [1] Albatineh, AN., Kibria, BM., Wilcox, ML., & Zogheib, B, 2014,
