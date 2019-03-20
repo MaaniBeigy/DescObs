@@ -92,7 +92,7 @@
 #'        \cr \cr
 #'        }
 #'        }
-#' @example ./examples/CoefVarCI.R
+#' @example ./R/CoefVarCI_example.R
 #' @references [1] Albatineh, AN., Kibria, BM., Wilcox, ML., & Zogheib, B, 2014,
 #'                 Confidence interval estimation for the population coefficient
 #'                 of variation using ranked set sampling: A simulation study,
@@ -123,8 +123,7 @@
 #' @references [9] Canty, A., & Ripley, B., 2017, boot: Bootstrap R (S-Plus)
 #'                 Functions, R package version 1.3-20
 #' @export
-#' @import dplyr SciViews boot MBESS R6 stats utils
-NULL
+#' @import SciViews boot MBESS R6 stats utils dplyr
 CoefVarCI <- R6::R6Class(
     classname = "CoefVarCI",
     inherit = CoefVar,

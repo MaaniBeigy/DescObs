@@ -3,6 +3,12 @@
 \name{rm_versatile}
 \alias{rm_versatile}
 \title{Versatile Function for Removing Objects}
+\usage{
+rm_versatile(save.objects = NULL, save.patterns = NULL,
+  rm.objects = NULL, rm.patterns = NULL, modes = list("integer",
+  "double", "character", "list"), envir = .GlobalEnv, inherits = FALSE,
+  ...)
+}
 \arguments{
 \item{save.objects}{an optional list naming objects to be saved (\emph{i.e.,}
 not to be removed).}

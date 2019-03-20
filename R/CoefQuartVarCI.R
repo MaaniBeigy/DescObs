@@ -69,7 +69,7 @@
 #'        }
 #'        }
 #'        }
-#' @example ./examples/CoefQuartVarCI.R
+#' @example ./R/CoefQuartVarCI_example.R
 #' @references [1] Bonett, DG., 2006, Confidence interval for a coefficient of
 #'                 quartile variation, Computational Statistics & Data Analysis,
 #'                 50(11), 2953-7, DOI: \href{
@@ -84,7 +84,7 @@
 #'                 Their Applications. Cambridge University Press, Cambridge.
 #'                 ISBN 0-521-57391-2
 #' @export
-#' @import dplyr SciViews boot MBESS R6 stats utils
+#' @import SciViews boot MBESS R6 stats utils dplyr
 NULL
 CoefQuartVarCI <- R6::R6Class(
     classname = "CoefQuartVarCI",

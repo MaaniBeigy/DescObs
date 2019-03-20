@@ -86,7 +86,7 @@
 #'        \cr \cr
 #'        }
 #'        }
-#' @example ./examples/cv_versatile.R
+#' @example ./R/cv_versatile_example.R
 #' @references [1] Albatineh, AN., Kibria, BM., Wilcox, ML., & Zogheib, B, 2014,
 #'                 Confidence interval estimation for the population coefficient
 #'                 of variation using ranked set sampling: A simulation study,
@@ -117,7 +117,7 @@
 #' @references [9] Canty, A., & Ripley, B., 2017, boot: Bootstrap R (S-Plus)
 #'                 Functions, R package version 1.3-20
 #' @export
-#' @import dplyr SciViews boot MBESS R6 stats utils
+#' @import SciViews boot MBESS R6 stats utils dplyr
 NULL
 cv_versatile <- function(
     x,  # Currently there are methods for numeric vectors

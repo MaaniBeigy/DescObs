@@ -16,7 +16,7 @@
 #'              stripped before the computation proceeds.
 #' @param alpha The allowed type I error probability
 #' @param R integer indicating the number of bootstrap replicates.
-#' @example ./examples/BootCoefQuartVar.R
+#' @example ./R/BootCoefQuartVar_example.R
 #' @export
 #' @references Canty, A., & Ripley, B, 2017, boot: Bootstrap R (S-Plus)
 #'             Functions. R package version 1.3-20.
@@ -27,8 +27,7 @@
 #'             intervals for the coefficient of quartile variation,
 #'             Simulation and Computation, 1-9, DOI: \href{http://doi.org/10.1080/03610918.2018.1435800}{http://doi.org/10.1080/03610918.2018.1435800}
 #' @export
-#' @import dplyr SciViews boot MBESS R6 stats utils
-NULL
+#' @import SciViews boot MBESS R6 stats utils dplyr
 BootCoefQuartVar <- R6::R6Class(
     classname = "BootCoefQuartVar",
     inherit = SampleQuantiles,

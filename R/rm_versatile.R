@@ -32,10 +32,9 @@
 #'          based upon \link[utils]{apropos} function, which
 #'          enables you to determine the type or storage mode of the objects
 #'          (\emph{e.g.,} double, integer, character, \emph{etc.}).
-#' @example ./examples/rm_versatile.R
+#' @example ./R/rm_versatile_example.R
 #' @export
-#' @import dplyr SciViews boot MBESS R6 stats utils
-NULL
+#' @import SciViews boot MBESS R6 stats utils dplyr
 rm_versatile <- function(
     save.objects = NULL,
     save.patterns = NULL,

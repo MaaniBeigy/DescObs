@@ -17,9 +17,10 @@
 #'              regarding the percentiles.
 #' @param type an integer between 1 and 9 selecting one of the nine quantile
 #'             algorithms explained in \link[stats]{quantile} to be used.
-#' @example ./examples/SampleQuantiles.R
-#' @import dplyr SciViews boot MBESS R6 stats utils
+#' @example ./R/SampleQuantiles_example.R
+#' @import SciViews boot MBESS R6 stats utils dplyr
 #' @export
+
 SampleQuantiles <- R6::R6Class(
     classname = "SampleQuantiles",
     public = list(

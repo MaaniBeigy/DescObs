@@ -21,12 +21,12 @@
 #'         also a measure of homogeneity [1, 2].
 #'         }
 #'         }
-#' @example ./examples/CoefQuartVar.R
+#' @example ./R/CoefQuartVar_example.R
 #' @references [1] Bonett, DG., 2006, Confidence interval for a coefficient of
 #'                 quartile variation, Computational Statistics & Data Analysis,
 #'                 50(11), 2953-7, DOI: \href{http://doi.org/10.1016/j.csda.2005.05.007}{http://doi.org/10.1016/j.csda.2005.05.007}
 #' @export
-#' @import dplyr SciViews boot MBESS R6 stats utils
+#' @import SciViews boot MBESS R6 stats utils dplyr
 NULL
 CoefQuartVar <- R6::R6Class(
     classname = "CoefQuartVar",
