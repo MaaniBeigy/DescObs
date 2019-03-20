@@ -219,7 +219,6 @@ CoefQuartVarCI <- R6::R6Class(
                 invisible(self)
             }
             self$bootcqv()
-            self$bonett_ci()
             invisible(self)
         },
         # -------------- public method bonett_ci() i.e., Bonett CI ------------
