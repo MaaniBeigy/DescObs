@@ -24,10 +24,10 @@ test_that(
             SampleQuantiles$new(x)$na.rm
         )
         expect_false(
-            formals(cv)$na.rm
+            formals(cv_versatile)$na.rm
         )
         expect_false(
-            formals(cqv)$na.rm
+            formals(cqv_versatile)$na.rm
         )
     }
 )
@@ -78,10 +78,11 @@ test_that(
             SampleQuantiles$new(y, na.rm = TRUE, names = FALSE)$qx(), 4.7
         )
         expect_equal(
-            cv(y, na.rm = TRUE, method = "kelley")$statistics$est, 80
+            cv_versatile(y, na.rm = TRUE, method = "kelley")$statistics$est, 80
         )
         expect_equal(
-            cqv(y, na.rm = TRUE, method = "bonett")$statistics$est, 55.1
+            cqv_versatile(y, na.rm = TRUE, method = "bonett")$statistics$est,
+            55.1
         )
     }
 )

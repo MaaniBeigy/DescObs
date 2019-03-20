@@ -2,11 +2,11 @@
 #' @name CoefVar
 #' @description The R6 class \code{CoefVar} for the coefficient of
 #'              variation (cv)
-#' @usage \code{CoefVar$new(x, ...)}
+#' @usage CoefVar$new(x, ...)
 #'
 #' ## Default R6 method:
-#' \code{CoefVar$new(x, na.rm = FALSE, digits = 1)$est()}
-#' \code{CoefVar$new(x, na.rm = FALSE, digits = 1)$est_corr()}
+#' CoefVar$new(x, na.rm = FALSE, digits = 1)$est()
+#' CoefVar$new(x, na.rm = FALSE, digits = 1)$est_corr()
 #' @param x An \code{R} object. Currently there are methods for numeric vectors
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #'              stripped before the computation proceeds.
@@ -26,8 +26,8 @@
 #'                 Confidence interval estimation for the population coefficient
 #'                 of variation using ranked set sampling: A simulation study,
 #'                 Journal of Applied Statistics, 41(4), 733–751, DOI:
-#'                 \href{https://doi.org/10.1080/02664763.2013.847405}{
-#'                 https://doi.org/10.1080/02664763.2013.847405}
+#'                 \href{http://doi.org/10.1080/02664763.2013.847405}{http://doi.org/10.1080/02664763.2013.847405}
+#' @import dplyr SciViews boot MBESS R6 stats utils
 #' @export
 CoefVar <- R6::R6Class(
     classname = "CoefVar",
@@ -46,10 +46,10 @@ CoefVar <- R6::R6Class(
             ...
         ) {
             # ---------------------- check NA or NAN -------------------------
-            if (!missing(x)) {
-                self$x <- x
-            } else if (missing(x)) {
+            if (missing(x) || is.null(x)) {
                 stop("object 'x' not found")
+            } else if (!missing(x)) {
+                self$x <- x
             }
             if (!missing(na.rm)) {
                 self$na.rm <- na.rm

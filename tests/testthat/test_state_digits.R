@@ -84,7 +84,7 @@ test_that(
             nchar(
                 sub(
                     '.*\\.', '',
-                    cv(x, method = "kelley")$statistics$est
+                    cv_versatile(x, method = "kelley")$statistics$est
                 )
             ),
             1
@@ -93,7 +93,7 @@ test_that(
             nchar(
                 sub(
                     '.*\\.', '',
-                    cqv(x, method = "bonett")$statistics$est
+                    cqv_versatile(x, method = "bonett")$statistics$est
                 )
             ),
             1
@@ -185,7 +185,7 @@ test_that(
             nchar(
                 sub(
                     '.*\\.', '',
-                    cv(x, digits = 3, method = "kelley")$statistics$est
+                    cv_versatile(x, digits = 3, method = "kelley")$statistics$est
                 )
             ),
             3
@@ -194,7 +194,9 @@ test_that(
             nchar(
                 sub(
                     '.*\\.', '',
-                    cqv(x, digits = 3, method = "bonett")$statistics$est
+                    cqv_versatile(
+                        x, digits = 3, method = "bonett"
+                        )$statistics$est
                 )
             ),
             3

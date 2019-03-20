@@ -6,11 +6,11 @@
 \title{R6 Sample Quantiles}
 \format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
-\code{SampleQuantiles$new(x, ...)}
+SampleQuantiles$new(x, ...)
 
 ## Default R6 method:
-\code{SampleQuantiles$new(x, na.rm = FALSE, digits = 1,
-               probs = 0.5, names = TRUE, type = 7)$qx()}
+SampleQuantiles$new(x, na.rm = FALSE, digits = 1,
+               probs = 0.5, names = TRUE, type = 7)$qx()
 }
 \arguments{
 \item{x}{An \code{R} object. Currently there are methods for numeric vectors}

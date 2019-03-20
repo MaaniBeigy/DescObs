@@ -3,11 +3,11 @@
 #' @description The R6 class \code{SampleQuantiles} produces the sample
 #'              quantiles corresponding to the given probabilities. It uses
 #'              \link[stats]{quantile} from the package \pkg{stats}.
-#' @usage \code{SampleQuantiles$new(x, ...)}
+#' @usage SampleQuantiles$new(x, ...)
 #'
 #' ## Default R6 method:
-#' \code{SampleQuantiles$new(x, na.rm = FALSE, digits = 1,
-#'                probs = 0.5, names = TRUE, type = 7)$qx()}
+#' SampleQuantiles$new(x, na.rm = FALSE, digits = 1,
+#'                probs = 0.5, names = TRUE, type = 7)$qx()
 #' @param x An \code{R} object. Currently there are methods for numeric vectors
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #'              stripped before the computation proceeds.
@@ -18,6 +18,7 @@
 #' @param type an integer between 1 and 9 selecting one of the nine quantile
 #'             algorithms explained in \link[stats]{quantile} to be used.
 #' @example ./examples/SampleQuantiles.R
+#' @import dplyr SciViews boot MBESS R6 stats utils
 #' @export
 SampleQuantiles <- R6::R6Class(
     classname = "SampleQuantiles",
@@ -39,10 +40,10 @@ SampleQuantiles <- R6::R6Class(
             type = 7,
             ...) {
             # ----------------------- check NA or NAN -------------------------
-            if (!missing(x)) {
-                self$x <- x
-            } else if (missing(x)) {
+            if (missing(x) || is.null(x)) {
                 stop("object 'x' not found")
+            } else if (!missing(x)) {
+                self$x <- x
             }
             if (!missing(na.rm)) {
                 self$na.rm <- na.rm

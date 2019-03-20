@@ -1,75 +1,128 @@
----
-title: "Versatile Exploration of Data: cv"
-author: "Maani Beigy"
-date: "February 18, 2019"
-output: 
-    rmarkdown::html_vignette
-bibliography: DescObs.bib
-csl: apa.csl
-vignette: >
-  %\VignetteIndexEntry{cv}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-# Coefficient of Variation   
-Coefficient of variation *($CV$)* is a measure of relative dispersion representing 
-the degree of variability relative to the mean [@Albatineh2014]. 
-Since cv is unitless, it is useful for comparison of variables with different 
-units [@Albatineh2014]. It is also a measure of homogeneity. The *population* coefficient of variation is:    
-$$CV = \frac{\sigma}{\mu},$$
-where $\sigma$ is the population standard deviation and $\mu$ is the population mean. Almost always, we analyze data from samples but want to generalize it 
-as the population's parameter [@Albatineh2014]. Its sample's estimate is given 
-as:    
-$$cv = \frac{sd}{\bar{X}}$$   
-where $sd$ is the sample standard deviation, the square root of the unbiased estimator of population variance, and $\bar{X}$ is the sample mean. The 
-corrected *cv* to account for the sample size is:
-$$
-cv_{corr} = cv * \biggl(1 - \frac{1}{4(n-1)} 
-+ \frac{1}{n}cv^2 
-+ \frac{1}{2 (n-1)^2} \biggr)
-$$
-There are various methods for the calculation of **confidence intervals (CI)** 
-for *cv*. All of them are fruitful and have particular use cases. Some of them 
-are model-based hence their usage depends the assumptions regarding the distribution of data. For sake of versatility, we cover almost all of these methods in `DescObs` package. Here, we explain them along with some examples:
-
-### Kelley Confidence Interval        
-
-Let us assume that *CV* follows a noncentral *t* distribution, when the parent  population of the scores is *normally-distributed*, with noncentrality 
-($\lambda$) parameter:   
-$$
-\lambda = \frac{\sqrt{n}}{cv}
-$$
-with *v* degrees of freedom, where $v = n - 1$. 
-Let $1 - \alpha$ be the CI coverage with $\alpha_L + \alpha_U = \alpha$ in which $\alpha_L$ is the the proportion of times that *cv* will be 
-less than the lower confidence bound and $\alpha_U$ the proportion of times that
-*cv* will be greater than the upper confidence bound in the CI procedure [@Kelley2007]. The lower confidence tile for $\lambda$ is is the noncentrality parameter that results in $t_{(1-\alpha_L,v,\lambda_L)}=\hat{\lambda}$ and the
-upper confdence tile for $\lambda$ is is the noncentrality parameter that 
-results in $t_{(\alpha_U,v,\lambda_U)}=\hat{\lambda}$, where $t_{(1-\alpha_L,v,\lambda_L)}=\hat{\lambda}$ is the value of noncentral *t* distribution at the $1-\alpha_L$ **quantile** with noncentrality parameter $\lambda_L$ and $t_{(\alpha_U,v,\lambda_U)}=\hat{\lambda}$ is the value of noncentral *t* distribution at the $\alpha_U$ **quantile** with noncentrality parameter $\lambda_U$, respectively [@Kelley2007].   
-Afterwards, we transform the tiles of the confidence interval for $\lambda$, by
-dividing the tiles by $\sqrt{n}$ and therafter inversing them; the CI limits of 
-$cv$ will be obtaned:  
-$$
-p\left[\biggl(\frac{\lambda_U}{\sqrt{n}}\biggr)^{-1}
-\le CV \le \biggl(\frac{\lambda_L}{\sqrt{n}}\biggr)^{-1}\right] = 1-\alpha
-$$
-where $p$ stands for *probability*. Thanks to package `MBESS` [@Kelley2018] for 
-the computation of confidence limits for the noncentrality parameter from a *t* distribution (`conf.limits.nct`), $cv$ will be obtained as: 
-```{r echo=FALSE, warning=FALSE, message=FALSE, include = FALSE}
-library(dplyr)
-library(boot)
-x <- c(
-    0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
-    4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
-)
-cv <- function(
+#' @title Coefficient of Variation (cv)
+#' @name cv_versatile
+#' @description Versatile function for the coefficient of variation (cv)
+#' @param x An \code{R} object. Currently there are methods for numeric vectors
+#' @param na.rm a logical value indicating whether \code{NA} values should be
+#'              stripped before the computation proceeds.
+#' @param digits integer indicating the number of decimal places to be used.
+#' @param method a scalar representing the type of confidence intervals
+#'               required. The value should be any of the values "kelley",
+#'               "mckay", "miller", "vangel", "mahmoudvand_hassani",
+#'               "equal_tailed", "shortest_length", "normal_approximation",
+#'               "norm","basic", or "all".
+#' @param correction returns the unbiased estimate of the coefficient of
+#'                   variation
+#' @param alpha The allowed type I error probability
+#' @param R integer indicating the number of bootstrap replicates.
+#' @details \describe{
+#'         \item{\strong{Coefficient of Variation}}{
+#'         \code{\deqn{ CV = \sigma/\mu} } where \eqn{\sigma}
+#'         and \eqn{\mu} are standard deviation and mean, respectively.
+#'         The \emph{cv} is a measure of relative dispersion representing
+#'         the degree of variability relative to the mean [1]. Since \eqn{cv} is
+#'         unitless, it is useful for comparison of variables with different
+#'         units. It is also a measure of homogeneity [1].
+#'         }
+#'         }
+#' @return An object of type "list" which contains the estimate, the
+#'         intervals, and the computation method. It has two main components:
+#' @return \describe{
+#'        \item{$method}{
+#'        A description of statistical method used for the computations.
+#'        }
+#'        \item{$statistics}{
+#'        A data frame representing three vectors: est, lower and upper limits
+#'        of \code{\eqn{(1-\alpha)}}\% confidence interval \code{(CI)};
+#'        additional description vector is provided when "all" is selected:
+#'        \cr \cr
+#'        \strong{est:}{
+#'        \code{\deqn{(sd/mean)*100}}
+#'        }
+#'        \strong{Kelley Confidence Interval:}{
+#'        Thanks to package \link[MBESS]{MBESS} [2] for the
+#'        computation of confidence limits for the noncentrality parameter from
+#'        a \emph{t} distribution \link[MBESS]{conf.limits.nct} [3].
+#'        }
+#'        \cr \cr
+#'        \strong{McKay Confidence Interval:}{
+#'        The intervals calculated by the method introduced by McKay [4],
+#'        using \code{\eqn{\chi^2}} distribution.
+#'        }
+#'        \cr \cr
+#'        \strong{Miller Confidence Interval:}{
+#'        The intervals calculated by the method introduced by Miller [5],
+#'        using the standard normal distribution.
+#'        }
+#'        \cr \cr
+#'        \strong{Vangel Confidence Interval:}{
+#'        Vangel [6] proposed a method for the calculation of CI for \emph{cv};
+#'        which is a modification on McKay’s CI.
+#'        }
+#'        \cr \cr
+#'        \strong{Mahmoudvand-Hassani Confidence Interval:}{
+#'        Mahmoudvand and Hassani [7] proposed a new CI for \emph{cv}; which
+#'        is obtained using ranked set sampling \emph{(RSS)}
+#'        }
+#'        \cr \cr
+#'        \strong{Normal Approximation Confidence Interval:}{
+#'        Wararit Panichkitkosolkul [8] proposed another CI for \emph{cv};
+#'        which is a normal approximation.
+#'        }
+#'        \cr \cr
+#'        \strong{Shortest-Length Confidence Interval:}{
+#'        Wararit Panichkitkosolkul [8] proposed another CI for \emph{cv};
+#'        which is obtained through minimizing the length of CI.
+#'        }
+#'        \cr \cr
+#'        \strong{Equal-Tailed Confidence Interval:}{
+#'        Wararit Panichkitkosolkul [8] proposed another CI for \emph{cv};
+#'        which is obtained using \code{\eqn{\chi^2}} distribution.
+#'        }
+#'        \cr \cr
+#'        \strong{Bootstrap Confidence Intervals:}{
+#'        Thanks to package \pkg{boot} by Canty & Ripley [9] we can obtain
+#'        bootstrap CI around \emph{cv} using \link[boot]{boot.ci}.
+#'        }
+#'        \cr \cr
+#'        }
+#'        }
+#' @example ./examples/cv_versatile.R
+#' @references [1] Albatineh, AN., Kibria, BM., Wilcox, ML., & Zogheib, B, 2014,
+#'                 Confidence interval estimation for the population coefficient
+#'                 of variation using ranked set sampling: A simulation study,
+#'                 Journal of Applied Statistics, 41(4), 733–751, DOI:
+#'                 \href{http://doi.org/10.1080/02664763.2013.847405}{http://doi.org/10.1080/02664763.2013.847405}
+#' @references [2] Kelley, K., 2018, MBESS: The MBESS R Package. R package
+#'                 version 4.4. 3., Retrieved from \href{http://cran.r-project.org/package=MBESS}{http://cran.r-project.org/package=MBESS}
+#' @references [3] Kelley, K., 2007, Sample size planning for the coefficient of
+#'                 variation from the accuracy in parameter estimation approach,
+#'                 Behavior Research Methods, 39(4), 755–766, DOI:
+#'                 \href{http://doi.org/10.3758/BF03192966}{http://doi.org/10.3758/BF03192966}
+#' @references [4] McKay, AT., 1932, Distribution of the Coefficient of
+#'                 Variation and the Extended“ t” Distribution, Journal of the
+#'                 Royal Statistical Society, 95(4), 695–698
+#' @references [5] Miller, E., 1991, Asymptotic test statistics for coefficients
+#'                 of variation, Communications in Statistics-Theory and
+#'                 Methods, 20(10), 3351–3363
+#' @references [6] Vangel, MG., 1996, Confidence intervals for a normal
+#'                 coefficient of variation, The American Statistician, 50(1),
+#'                 21–26
+#' @references [7] Mahmoudvand, R., & Hassani, H., 2009, Two new confidence
+#'                 intervals for the coefficient of variation in a normal
+#'                 distribution, Journal of Applied Statistics, 36(4), 429–442
+#' @references [8] Panichkitkosolkul, W., 2013, Confidence Intervals for the
+#'                 Coefficient of Variation in a Normal Distribution with a
+#'                 Known Population Mean, Journal of Probability and Statistics,
+#'                 2013, 1–11, \href{http://doi.org/10.1155/2013/324940}{http://doi.org/10.1155/2013/324940}
+#' @references [9] Canty, A., & Ripley, B., 2017, boot: Bootstrap R (S-Plus)
+#'                 Functions, R package version 1.3-20
+#' @export
+#' @import dplyr SciViews boot MBESS R6 stats utils
+NULL
+cv_versatile <- function(
     x,  # Currently there are methods for numeric vectors
     na.rm = FALSE,  # indicating whether NA values should be stripped
-    digits = NULL,  # digits of output after rounding. default is 4
+    digits = 1,  # digits of output after rounding. default is 4
     method = NULL,  # method for the computation of confidence interval (CI)
     correction = FALSE,  # indicating whether to compute the unbiased statistics
     alpha = 0.05,  # The allowed type I error probability
@@ -80,19 +133,28 @@ cv <- function(
     # require(dplyr)
     # require(SciViews)
     # require(boot)
-    if (!is.numeric(x)) {  # checkpoint 1 typeof x
-        stop("argument is not numeric: returning NA")
-        return(NA_real_)
+    if (missing(x) || is.null(x)) {
+        stop("object 'x' not found")
+    } else if (!missing(x)) {
+        x <- x
     }
-    if (!is.vector(x)) {  # checkpoint 2 typeof x
-        stop("x is not a vector")
+    if (!is.numeric(x)) {
+        stop("argument is not a numeric vector: returning NA")
         return(NA_real_)
     }
     na.rm <- na.rm  # removes NAs if TRUE
-    if (is.null(digits)) {  # checkpoint 3 determining digits
-        digits = 4
+    if (na.rm == TRUE) {
+        x <- x[!is.na(x)]
+    } else if (anyNA(x)) {
+        stop(
+            "missing values and NaN's not allowed if 'na.rm' is FALSE"
+        )
     }
-    if (is.null(R)) {  # checkpoint 4 the number of bootstrap replicates
+
+    if (is.null(digits)) {
+        digits = 1
+    }
+    if (is.null(R)) {
         R = 1000
     }
     digits <- digits  # digits required for rounding
@@ -173,7 +235,7 @@ cv <- function(
         )
     )
     if ("kelley" %in% method) {
-        if (!require(MBESS)) {
+        if (!requireNamespace("MBESS")) {
             warning(
         "package 'MBESS' required to calculate Kelley's confidence interval"
             )
@@ -188,23 +250,21 @@ cv <- function(
             (1/(2 * (length(x) - 1)^2))
     )
     if (is.null(method) == TRUE & correction == FALSE) {
-        warning("No confidence interval method is selected")
         return(
             list(
                 method = "cv = sd/mean (may be biased)",
                 statistics = data.frame(
-                    est = cv,
+                    est = round(cv*100, digits = digits),
                     row.names = c(" ")
                     )
                 )
             )
     } else if (is.null(method) == TRUE & correction == TRUE) {
-        warning("No confidence interval method is selected")
         return(
             list(
                 method = "Corrected (i.e., unbiased) cv",
                 statistics = data.frame(
-                    est = cv_corr,
+                    est = round(cv_corr*100, digits = digits),
                     row.names = c(" ")
                 )
             )
@@ -1210,190 +1270,3 @@ cv <- function(
         )
     }
 }
-```
-```{r eval = TRUE, warning=FALSE, message=FALSE}
-x <- c(
-    0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
-    4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
-)
-cv(
-    x, 
-    na.rm = TRUE, 
-    digits = 3, 
-    method = "kelley", 
-    correction = TRUE, 
-    alpha = 0.05
-)
-```
-### McKay Confidence Interval
-McKay [@McKay1932] introduced the following CI for $cv$; considering $u_1 = \chi_{v,1-\alpha/2}^2$ and $u_1 = \chi_{v,\alpha/2}^2$ being
-the $100(1-\alpha/2)\%$ and $100(\alpha/2)\%$ percentile of the $\chi^2$ distribution with $v = n-1$ degrees of freedom, respectively [@Albatineh2014]:   
-$$
-\biggl(cv\left[\biggl(\frac{u_1}{v}-1\biggr)(cv)^{2}+\frac{u_1}{v}\right]^{-1/2}
-\le CV \le cv
-\left[\biggl(\frac{u_2}{v}-1\biggr)(cv)^{2}+\frac{u_2}{v}\right]^{-1/2}\biggr)
-$$
-Let us calculate the 95\% CI for our variable $x$ according to McKay's method [@McKay1932]:
-```{r eval = TRUE, warning=FALSE, message=FALSE}
-cv(
-    x, 
-    na.rm = TRUE, 
-    digits = 3, 
-    method = "mckay", 
-    correction = TRUE, 
-    alpha = 0.05
-)
-```
-### Miller Confidence Interval    
-Miller [@EdwardMiller1991] introduced the following CI for 
-$cv$; considering $Z_{\alpha/2}$ being the $(1-\alpha/2)$ percentile of the standard normal distribution [@Albatineh2014]:
-$$
-\biggl(cv - Z_{\alpha/2}\sqrt{
-\biggl(\frac{cv^2}{v}\biggr)\biggl(\frac{1}{2}+cv^2\biggr)} \le
-CV \le cv + Z_{\alpha/2}\sqrt{
-\biggl(\frac{cv^2}{v}\biggr)\biggl(\frac{1}{2}+cv^2\biggr)}
-\biggr)
-$$
-where $v = n-1$ is the degree of freedom.   
-Let us calculate the 95\% CI for $x$ according to Miller's method [@EdwardMiller1991]:   
-```{r eval = TRUE, warning=FALSE, message=FALSE}
-cv(
-    x, 
-    na.rm = TRUE, 
-    digits = 3, 
-    method = "miller", 
-    correction = TRUE, 
-    alpha = 0.05
-)
-```
-### Vangel Confidence Interval      
-Vangel [@Vangel1996] proposed the following CI for 
-$cv$; which is a modification on McKay’s CI:
-$$
-\biggl(cv\left[\biggl(\frac{u_1+1}{v}-1\biggr)(cv)^{2}+\frac{u_1}{v}\right]^{-1/2}
-\le CV \le cv
-\left[\biggl(\frac{u_2+1}{v}-1\biggr)(cv)^{2}+\frac{u_2}{v}\right]^{-1/2}\biggr)
-$$
-Let us calculate the 95\% CI for $x$ according to Vangel's method [@Vangel1996]:   
-```{r eval = TRUE, warning=FALSE, message=FALSE}
-cv(
-    x, 
-    na.rm = TRUE, 
-    digits = 3, 
-    method = "vangel", 
-    correction = TRUE, 
-    alpha = 0.05
-)
-```
-### Mahmoudvand-Hassani Confidence Interval   
-Mahmoudvand and Hassani [@Mahmoudvand2009] proposed the following CI for 
-$cv$; which is obtained using ranked set sampling *(RSS)*:    
-$$
-\biggl(\frac{cv}{2-C_n+Z_{1-\alpha/2}\sqrt{1-C_n^2}}
-\le CV \le
-\frac{cv}{2-C_n-Z_{1-\alpha/2}\sqrt{1-C_n^2}}
-\biggr)
-$$
-where 
-$$
-C_n=\sqrt{\frac{2}{n-1}}\frac{\Gamma{(n/2)}}{\Gamma{((n-1)/2)}},
-\Gamma(n)=(n-1)!
-$$
-Let us now calculate the 95\% CI for $x$ according to Mahmoudvand-Hassani's 
-method [@Mahmoudvand2009]:   
-```{r eval = TRUE, warning=FALSE, message=FALSE}
-cv(
-    x, 
-    na.rm = TRUE, 
-    digits = 3, 
-    method = "mahmoudvand_hassani", 
-    correction = TRUE, 
-    alpha = 0.05
-)
-```
-### Normal Approximation Confidence Interval     
-Wararit Panichkitkosolkul [@Panichkitkosolkul2013] proposed the following CI for 
-$cv$; which is a *normal approximation*: 
-$$
-\biggl(\frac{cv}{C_{n+1}+Z_{1-\alpha/2}\sqrt{1-C_{n+1}^2}}
-\le CV \le
-\frac{cv}{C_{n+1}-Z_{1-\alpha/2}\sqrt{1-C_{n+1}^2}}
-\biggr)
-$$
-where $C_{n+1}=\sqrt{1-(1/2n)}$     
-Now we calculate the normal approximation 95\% CI for $x$ according to Panichkitkosolkul [@Panichkitkosolkul2013]:   
-```{r eval = TRUE, warning=FALSE, message=FALSE}
-cv(
-    x, 
-    na.rm = TRUE, 
-    digits = 3, 
-    method = "normal_approximation", 
-    correction = TRUE, 
-    alpha = 0.05
-)
-```
-### Shortest-Length Confidence Interval    
-Panichkitkosolkul [@Panichkitkosolkul2013] has also introduced the following CI for $cv$:   
-$$
-\biggl(\frac{cv\sqrt{v}}{\sqrt{b}}
-\le CV \le
-\frac{cv\sqrt{v}}{\sqrt{a}}
-\biggr)
-$$
-with $v = n-1$ degrees of freedom. Then, shortest-length 95\% CI for $x$ is:    
-```{r eval = TRUE, warning=FALSE, message=FALSE}
-cv(
-    x, 
-    na.rm = TRUE, 
-    digits = 3, 
-    method = "shortest_length", 
-    correction = TRUE, 
-    alpha = 0.05
-)
-```
-### Equal-Tailed Confidence Interval     
-The $100(1-\alpha)\%$ equal-tailed CI for $cv$ can be obtained as:
-$$
-\biggl(\frac{cv\sqrt{v}}{\sqrt{\chi_{v,1-\alpha/2}^2}}
-\le CV \le
-\frac{cv\sqrt{v}}{\sqrt{\chi_{v,\alpha/2}^2}}
-\biggr)
-$$
-where $\chi_{v,\alpha/2}^2$ and $\chi_{v,1-\alpha/2}^2$ are the $100(\alpha/2)$ and $100(1-\alpha/2)$ percentiles of the central $\chi^2$ distribution with $v$ degrees of freedom, respectively [@Panichkitkosolkul2013].   
-Then, equal-tailed 95\% CI for $x$ is:    
-```{r eval = TRUE, warning=FALSE, message=FALSE}
-cv(
-    x, 
-    na.rm = TRUE, 
-    digits = 3, 
-    method = "equal_tailed", 
-    correction = TRUE, 
-    alpha = 0.05
-)
-```
-### Bootstrap Confidence Intervals      
-Thanks to package `boot` [@Canty2017] we can obtain bootstrap CI around $cv$:    
-```{r eval = TRUE, warning=FALSE, message=FALSE}
-cv(
-    x, 
-    na.rm = TRUE, 
-    digits = 3, 
-    method = "basic", 
-    correction = TRUE, 
-    alpha = 0.05
-)
-```
-### All Available Methods   
-In conclusion, we can observe CIs calculated by all available methods:    
-```{r eval = TRUE, warning=FALSE, message=FALSE}
-cv(
-    x, 
-    na.rm = TRUE, 
-    digits = 3, 
-    method = "all", 
-    correction = FALSE, 
-    alpha = 0.05
-)
-```
-# References   
-

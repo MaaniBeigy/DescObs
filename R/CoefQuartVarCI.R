@@ -3,11 +3,11 @@
 #' @name CoefQuartVarCI
 #' @description The R6 class \code{CoefQuartVarCI} for the confidence intervals
 #'              of coefficient of quartile variation (cqv)
-#' @usage \code{CoefQuartVarCI$new(x, ...)}
+#' @usage CoefQuartVarCI$new(x, ...)
 #'
 #' ## Default R6 method:
-#' \code{CoefQuartVarCI$new(x, na.rm = FALSE, digits = 1,
-#'                R = 1000, alpha = 0.05, ...)$bonett_ci()}
+#' CoefQuartVarCI$new(x, na.rm = FALSE, digits = 1,
+#'                R = 1000, alpha = 0.05, ...)$bonett_ci()
 #' @param x An \code{R} object. Currently there are methods for numeric vectors
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #'              stripped before the computation proceeds.
@@ -73,19 +73,19 @@
 #' @references [1] Bonett, DG., 2006, Confidence interval for a coefficient of
 #'                 quartile variation, Computational Statistics & Data Analysis,
 #'                 50(11), 2953-7, DOI: \href{
-#'                 https://doi.org/10.1016/j.csda.2005.05.007}{
-#'                 https://doi.org/10.1016/j.csda.2005.05.007}
+#'                 http://doi.org/10.1016/j.csda.2005.05.007}{http://doi.org/10.1016/j.csda.2005.05.007}
 #' @references [2] Altunkaynak, B., Gamgam, H., 2018, Bootstrap confidence
 #'                 intervals for the coefficient of quartile variation,
 #'                 Simulation and Computation, 1-9, DOI: \href{
-#'                 https://doi.org/10.1080/03610918.2018.1435800}{
-#'                 https://doi.org/10.1080/03610918.2018.1435800}
+#'                 http://doi.org/10.1080/03610918.2018.1435800}{http://doi.org/10.1080/03610918.2018.1435800}
 #' @references [3] Canty, A., & Ripley, B, 2017, boot: Bootstrap R (S-Plus)
 #'                 Functions. R package version 1.3-20.
 #' @references [4] Davison, AC., & Hinkley, DV., 1997, Bootstrap Methods and
 #'                 Their Applications. Cambridge University Press, Cambridge.
 #'                 ISBN 0-521-57391-2
 #' @export
+#' @import dplyr SciViews boot MBESS R6 stats utils
+NULL
 CoefQuartVarCI <- R6::R6Class(
     classname = "CoefQuartVarCI",
     inherit = CoefQuartVar,
@@ -115,10 +115,10 @@ CoefQuartVarCI <- R6::R6Class(
             ...
         ) {
             # ---------------------- check NA or NAN -------------------------
-            if (!missing(x)) {
-                self$x <- x
-            } else if (missing(x)) {
+            if (missing(x) || is.null(x)) {
                 stop("object 'x' not found")
+            } else if (!missing(x)) {
+                self$x <- x
             }
             if (!missing(na.rm)) {
                 self$na.rm <- na.rm

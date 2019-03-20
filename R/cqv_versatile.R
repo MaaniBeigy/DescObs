@@ -1,6 +1,6 @@
 #' @title Coefficient of Quartile Variation (cqv)
-#' @name cqv
-#' @description Generic function for the coefficient of quartile variation (cqv)
+#' @name cqv_versatile
+#' @description Versatile function for the coefficient of quartile variation (cqv)
 #' @param x An \code{R} object. Currently there are methods for numeric vectors
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #'              stripped before the computation proceeds.
@@ -62,24 +62,22 @@
 #'        }
 #'        }
 #'        }
-#' @example ./examples/cqv.R
+#' @example ./examples/cqv_versatile.R
 #' @references [1] Bonett, DG., 2006, Confidence interval for a coefficient of
 #'                 quartile variation, Computational Statistics & Data Analysis,
-#'                 50(11), 2953-7, DOI: \href{
-#'                 https://doi.org/10.1016/j.csda.2005.05.007}{
-#'                 https://doi.org/10.1016/j.csda.2005.05.007}
+#'                 50(11), 2953-7, DOI: \href{http://doi.org/10.1016/j.csda.2005.05.007}{http://doi.org/10.1016/j.csda.2005.05.007}
 #' @references [2] Altunkaynak, B., Gamgam, H., 2018, Bootstrap confidence
 #'                 intervals for the coefficient of quartile variation,
-#'                 Simulation and Computation, 1-9, DOI: \href{
-#'                 https://doi.org/10.1080/03610918.2018.1435800}{
-#'                 https://doi.org/10.1080/03610918.2018.1435800}
+#'                 Simulation and Computation, 1-9, DOI: \href{http://doi.org/10.1080/03610918.2018.1435800}{http://doi.org/10.1080/03610918.2018.1435800}
 #' @references [3] Canty, A., & Ripley, B, 2017, boot: Bootstrap R (S-Plus)
 #'                 Functions. R package version 1.3-20.
 #' @references [4] Davison, AC., & Hinkley, DV., 1997, Bootstrap Methods and
 #'                 Their Applications. Cambridge University Press, Cambridge.
 #'                 ISBN 0-521-57391-2
 #' @export
-cqv <- function(
+#' @import dplyr SciViews boot MBESS R6 stats utils
+NULL
+cqv_versatile <- function(
     x,
     na.rm = FALSE,
     digits = 1,
@@ -90,6 +88,11 @@ cqv <- function(
     # require(dplyr)
     # require(SciViews)
     # require(boot)
+    if (missing(x) || is.null(x)) {
+        stop("object 'x' not found")
+    } else if (!missing(x)) {
+        x <- x
+    }
     if (!is.numeric(x)) {
         stop("argument is not a numeric vector: returning NA")
         return(NA_real_)

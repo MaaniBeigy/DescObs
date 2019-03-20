@@ -3,12 +3,6 @@
 \name{rm_versatile}
 \alias{rm_versatile}
 \title{Versatile Function for Removing Objects}
-\usage{
-rm_versatile(save.objects = NULL, save.patterns = NULL,
-  rm.objects = NULL, rm.patterns = NULL, modes = list("integer",
-  "double", "character", "list"), envir = .GlobalEnv, inherits = FALSE,
-  ...)
-}
 \arguments{
 \item{save.objects}{an optional list naming objects to be saved (\emph{i.e.,}
 not to be removed).}
@@ -78,7 +72,7 @@ matrix2 <- matrix(1:100, ncol = 2)
 x <- c("a", "b", "c", "d")
 y <- c("d", "e", "f")
 # Remove objects by rm.versatile
-rm.versatile(
+rm_versatile(
     save.objects = list("a", "b", "c"),
     save.patterns = list("df", "data"),
     rm.objects = list("x", "y"),

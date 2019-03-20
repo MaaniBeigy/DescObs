@@ -4,13 +4,13 @@
 #'              resamplimg for the coeficient of variation (cv) of the
 #'              given numeric vectors. It uses \link[boot]{boot} and
 #'              \link[boot]{boot.ci} from the package \pkg{boot}.
-#' @usage \code{BootCoefVar$new(x, ...)}
+#' @usage BootCoefVar$new(x, ...)
 #'
 #' ## Default R6 method:
-#' \code{BootCoefVar$new(x, na.rm = FALSE, R = 1000,
-#'                alpha = 0.05, ...)$boot_cv()}
-#' \code{BootCoefVar$new(x, na.rm = FALSE, R = 1000,
-#'                alpha = 0.05, ...)$boot_cv_corr()}
+#' BootCoefVar$new(x, na.rm = FALSE, R = 1000,
+#'                alpha = 0.05, ...)$boot_cv()
+#' BootCoefVar$new(x, na.rm = FALSE, R = 1000,
+#'                alpha = 0.05, ...)$boot_cv_corr()
 #' @param x An \code{R} object. Currently there are methods for numeric vectors
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #'              stripped before the computation proceeds.
@@ -23,6 +23,9 @@
 #' @references Davison, AC., & Hinkley, DV., 1997, Bootstrap Methods and
 #'             Their Applications. Cambridge University Press, Cambridge.
 #'             ISBN 0-521-57391-2
+#' @export
+#' @import dplyr SciViews boot MBESS R6 stats utils
+NULL
 BootCoefVar <- R6::R6Class(
     classname = "BootCoefVar",
     public = list(
@@ -42,10 +45,10 @@ BootCoefVar <- R6::R6Class(
             ...
         ) {
             # ---------------------- check NA or NAN -------------------------
-            if (!missing(x)) {
-                self$x <- x
-            } else if (missing(x)) {
+            if (missing(x) || is.null(x)) {
                 stop("object 'x' not found")
+            } else if (!missing(x)) {
+                self$x <- x
             }
             if (!missing(na.rm)) {
                 self$na.rm <- na.rm

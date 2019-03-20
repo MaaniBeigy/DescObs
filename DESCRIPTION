@@ -19,19 +19,17 @@ Description: Provides some easy-to-use functions to extract and visualize the
 Depends: 
     R (>= 3.1.2),
     dplyr (>= 0.8.0.1)
-Imports: dplyr, 
-  R6,
+Imports: R6,
   SciViews, 
   boot, 
   MBESS
 Suggests: testthat,
     knitr,
-    rmarkdown,
-    covr
+    rmarkdown
 VignetteBuilder: knitr
 URL: https://github.com/MaaniBeigy/DescObs
 BugReports: https://github.com/MaaniBeigy/DescObs/issues
-License: GPL-3
+License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1

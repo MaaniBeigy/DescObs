@@ -49,11 +49,11 @@ available:
 |CoefVarCI        |TRUE    |Confidence Intervals for cv             |
 |CoefQuartVarCI   |TRUE    |Confidence Intervals for cqv            |
 |SampleQuantiles  |TRUE    |Sample Quantiles                        |
-|cv               |FALSE   |Coefficient of Variation                |
-|cqv              |FALSE   |Coefficient of Quartile Variation       |
+|cv_versatile     |FALSE   |Coefficient of Variation                |
+|cqv_versatile    |FALSE   |Coefficient of Quartile Variation       |
 |BootCoefVar      |TRUE    |Bootstrap Resampling for cv             |
 |BootCoefQuartVar |TRUE    |Bootstrap Resampling for cqv            |
-|rm.versatile     |FALSE   |Versatile Function for Removing Objects |
+|rm_versatile     |FALSE   |Versatile Function for Removing Objects |
 
 
 
@@ -87,7 +87,7 @@ x <- c(
 )
 results <- CoefVarCI$new(x, digits = 3)$all_ci()  # R6 class
 # or alternatively: 
-results <- cv(x, digits = 3, method = "all")  # functional programming
+results <- cv_versatile(x, digits = 3, method = "all")  # functional programming
 ```
 The `results` will be:    
 
@@ -111,7 +111,7 @@ Next, we want to find **all** of the available *confidence intervals* for the `c
 ```r
 results <- CoefQuartVarCI$new(x, digits = 3)$all_ci()  # R6 class
 # or alternatively:
-results <- cqv(x, , digits = 3, method = "all")  # functional programming
+results <- cqv_versatile(x, , digits = 3, method = "all")  # functional programming
 
 ```
 The `results` will be:   

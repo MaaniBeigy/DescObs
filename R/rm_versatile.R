@@ -34,6 +34,8 @@
 #'          (\emph{e.g.,} double, integer, character, \emph{etc.}).
 #' @example ./examples/rm_versatile.R
 #' @export
+#' @import dplyr SciViews boot MBESS R6 stats utils
+NULL
 rm_versatile <- function(
     save.objects = NULL,
     save.patterns = NULL,

@@ -1,45 +1,7 @@
----
-title: "Versatile Exploration of Data: cqv"
-author: "Maani Beigy"
-date: "February 25, 2019"
-output: rmarkdown::html_vignette
-bibliography: DescObs.bib
-csl: apa.csl
-vignette: >
-  %\VignetteIndexEntry{cqv}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
----
-```{r setup, include=FALSE}
+## ----setup, include=FALSE------------------------------------------------
 knitr::opts_chunk$set(echo = TRUE)
-```
-# Coefficient of Quartile Variation   
-Coefficient of quartile variation *($CQV$)* is a measure of relative dispersion  that is based on interquartile range (`IQR`). Since *cqv* is unitless, it is 
-useful for comparison of variables with different units. It is also a measure of homogeneity [@Bonett2006; @Altunkaynak2018].    
-The *population* coefficient of quartile variation is:    
-$$
-CQV = \biggl(\frac{Q_3-Q_1}{Q_3+Q_1}\biggr)\times100
-$$
-where $q_3$ and $q_1$ are the population third quartile 
-(*i.e.,* $75^{th}$ percentile) and first quartile (*i.e.,* $25^{th}$ percentile), respectively. Almost always, we analyze data from samples but want to 
-generalize it as the population's parameter [@Albatineh2014]. Its sample's estimate is given as:    
-$$
-cqv = \biggl(\frac{q_3-q_1}{q_3+q_1}\biggr)\times100
-$$
-There are different methods for the calculation of **confidence intervals (CI)** 
-for *CQV*. All of them are fruitful and have particular use cases. For sake of versatility, we cover almost all of these methods in `DescObs` package. Here, we explain them along with some examples:     
 
-### Bonett Confidence Interval    
-
-Bonett [@Bonett2006] introduced the following confidence interval for *CQV*:   
-$$
-\exp\{\ln{(D/S)c\  \pm\ Z_{1-\alpha/2}\sqrt{v} }\}
-$$
-where $c = n/(n-1)$ is a centering adjustment which helps to equalize the tail error probabilities [@Bonett2006; @Altunkaynak2018]. $D = \hat{Q3}-\hat{Q1}$ and
-$S = \hat{Q3}+\hat{Q1}$ are the sample $25^{th}$ and $75^{th}$ percentiles, respectively; $Z_{1-\alpha/2}$ is the $1-\alpha/2$ quantile of the standard 
-normal distribution. Computation of $v$ which is $Var\{\ln{(D/S)}\}$ is long and 
-a bit complicated, but has been implemented for `cqv` function:
-```{r echo=FALSE, warning=FALSE, message=FALSE, include = FALSE}
+## ----echo=FALSE, warning=FALSE, message=FALSE, include = FALSE-----------
 library(dplyr)
 library(boot)
 library(SciViews)
@@ -47,10 +9,10 @@ x <- c(
     0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
     4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
 )
-cqv <- function(
+cqv_versatile <- function(
     x,
     na.rm = FALSE,
-    digits = NULL,
+    digits = 1,
     method = NULL,
     R = NULL,
     ...
@@ -58,17 +20,25 @@ cqv <- function(
     # require(dplyr)
     # require(SciViews)
     # require(boot)
-    if (!is.numeric(x)) {
-        stop("argument is not numeric: returning NA")
-        return(NA_real_)
+    if (missing(x) || is.null(x)) {
+        stop("object 'x' not found")
+    } else if (!missing(x)) {
+        x <- x
     }
-    if (!is.vector(x)) {
-        stop("x is not a vector")
+    if (!is.numeric(x)) {
+        stop("argument is not a numeric vector: returning NA")
         return(NA_real_)
     }
     na.rm = na.rm  # removes NAs if TRUE
+    if (na.rm == TRUE) {
+        x <- x[!is.na(x)]
+    } else if (anyNA(x)) {
+        stop(
+            "missing values and NaN's not allowed if 'na.rm' is FALSE"
+        )
+    }
     if (is.null(digits)) {
-        digits = 4
+        digits = 1
     }
     digits = digits  # digits required for rounding
     method = method  # returns 95% confidence interval
@@ -92,7 +62,7 @@ cqv <- function(
     if (q3 == 0) {  # to avoid NaNs when q3 and q1 are zero
         warning(
             "cqv is NaN because q3 and q1 are 0, max was used instead of q3"
-            )
+        )
         q3 <- max(x, na.rm = na.rm)
     }
     a <- ceiling(
@@ -122,9 +92,9 @@ cqv <- function(
     S <- q3 + q1
     v <- (
         (1/(16 * length(x))) * (
-        (((3/f1square) + (3/f3square) - (2/sqrt(f1square * f3square))) / D^2) +
-        (((3/f1square) + (3/f3square) + (2/sqrt(f1square * f3square))) / S^2) -
-        ((2 * ((3/f3square) - (3/f1square)))/(D*S))
+            (((3/f1square) + (3/f3square) - (2/sqrt(f1square * f3square))) / D^2) +
+                (((3/f1square) + (3/f3square) + (2/sqrt(f1square * f3square))) / S^2) -
+                ((2 * ((3/f3square) - (3/f1square)))/(D*S))
         )
     )
     ccc <- length(x)/(length(x) - 1)
@@ -252,9 +222,9 @@ cqv <- function(
                     lower = lower,
                     upper = upper,
                     row.names = c(" ")
-                    )
                 )
             )
+        )
     } else if (method == "norm" && cqv != 100) {
         return(
             list(
@@ -264,9 +234,9 @@ cqv <- function(
                     lower = lower,
                     upper = upper,
                     row.names = c(" ")
-                    )
                 )
             )
+        )
     } else if (method == "basic" && cqv != 100) {
         return(
             list(
@@ -276,9 +246,9 @@ cqv <- function(
                     lower = lower,
                     upper = upper,
                     row.names = c(" ")
-                    )
                 )
             )
+        )
     } else if (method == "perc" && cqv != 100) {
         return(
             list(
@@ -288,9 +258,9 @@ cqv <- function(
                     lower = lower,
                     upper = upper,
                     row.names = c(" ")
-                    )
                 )
             )
+        )
     } else if (method == "bca" && cqv != 100) {
         return(
             list(
@@ -300,17 +270,17 @@ cqv <- function(
                     lower = lower,
                     upper = upper,
                     row.names = c(" ")
-                    )
                 )
             )
+        )
     } else if (
         (
-    method == "norm" | method == "bonett" | method == "basic" | method == "perc" |
-    method == "bca" | method == "all"
-    ) && cqv == 100
-        ) {
+            method == "norm" | method == "bonett" | method == "basic" | method == "perc" |
+            method == "bca" | method == "all"
+        ) && cqv == 100
+    ) {
         warning(
-"All values of t are equal to  100 \n Cannot calculate confidence intervals \n"
+            "All values of t are equal to  100 \n Cannot calculate confidence intervals \n"
         )
         return(
             list(
@@ -329,7 +299,7 @@ cqv <- function(
                 method = "All methods",
                 statistics = data.frame(
                     row.names = c(
-                        "bonnet",
+                        "bonett",
                         "norm",
                         "basic",
                         "percent",
@@ -349,7 +319,7 @@ cqv <- function(
                         round(boot.basic.ci$basic[5], digits = digits),
                         round(boot.perc.ci$percent[5], digits = digits),
                         round(boot.bca.ci$bca[5], digits = digits)
-                        ),
+                    ),
                     description = c(
                         "cqv with Bonett 95% CI",
                         "cqv with normal approximation 95% CI",
@@ -357,48 +327,40 @@ cqv <- function(
                         "cqv with bootstrap percentile 95% CI",
                         "cqv with adjusted bootstrap percentile (BCa) 95% CI"
                     )
-                    )
                 )
             )
+        )
     } else {
         stop("method for confidence interval is not available")
         return(NA_real_)
     }
 }
-```
-```{r eval = TRUE, warning=FALSE, message=FALSE}
+
+## ----eval = TRUE, warning=FALSE, message=FALSE---------------------------
 x <- c(
     0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,
     4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
 )
-cqv(
+cqv_versatile(
     x, 
     na.rm = TRUE, 
     digits = 3, 
     method = "bonett"
 )
-```
-### Bootstrap Confidence Intervals      
-Thanks to package `boot` [@Canty2017] we can obtain bootstrap CI around $cqv$:  
-```{r eval = TRUE, warning=FALSE, message=FALSE}
-cqv(
+
+## ----eval = TRUE, warning=FALSE, message=FALSE---------------------------
+cqv_versatile(
     x, 
     na.rm = TRUE, 
     digits = 3, 
     method = "bca"
 )
-```
-### All Available Methods   
-In conclusion, we can observe CIs calculated by all available methods:    
-```{r eval = TRUE, warning=FALSE, message=FALSE}
-cqv(
+
+## ----eval = TRUE, warning=FALSE, message=FALSE---------------------------
+cqv_versatile(
     x, 
     na.rm = TRUE, 
     digits = 3, 
     method = "all"
 )
-```
-# References   
-
-
 

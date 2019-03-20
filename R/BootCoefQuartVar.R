@@ -6,11 +6,11 @@
 #'              package \pkg{boot}. Also, it produces the bootstrap confidence
 #'              intervals for the cqv based on the \link[boot]{boot.ci} from the
 #'              package \pkg{boot}.
-#' @usage \code{BootCoefQuartVar$new(x, ...)}
+#' @usage BootCoefQuartVar$new(x, ...)
 #'
 #' ## Default R6 method:
-#' \code{BootCoefQuartVar$new(x, na.rm = FALSE, R = 1000,
-#'                alpha = 0.05, ...)$boot_cqv()}
+#' BootCoefQuartVar$new(x, na.rm = FALSE, R = 1000,
+#'                alpha = 0.05, ...)$boot_cqv()
 #' @param x An \code{R} object. Currently there are methods for numeric vectors
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #'              stripped before the computation proceeds.
@@ -25,9 +25,10 @@
 #'             ISBN 0-521-57391-2
 #' @references Altunkaynak, B., Gamgam, H., 2018, Bootstrap confidence
 #'             intervals for the coefficient of quartile variation,
-#'             Simulation and Computation, 1-9, DOI: \href{
-#'             https://doi.org/10.1080/03610918.2018.1435800}{
-#'             https://doi.org/10.1080/03610918.2018.1435800}
+#'             Simulation and Computation, 1-9, DOI: \href{http://doi.org/10.1080/03610918.2018.1435800}{http://doi.org/10.1080/03610918.2018.1435800}
+#' @export
+#' @import dplyr SciViews boot MBESS R6 stats utils
+NULL
 BootCoefQuartVar <- R6::R6Class(
     classname = "BootCoefQuartVar",
     inherit = SampleQuantiles,
@@ -47,10 +48,10 @@ BootCoefQuartVar <- R6::R6Class(
             ...
         ) {
             # ---------------------- check NA or NAN -------------------------
-            if (!missing(x)) {
-                self$x <- x
-            } else if (missing(x)) {
+            if (missing(x) || is.null(x)) {
                 stop("object 'x' not found")
+            } else if (!missing(x)) {
+                self$x <- x
             }
             if (!missing(na.rm)) {
                 self$na.rm <- na.rm

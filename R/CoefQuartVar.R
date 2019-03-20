@@ -2,10 +2,10 @@
 #' @name CoefQuartVar
 #' @description The R6 class \code{CoefQuartVar} for the coefficient of
 #'              quartile variation (cqv)
-#' @usage \code{CoefQuartVar$new(x, ...)}
+#' @usage CoefQuartVar$new(x, ...)
 #'
 #' ## Default R6 method:
-#' \code{CoefQuartVar$new(x, na.rm = FALSE, digits = 1)$est()}
+#' CoefQuartVar$new(x, na.rm = FALSE, digits = 1)$est()
 #' @param x An \code{R} object. Currently there are methods for numeric vectors
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #'              stripped before the computation proceeds.
@@ -24,10 +24,10 @@
 #' @example ./examples/CoefQuartVar.R
 #' @references [1] Bonett, DG., 2006, Confidence interval for a coefficient of
 #'                 quartile variation, Computational Statistics & Data Analysis,
-#'                 50(11), 2953-7, DOI: \href{
-#'                 https://doi.org/10.1016/j.csda.2005.05.007}{
-#'                 https://doi.org/10.1016/j.csda.2005.05.007}
+#'                 50(11), 2953-7, DOI: \href{http://doi.org/10.1016/j.csda.2005.05.007}{http://doi.org/10.1016/j.csda.2005.05.007}
 #' @export
+#' @import dplyr SciViews boot MBESS R6 stats utils
+NULL
 CoefQuartVar <- R6::R6Class(
     classname = "CoefQuartVar",
     inherit = BootCoefQuartVar,
@@ -45,10 +45,10 @@ CoefQuartVar <- R6::R6Class(
             ...
         ) {
             # ---------------------- check NA or NAN -------------------------
-            if (!missing(x)) {
-                self$x <- x
-            } else if (missing(x)) {
+            if (missing(x) || is.null(x)) {
                 stop("object 'x' not found")
+            } else if (!missing(x)) {
+                self$x <- x
             }
             if (!missing(na.rm)) {
                 self$na.rm <- na.rm

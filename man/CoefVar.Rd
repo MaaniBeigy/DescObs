@@ -6,11 +6,11 @@
 \title{R6 Coefficient of Variation (cv)}
 \format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
-\code{CoefVar$new(x, ...)}
+CoefVar$new(x, ...)
 
 ## Default R6 method:
-\code{CoefVar$new(x, na.rm = FALSE, digits = 1)$est()}
-\code{CoefVar$new(x, na.rm = FALSE, digits = 1)$est_corr()}
+CoefVar$new(x, na.rm = FALSE, digits = 1)$est()
+CoefVar$new(x, na.rm = FALSE, digits = 1)$est_corr()
 }
 \arguments{
 \item{x}{An \code{R} object. Currently there are methods for numeric vectors}
@@ -52,7 +52,6 @@ R6::is.R6(cv_x)
                 Confidence interval estimation for the population coefficient
                 of variation using ranked set sampling: A simulation study,
                 Journal of Applied Statistics, 41(4), 733–751, DOI:
-                \href{https://doi.org/10.1080/02664763.2013.847405}{
-                https://doi.org/10.1080/02664763.2013.847405}
+                \href{http://doi.org/10.1080/02664763.2013.847405}{http://doi.org/10.1080/02664763.2013.847405}
 }
 \keyword{datasets}

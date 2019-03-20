@@ -2,11 +2,11 @@
 #' @name CoefVarCI
 #' @description The R6 class \code{CoefVarCI} for the confidence intervals of
 #'              coefficient of variation (cv)
-#' @usage \code{CoefVarCI$new(x, ...)}
+#' @usage CoefVarCI$new(x, ...)
 #'
 #' ## Default R6 method:
-#' \code{CoefVarCI$new(x, na.rm = FALSE, digits = 1, correction = FALSE,
-#'                R = 1000, alpha = 0.05)$kelley_ci()}
+#' CoefVarCI$new(x, na.rm = FALSE, digits = 1, correction = FALSE,
+#'                R = 1000, alpha = 0.05)$kelley_ci()
 #' @param x An \code{R} object. Currently there are methods for numeric vectors
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #'              stripped before the computation proceeds.
@@ -97,17 +97,13 @@
 #'                 Confidence interval estimation for the population coefficient
 #'                 of variation using ranked set sampling: A simulation study,
 #'                 Journal of Applied Statistics, 41(4), 733–751, DOI:
-#'                 \href{https://doi.org/10.1080/02664763.2013.847405}{
-#'                 https://doi.org/10.1080/02664763.2013.847405}
+#'                 \href{http://doi.org/10.1080/02664763.2013.847405}{http://doi.org/10.1080/02664763.2013.847405}
 #' @references [2] Kelley, K., 2018, MBESS: The MBESS R Package. R package
-#'                 version 4.4. 3., Retrieved from \href{
-#'                 https://cran.r-project.org/package=MBESS}{
-#'                 https://cran.r-project.org/package=MBESS}
+#'                 version 4.4. 3., Retrieved from \href{http://cran.r-project.org/package=MBESS}{http://cran.r-project.org/package=MBESS}
 #' @references [3] Kelley, K., 2007, Sample size planning for the coefficient of
 #'                 variation from the accuracy in parameter estimation approach,
 #'                 Behavior Research Methods, 39(4), 755–766, DOI:
-#'                 \href{https://doi.org/10.3758/BF03192966}{
-#'                 https://doi.org/10.3758/BF03192966}
+#'                 \href{http://doi.org/10.3758/BF03192966}{http://doi.org/10.3758/BF03192966}
 #' @references [4] McKay, AT., 1932, Distribution of the Coefficient of
 #'                 Variation and the Extended“ t” Distribution, Journal of the
 #'                 Royal Statistical Society, 95(4), 695–698
@@ -123,11 +119,12 @@
 #' @references [8] Panichkitkosolkul, W., 2013, Confidence Intervals for the
 #'                 Coefficient of Variation in a Normal Distribution with a
 #'                 Known Population Mean, Journal of Probability and Statistics,
-#'                 2013, 1–11, \href{https://doi.org/10.1155/2013/324940}{
-#'                 https://doi.org/10.1155/2013/324940}
+#'                 2013, 1–11, \href{http://doi.org/10.1155/2013/324940}{http://doi.org/10.1155/2013/324940}
 #' @references [9] Canty, A., & Ripley, B., 2017, boot: Bootstrap R (S-Plus)
 #'                 Functions, R package version 1.3-20
 #' @export
+#' @import dplyr SciViews boot MBESS R6 stats utils
+NULL
 CoefVarCI <- R6::R6Class(
     classname = "CoefVarCI",
     inherit = CoefVar,
@@ -290,10 +287,10 @@ CoefVarCI <- R6::R6Class(
             ...
         ) {
             # ---------------------- check NA or NAN -------------------------
-            if (!missing(x)) {
-                self$x <- x
-            } else if (missing(x)) {
+            if (missing(x) || is.null(x)) {
                 stop("object 'x' not found")
+            } else if (!missing(x)) {
+                self$x <- x
             }
             if (!missing(na.rm)) {
                 self$na.rm <- na.rm
