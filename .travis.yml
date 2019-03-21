@@ -2,3 +2,5 @@
 language: R
 warnings_are_errors: true
 sudo: required
+before_install:
+  - sudo apt install libcurl4-openssl-dev libssl-dev libxml2-dev libgsl-dev
