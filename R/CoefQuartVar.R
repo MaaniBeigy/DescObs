@@ -12,7 +12,7 @@
 #' @param digits integer indicating the number of decimal places to be used.
 #' @details \describe{
 #'         \item{\strong{Coefficient of Quartile Variation}}{
-#'         \code{\deqn{ cqv = ((q3-q1)/(q3 + q1))*100 , } } where \eqn{q3}
+#'         \deqn{ cqv = ((q3-q1)/(q3 + q1))*100 , }  where \eqn{q3}
 #'         and \eqn{q1} are third quartile (\emph{i.e.,} 75th percentile) and
 #'         first quartile (\emph{i.e.,} 25th percentile), respectively.
 #'         The \emph{cqv} is a measure of relative dispersion that is based on

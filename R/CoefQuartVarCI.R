@@ -18,7 +18,7 @@
 #' @param R integer indicating the number of bootstrap replicates.
 #' @details \describe{
 #'         \item{\strong{Coefficient of Quartile Variation}}{
-#'         \code{\deqn{ cqv = ((q3-q1)/(q3 + q1))*100 , } } where \eqn{q3}
+#'         \deqn{ cqv = ((q3-q1)/(q3 + q1))*100 , } where \eqn{q3}
 #'         and \eqn{q1} are third quartile (\emph{i.e.,} 75th percentile) and
 #'         first quartile (\emph{i.e.,} 25th percentile), respectively.
 #'         The \emph{cqv} is a measure of relative dispersion that is based on
@@ -38,10 +38,10 @@
 #'        of 95\% confidence interval \code{(CI)}:
 #'        \cr \cr
 #'        \strong{est:}{
-#'        \code{\deqn{((q3-q1)/(q3 + q1))*100}}
+#'        \deqn{((q3-q1)/(q3 + q1))*100}
 #'        }
 #'        \strong{Bonett 95\% CI:}{
-#'        \code{\deqn{  exp{ln(D/S)C +/- (z(1 - alpha/2) * sqrt(v))}, }}
+#'        \deqn{  exp{ln(D/S)C +/- (z(1 - alpha/2) * sqrt(v))}, }
 #'        where \eqn{C = n/(n - 1)} is a centering adjustment which helps to
 #'        equalize the tail error probabilities. For this confidence interval,
 #'        \eqn{D = q3 - q1} and \eqn{S = q3 + q1}; \eqn{z(1 - alpha/2)} is the
@@ -90,12 +90,10 @@
 #' R6::is.R6(cqv_y)
 #' @references [1] Bonett, DG., 2006, Confidence interval for a coefficient of
 #'                 quartile variation, Computational Statistics & Data Analysis,
-#'                 50(11), 2953-7, DOI: \href{
-#'                 http://doi.org/10.1016/j.csda.2005.05.007}{http://doi.org/10.1016/j.csda.2005.05.007}
+#'                 50(11), 2953-7, DOI: \href{http://doi.org/10.1016/j.csda.2005.05.007}{http://doi.org/10.1016/j.csda.2005.05.007}
 #' @references [2] Altunkaynak, B., Gamgam, H., 2018, Bootstrap confidence
 #'                 intervals for the coefficient of quartile variation,
-#'                 Simulation and Computation, 1-9, DOI: \href{
-#'                 http://doi.org/10.1080/03610918.2018.1435800}{http://doi.org/10.1080/03610918.2018.1435800}
+#'                 Simulation and Computation, 1-9, DOI: \href{http://doi.org/10.1080/03610918.2018.1435800}{http://doi.org/10.1080/03610918.2018.1435800}
 #' @references [3] Canty, A., & Ripley, B, 2017, boot: Bootstrap R (S-Plus)
 #'                 Functions. R package version 1.3-20.
 #' @references [4] Davison, AC., & Hinkley, DV., 1997, Bootstrap Methods and

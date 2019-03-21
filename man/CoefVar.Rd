@@ -27,7 +27,7 @@ The R6 class \code{CoefVar} for the coefficient of
 \details{
 \describe{
         \item{\strong{Coefficient of Variation}}{
-        \code{\deqn{ CV = \sigma/\mu} } where \eqn{\sigma}
+        \deqn{ CV = \sigma/\mu} where \eqn{\sigma}
         and \eqn{\mu} are standard deviation and mean, respectively.
         The \emph{cv} is a measure of relative dispersion representing
         the degree of variability relative to the mean [1]. Since \eqn{cv} is

@@ -34,11 +34,11 @@ An object of type "list" which contains the estimate, the
        }
        \item{$statistics}{
        A data frame representing three vectors: est, lower and upper limits
-       of \code{\eqn{(1-\alpha)}}\% confidence interval \code{(CI)};
+       of \eqn{(1-\alpha)}\% confidence interval \code{(CI)};
        additional description vector is provided when "all" is selected:
        \cr \cr
        \strong{est:}{
-       \code{\deqn{(sd/mean)*100}}
+       \deqn{(sd/mean)*100}
        }
        \strong{Kelley Confidence Interval:}{
        Thanks to package \link[MBESS]{MBESS} [2] for the
@@ -48,7 +48,7 @@ An object of type "list" which contains the estimate, the
        \cr \cr
        \strong{McKay Confidence Interval:}{
        The intervals calculated by the method introduced by McKay [4],
-       using \code{\eqn{\chi^2}} distribution.
+       using \eqn{\chi^2} distribution.
        }
        \cr \cr
        \strong{Miller Confidence Interval:}{
@@ -78,7 +78,7 @@ An object of type "list" which contains the estimate, the
        \cr \cr
        \strong{Equal-Tailed Confidence Interval:}{
        Wararit Panichkitkosolkul [8] proposed another CI for \emph{cv};
-       which is obtained using \code{\eqn{\chi^2}} distribution.
+       which is obtained using \eqn{\chi^2} distribution.
        }
        \cr \cr
        \strong{Bootstrap Confidence Intervals:}{
@@ -95,7 +95,7 @@ Versatile function for the coefficient of variation (cv)
 \details{
 \describe{
         \item{\strong{Coefficient of Variation}}{
-        \code{\deqn{ CV = \sigma/\mu} } where \eqn{\sigma}
+        \deqn{ CV = \sigma/\mu} where \eqn{\sigma}
         and \eqn{\mu} are standard deviation and mean, respectively.
         The \emph{cv} is a measure of relative dispersion representing
         the degree of variability relative to the mean [1]. Since \eqn{cv} is

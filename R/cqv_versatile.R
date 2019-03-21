@@ -11,7 +11,7 @@
 #' @param R integer indicating the number of bootstrap replicates.
 #' @details \describe{
 #'         \item{\strong{Coefficient of Quartile Variation}}{
-#'         \code{\deqn{ cqv = ((q3-q1)/(q3 + q1))*100 , } } where \eqn{q3}
+#'         \deqn{ cqv = ((q3-q1)/(q3 + q1))*100 , } where \eqn{q3}
 #'         and \eqn{q1} are third quartile (\emph{i.e.,} 75th percentile) and
 #'         first quartile (\emph{i.e.,} 25th percentile), respectively.
 #'         The \emph{cqv} is a measure of relative dispersion that is based on
@@ -31,10 +31,10 @@
 #'        of 95\% confidence interval \code{(CI)}:
 #'        \cr \cr
 #'        \strong{est:}{
-#'        \code{\deqn{((q3-q1)/(q3 + q1))*100}}
+#'        \deqn{((q3-q1)/(q3 + q1))*100}
 #'        }
 #'        \strong{Bonett 95\% CI:}{
-#'        \code{\deqn{  exp{ln(D/S)C +/- (z(1 - alpha/2) * sqrt(v))}, }}
+#'        \deqn{  exp{ln(D/S)C +/- (z(1 - alpha/2) * sqrt(v))}, }
 #'        where \eqn{C = n/(n - 1)} is a centering adjustment which helps to
 #'        equalize the tail error probabilities. For this confidence interval,
 #'        \eqn{D = q3 - q1} and \eqn{S = q3 + q1}; \eqn{z(1 - alpha/2)} is the
