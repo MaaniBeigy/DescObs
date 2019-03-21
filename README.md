@@ -1,3 +1,4 @@
+[![Travis build status](https://travis-ci.org/MaaniBeigy/DescObs.svg?branch=master)](https://travis-ci.org/MaaniBeigy/DescObs)
 # DescObs ![DescObs](eye.png)
 Tools for Versatile Exploration of Data.   
 
@@ -59,22 +60,6 @@ available:
 
 
 \* This package is inspired by `dplyr`, `R6`, `SciView`, `boot`, and `MBESS`.    
-
-## Dependencies     
-To load the required libraries, run:    
-
-```r
-# define required libraries
-required.packages <- c("dplyr", "SciViews", "boot", "MBESS", "R6")
-# function of installing the uninstalled required packages
-if (length(setdiff(required.packages, rownames(installed.packages()))) > 0) {
-    install.packages(setdiff(required.packages, rownames(installed.packages())))
-} 
-# add `DescObs` to the required.packages
-required.packages <- c(required.packages, "DescObs")
-# loading the required packages
-lapply(required.packages, require, character.only = TRUE)
-```
 
 ## Examples    
 
