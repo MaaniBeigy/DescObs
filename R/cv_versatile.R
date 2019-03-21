@@ -130,6 +130,8 @@
 #' @export
 #' @import dplyr SciViews boot MBESS R6 utils
 NULL
+#' @importFrom stats quantile sd qchisq qnorm
+NULL
 cv_versatile <- function(
     x,  # Currently there are methods for numeric vectors
     na.rm = FALSE,  # indicating whether NA values should be stripped
@@ -253,7 +255,7 @@ cv_versatile <- function(
         }
     }
     cv <- (
-        sd(x, na.rm = na.rm)/mean(x, na.rm = na.rm)  # coefficient of variation
+        stats::sd(x, na.rm = na.rm)/mean(x, na.rm = na.rm)  # coefficient of variation
     )
     cv_corr <- cv * (
         (1 - (1/(4 * (length(x) - 1))) +  # corrected coefficient of variation
@@ -297,17 +299,17 @@ cv_versatile <- function(
     boot.cv <- boot::boot(
         x,
         function(x, i) {  # coefficient of variation
-            sd(x[i], na.rm = na.rm)/mean(x[i], na.rm = na.rm)
+            stats::sd(x[i], na.rm = na.rm)/mean(x[i], na.rm = na.rm)
         },
         R = R
     )
     boot.cv_corr <- boot::boot(
         x,
         function(x, i) {  # corrected coefficient of variation
-            sd(x[i], na.rm = na.rm)/mean(x[i], na.rm = na.rm) * (
+            stats::sd(x[i], na.rm = na.rm)/mean(x[i], na.rm = na.rm) * (
                 (1 - (1/(4 * (length(x[i]) - 1))) +
                      (1/length(x)) * (
-                         sd(x[i], na.rm = na.rm)/mean(x[i], na.rm = na.rm)
+                         stats::sd(x[i], na.rm = na.rm)/mean(x[i], na.rm = na.rm)
                      )^2) +
                     (1/(2 * (length(x) - 1)^2))
             )
@@ -338,8 +340,8 @@ cv_versatile <- function(
             warning("Confidence interval may be very approximate")
         }
         v <- length(x) - 1
-        t1 <- qchisq(1 - alpha/2,v)/v
-        t2 <- qchisq(alpha/2,v)/v
+        t1 <- stats::qchisq(1 - alpha/2,v)/v
+        t2 <- stats::qchisq(alpha/2,v)/v
         u1 <- v*t1
         u2 <- v*t2
         est.mckay <- cv  # cv is an estimate of CV
@@ -350,8 +352,8 @@ cv_versatile <- function(
             warning("Confidence interval may be very approximate")
         }
         v <- length(x) - 1
-        t1 <- qchisq(1 - alpha/2,v)/v
-        t2 <- qchisq(alpha/2,v)/v
+        t1 <- stats::qchisq(1 - alpha/2,v)/v
+        t2 <- stats::qchisq(alpha/2,v)/v
         u1 <- v*t1
         u2 <- v*t2
         est.mckay <- cv_corr  # corrected cv is an estimate of CV
@@ -359,7 +361,7 @@ cv_versatile <- function(
         upper.tile.mckay <- cv_corr/sqrt((u2/(v + 1) - 1)*(cv_corr^2) + u2/v)
     } else if ("miller" %in% method && correction == FALSE) {
         v <- length(x) - 1
-        z_alpha_over2 <- qnorm(1 - (alpha/2))
+        z_alpha_over2 <- stats::qnorm(1 - (alpha/2))
         u <- sqrt(
             (cv^2/v) * (0.5 + cv^2)
         )
@@ -369,7 +371,7 @@ cv_versatile <- function(
         upper.tile.miller <- cv + zu
     } else if ("miller" %in% method && correction == TRUE) {
         v <- length(x) - 1
-        z_alpha_over2 <- qnorm(1 - (alpha/2))
+        z_alpha_over2 <- stats::qnorm(1 - (alpha/2))
         u <- sqrt(
             (cv_corr^2/v) * (0.5 + cv_corr^2)
         )
@@ -382,8 +384,8 @@ cv_versatile <- function(
             warning("Confidence interval may be very approximate")
         }
         v <- length(x) - 1
-        t1 <- qchisq(1 - alpha/2,v)/v
-        t2 <- qchisq(alpha/2,v)/v
+        t1 <- stats::qchisq(1 - alpha/2,v)/v
+        t2 <- stats::qchisq(alpha/2,v)/v
         u1 <- v*t1
         u2 <- v*t2
         est.vangel <- cv  # cv is an estimate of CV
@@ -394,8 +396,8 @@ cv_versatile <- function(
             warning("Confidence interval may be very approximate")
         }
         v <- length(x) - 1
-        t1 <- qchisq(1 - alpha/2,v)/v
-        t2 <- qchisq(alpha/2,v)/v
+        t1 <- stats::qchisq(1 - alpha/2,v)/v
+        t2 <- stats::qchisq(alpha/2,v)/v
         u1 <- v*t1
         u2 <- v*t2
         est.vangel <- cv_corr  # corrected cv is an estimate of CV
@@ -415,8 +417,8 @@ cv_versatile <- function(
                 (lgamma(length(x)/2))/(lgamma((length(x) - 1)/2))
             )
         }
-        ul <- 2 - (cn + (qnorm((alpha/2)) * sqrt(1 - cn^2)))
-        uu <- 2 - (cn - (qnorm((alpha/2)) * sqrt(1 - cn^2)))
+        ul <- 2 - (cn + (stats::qnorm((alpha/2)) * sqrt(1 - cn^2)))
+        uu <- 2 - (cn - (stats::qnorm((alpha/2)) * sqrt(1 - cn^2)))
         est.mahmoud <- cv  # cv is an estimate of CV
         lower.tile.mahmoud <- cv/ul
         upper.tile.mahmoud <- cv/uu
@@ -430,22 +432,22 @@ cv_versatile <- function(
                 (lgamma(length(x)/2))/(lgamma((length(x) - 1)/2))
             )
         }
-        ul <- 2 - (cn + (qnorm((alpha/2)) * sqrt(1 - cn^2)))
-        uu <- 2 - (cn - (qnorm((alpha/2)) * sqrt(1 - cn^2)))
+        ul <- 2 - (cn + (stats::qnorm((alpha/2)) * sqrt(1 - cn^2)))
+        uu <- 2 - (cn - (stats::qnorm((alpha/2)) * sqrt(1 - cn^2)))
         est.mahmoud <- cv_corr  # corrected cv is an estimate of CV
         lower.tile.mahmoud <- cv_corr/ul
         upper.tile.mahmoud <- cv_corr/uu
     } else if ("normal_approximation" %in% method && correction == FALSE) {
         cn <- sqrt(1 - (1/(2 * length(x))))
-        ul <- cn + (qnorm(1 - (alpha/2)) * sqrt(1 - cn^2))
-        uu <- cn - (qnorm(1 - (alpha/2)) * sqrt(1 - cn^2))
+        ul <- cn + (stats::qnorm(1 - (alpha/2)) * sqrt(1 - cn^2))
+        uu <- cn - (stats::qnorm(1 - (alpha/2)) * sqrt(1 - cn^2))
         est.normaapprox <- cv  # cv is an estimate of CV
         lower.tile.normaapprox <- cv/ul
         upper.tile.normaapprox <- cv/uu
     } else if ("normal_approximation" %in% method && correction == TRUE) {
         cn <- sqrt(1 - (1/(2 * length(x))))
-        ul <- cn + (qnorm(1 - (alpha/2)) * sqrt(1 - cn^2))
-        uu <- cn - (qnorm(1 - (alpha/2)) * sqrt(1 - cn^2))
+        ul <- cn + (stats::qnorm(1 - (alpha/2)) * sqrt(1 - cn^2))
+        uu <- cn - (stats::qnorm(1 - (alpha/2)) * sqrt(1 - cn^2))
         est.normaapprox <- cv_corr  # corrected cv is an estimate of CV
         lower.tile.normaapprox <- cv_corr/ul
         upper.tile.normaapprox <- cv_corr/uu
@@ -489,15 +491,15 @@ cv_versatile <- function(
         upper.tile.shortest <- (cv_corr*sqrt(length(x) - 1))/sqrt(a_value$a)
     } else if ("equal_tailed" %in% method && correction == FALSE) {
         v <- length(x) - 1
-        tt1 <- qchisq(1 - alpha/2,v)
-        tt2 <- qchisq(alpha/2,v)
+        tt1 <- stats::qchisq(1 - alpha/2,v)
+        tt2 <- stats::qchisq(alpha/2,v)
         est.equal <- cv  # cv is an estimate of CV
         lower.tile.equal <- (cv*sqrt(v))/(sqrt(tt1))
         upper.tile.equal <- (cv*sqrt(v))/(sqrt(tt2))
     } else if ("equal_tailed" %in% method && correction == TRUE) {
         v <- length(x) - 1
-        tt1 <- qchisq(1 - alpha/2,v)
-        tt2 <- qchisq(alpha/2,v)
+        tt1 <- stats::qchisq(1 - alpha/2,v)
+        tt2 <- stats::qchisq(alpha/2,v)
         est.equal <- cv_corr  # corrected cv is an estimate of CV
         lower.tile.equal <- (cv_corr*sqrt(v))/(sqrt(tt1))
         upper.tile.equal <- (cv_corr*sqrt(v))/(sqrt(tt2))
@@ -570,14 +572,14 @@ cv_versatile <- function(
             warning("Confidence interval may be very approximate")
         }
         v <- length(x) - 1
-        t1 <- qchisq(1 - alpha/2,v)/v
-        t2 <- qchisq(alpha/2,v)/v
+        t1 <- stats::qchisq(1 - alpha/2,v)/v
+        t2 <- stats::qchisq(alpha/2,v)/v
         u1 <- v*t1
         u2 <- v*t2
         est.mckay <- cv  # cv is an estimate of CV
         lower.tile.mckay <- cv/sqrt((u1/(v + 1) - 1 )*(cv^2) + u1/v)
         upper.tile.mckay <- cv/sqrt((u2/(v + 1) - 1)*(cv^2) + u2/v)
-        z_alpha_over2 <- qnorm(1 - (alpha/2))
+        z_alpha_over2 <- stats::qnorm(1 - (alpha/2))
         u <- sqrt(
             (cv^2/v) * (0.5 + cv^2)
         )
@@ -585,8 +587,8 @@ cv_versatile <- function(
         est.miller <- cv  # cv is an estimate of CV
         lower.tile.miller <- cv - zu
         upper.tile.miller <- cv + zu
-        tt1 <- qchisq(1 - alpha/2,v)/v
-        tt2 <- qchisq(alpha/2,v)/v
+        tt1 <- stats::qchisq(1 - alpha/2,v)/v
+        tt2 <- stats::qchisq(alpha/2,v)/v
         uu1 <- v*tt1
         uu2 <- v*tt2
         est.vangel <- cv  # cv is an estimate of CV
@@ -601,14 +603,14 @@ cv_versatile <- function(
                 (lgamma(length(x)/2))/(lgamma((length(x) - 1)/2))
             )
         }
-        ul <- 2 - (cn + (qnorm((alpha/2)) * sqrt(1 - cn^2)))
-        uu <- 2 - (cn - (qnorm((alpha/2)) * sqrt(1 - cn^2)))
+        ul <- 2 - (cn + (stats::qnorm((alpha/2)) * sqrt(1 - cn^2)))
+        uu <- 2 - (cn - (stats::qnorm((alpha/2)) * sqrt(1 - cn^2)))
         est.mahmoud <- cv  # cv is an estimate of CV
         lower.tile.mahmoud <- cv/ul
         upper.tile.mahmoud <- cv/uu
         cnt <- sqrt(1 - (1/(2 * length(x))))
-        ult <- cnt + (qnorm(1 - (alpha/2)) * sqrt(1 - cnt^2))
-        uut <- cnt - (qnorm(1 - (alpha/2)) * sqrt(1 - cnt^2))
+        ult <- cnt + (stats::qnorm(1 - (alpha/2)) * sqrt(1 - cnt^2))
+        uut <- cnt - (stats::qnorm(1 - (alpha/2)) * sqrt(1 - cnt^2))
         est.normaapprox <- cv  # cv is an estimate of CV
         lower.tile.normaapprox <- cv/ult
         upper.tile.normaapprox <- cv/uut
@@ -630,8 +632,8 @@ cv_versatile <- function(
         est.shortest <- cv  # cv is an estimate of CV
         lower.tile.shortest <- (cv*sqrt(length(x) - 1))/sqrt(b_value$b)
         upper.tile.shortest <- (cv*sqrt(length(x) - 1))/sqrt(a_value$a)
-        ttt1 <- qchisq(1 - alpha/2,v)
-        ttt2 <- qchisq(alpha/2,v)
+        ttt1 <- stats::qchisq(1 - alpha/2,v)
+        ttt2 <- stats::qchisq(alpha/2,v)
         est.equal <- cv  # cv is an estimate of CV
         lower.tile.equal <- (cv*sqrt(v))/(sqrt(ttt1))
         upper.tile.equal <- (cv*sqrt(v))/(sqrt(ttt2))
@@ -672,14 +674,14 @@ cv_versatile <- function(
             warning("Confidence interval may be very approximate")
         }
         v <- length(x) - 1
-        t1 <- qchisq(1 - alpha/2,v)/v
-        t2 <- qchisq(alpha/2,v)/v
+        t1 <- stats::qchisq(1 - alpha/2,v)/v
+        t2 <- stats::qchisq(alpha/2,v)/v
         u1 <- v*t1
         u2 <- v*t2
         est.mckay <- cv_corr  # cv_corr is an estimate of CV
         lower.tile.mckay <- cv_corr/sqrt((u1/(v + 1) - 1 )*(cv_corr^2) + u1/v)
         upper.tile.mckay <- cv_corr/sqrt((u2/(v + 1) - 1)*(cv_corr^2) + u2/v)
-        z_alpha_over2 <- qnorm(1 - (alpha/2))
+        z_alpha_over2 <- stats::qnorm(1 - (alpha/2))
         u <- sqrt(
             (cv_corr^2/v) * (0.5 + cv_corr^2)
         )
@@ -687,8 +689,8 @@ cv_versatile <- function(
         est.miller <- cv_corr  # cv_corr is an estimate of CV
         lower.tile.miller <- cv_corr - zu
         upper.tile.miller <- cv_corr + zu
-        tt1 <- qchisq(1 - alpha/2,v)/v
-        tt2 <- qchisq(alpha/2,v)/v
+        tt1 <- stats::qchisq(1 - alpha/2,v)/v
+        tt2 <- stats::qchisq(alpha/2,v)/v
         uu1 <- v*tt1
         uu2 <- v*tt2
         est.vangel <- cv_corr  # cv_corr is an estimate of CV
@@ -703,14 +705,14 @@ cv_versatile <- function(
                 (lgamma(length(x)/2))/(lgamma((length(x) - 1)/2))
             )
         }
-        ul <- 2 - (cn + (qnorm((alpha/2)) * sqrt(1 - cn^2)))
-        uu <- 2 - (cn - (qnorm((alpha/2)) * sqrt(1 - cn^2)))
+        ul <- 2 - (cn + (stats::qnorm((alpha/2)) * sqrt(1 - cn^2)))
+        uu <- 2 - (cn - (stats::qnorm((alpha/2)) * sqrt(1 - cn^2)))
         est.mahmoud <- cv_corr  # cv_corr is an estimate of CV
         lower.tile.mahmoud <- cv_corr/ul
         upper.tile.mahmoud <- cv_corr/uu
         cnt <- sqrt(1 - (1/(2 * length(x))))
-        ult <- cnt + (qnorm(1 - (alpha/2)) * sqrt(1 - cnt^2))
-        uut <- cnt - (qnorm(1 - (alpha/2)) * sqrt(1 - cnt^2))
+        ult <- cnt + (stats::qnorm(1 - (alpha/2)) * sqrt(1 - cnt^2))
+        uut <- cnt - (stats::qnorm(1 - (alpha/2)) * sqrt(1 - cnt^2))
         est.normaapprox <- cv_corr  # cv_corr is an estimate of CV
         lower.tile.normaapprox <- cv_corr/ult
         upper.tile.normaapprox <- cv_corr/uut
@@ -732,8 +734,8 @@ cv_versatile <- function(
         est.shortest <- cv_corr  # cv_corr is an estimate of CV
         lower.tile.shortest <- (cv_corr*sqrt(length(x) - 1))/sqrt(b_value$b)
         upper.tile.shortest <- (cv_corr*sqrt(length(x) - 1))/sqrt(a_value$a)
-        ttt1 <- qchisq(1 - alpha/2,v)
-        ttt2 <- qchisq(alpha/2,v)
+        ttt1 <- stats::qchisq(1 - alpha/2,v)
+        ttt2 <- stats::qchisq(alpha/2,v)
         est.equal <- cv_corr  # cv_corr is an estimate of CV
         lower.tile.equal <- (cv_corr*sqrt(v))/(sqrt(ttt1))
         upper.tile.equal <- (cv_corr*sqrt(v))/(sqrt(ttt2))

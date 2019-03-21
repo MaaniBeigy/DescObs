@@ -102,6 +102,8 @@
 #' @export
 #' @import dplyr SciViews boot MBESS R6 utils
 NULL
+#' @importFrom stats quantile sd qchisq qnorm
+NULL
 CoefQuartVarCI <- R6::R6Class(
     classname = "CoefQuartVarCI",
     inherit = CoefQuartVar,

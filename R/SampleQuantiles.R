@@ -28,8 +28,11 @@
 #' percentile_75 <-  SampleQuantiles$new(x, na.rm = TRUE, digits = 3, probs = 0.75)
 #' percentile_75$qx()
 #' R6::is.R6(percentile_95)
-#' @import dplyr SciViews boot MBESS R6 utils
 #' @export
+#' @import dplyr SciViews boot MBESS R6 utils
+NULL
+#' @importFrom stats quantile sd qchisq qnorm
+NULL
 SampleQuantiles <- R6::R6Class(
     classname = "SampleQuantiles",
     public = list(
@@ -96,7 +99,7 @@ SampleQuantiles <- R6::R6Class(
         qx = function(...) {
             return(
                 round(
-                    quantile(
+                    stats::quantile(
                         self$x,
                         probs = self$probs,
                         na.rm = self$na.rm,

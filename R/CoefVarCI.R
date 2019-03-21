@@ -150,6 +150,9 @@
 #'                 Functions, R package version 1.3-20
 #' @export
 #' @import dplyr SciViews boot MBESS R6 utils
+NULL
+#' @importFrom stats quantile sd qchisq qnorm
+NULL
 CoefVarCI <- R6::R6Class(
     classname = "CoefVarCI",
     inherit = CoefVar,

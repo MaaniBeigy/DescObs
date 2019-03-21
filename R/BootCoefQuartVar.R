@@ -38,7 +38,10 @@
 #'             intervals for the coefficient of quartile variation,
 #'             Simulation and Computation, 1-9, DOI: \href{http://doi.org/10.1080/03610918.2018.1435800}{http://doi.org/10.1080/03610918.2018.1435800}
 #' @export
-#' @import SciViews boot MBESS R6 stats utils dplyr
+#' @import dplyr SciViews boot MBESS R6 utils
+NULL
+#' @importFrom stats quantile sd qchisq qnorm
+NULL
 BootCoefQuartVar <- R6::R6Class(
     classname = "BootCoefQuartVar",
     inherit = SampleQuantiles,

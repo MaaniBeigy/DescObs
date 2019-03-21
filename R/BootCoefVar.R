@@ -41,6 +41,9 @@
 #'             ISBN 0-521-57391-2
 #' @export
 #' @import dplyr SciViews boot MBESS R6 utils
+NULL
+#' @importFrom stats quantile sd qchisq qnorm
+NULL
 BootCoefVar <- R6::R6Class(
     classname = "BootCoefVar",
     public = list(

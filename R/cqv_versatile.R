@@ -89,6 +89,8 @@
 #' @export
 #' @import dplyr SciViews boot MBESS R6 utils
 NULL
+#' @importFrom stats quantile sd qchisq qnorm
+NULL
 cqv_versatile <- function(
     x,
     na.rm = FALSE,
@@ -126,14 +128,14 @@ cqv_versatile <- function(
         R = 1000
     }
     q3 <- unname(
-        quantile(
+        stats::quantile(
             x,
             probs = 0.75,  # third quartile (0.75 percentile)
             na.rm = na.rm
         )
     )
     q1 <- unname(
-        quantile(
+        stats::quantile(
             x,
             probs = 0.25,  # first quartile (0.25 percentile)
             na.rm = na.rm
@@ -165,7 +167,7 @@ cqv_versatile <- function(
         )
         alphastar <- 1 - sum(star[i], na.rm = na.rm)
     }
-    zzz <- qnorm((1 - ((1 - alphastar)/2)))
+    zzz <- stats::qnorm((1 - ((1 - alphastar)/2)))
     f1square <- (3 * (zzz)^2)/(4 * length(x) * ((Yb - Ya)^2))
     f3square <- (3 * (zzz)^2)/(4 * length(x) * ((Yd - Yc)^2))
     D <- q3 - q1
@@ -181,33 +183,33 @@ cqv_versatile <- function(
     upper.tile <- exp(((SciViews::ln((D/S)) * ccc)) + (zzz * (v^(0.5))))
     lower.tile <- exp(((SciViews::ln((D/S)) * ccc)) - (zzz * (v^(0.5))))
     if (
-        unname(quantile(x, probs = 0.75, na.rm = na.rm)) != 0
+        unname(stats::quantile(x, probs = 0.75, na.rm = na.rm)) != 0
     ) {
         boot.cqv <- boot::boot(
             x,
             function(x, i) {
                 round(((
-                    unname(quantile(x[i], probs = 0.75, na.rm = na.rm)) -
-                        unname(quantile(x[i], probs = 0.25, na.rm = na.rm))
+                    unname(stats::quantile(x[i], probs = 0.75, na.rm = na.rm)) -
+                        unname(stats::quantile(x[i], probs = 0.25, na.rm = na.rm))
                 ) / (
-                    unname(quantile(x[i], probs = 0.75, na.rm = na.rm)) +
-                        unname(quantile(x[i], probs = 0.25, na.rm = na.rm))
+                    unname(stats::quantile(x[i], probs = 0.75, na.rm = na.rm)) +
+                        unname(stats::quantile(x[i], probs = 0.25, na.rm = na.rm))
                 )) * 100, digits = digits)
             },
             R = R
         )
     } else if (
-        unname(quantile(x, probs = 0.75, na.rm = na.rm)) == 0
+        unname(stats::quantile(x, probs = 0.75, na.rm = na.rm)) == 0
     ) {
         boot.cqv <- boot::boot(
             x,
             function(x, i) {
                 round(((
                     max(x[i], na.rm = na.rm) -
-                        unname(quantile(x[i], probs = 0.25, na.rm = na.rm))
+                        unname(stats::quantile(x[i], probs = 0.25, na.rm = na.rm))
                 ) / (
                     max(x[i], na.rm = na.rm) +
-                        unname(quantile(x[i], probs = 0.25, na.rm = na.rm))
+                        unname(stats::quantile(x[i], probs = 0.25, na.rm = na.rm))
                 )) * 100, digits = digits)
             },
             R = R
