@@ -3,13 +3,6 @@
 \name{SampleQuantiles}
 \alias{SampleQuantiles}
 \title{R6 Sample Quantiles}
-\usage{
-SampleQuantiles$new(x, ...)
-
-## Default R6 method:
-SampleQuantiles$new(x, na.rm = FALSE, digits = 1,
-               probs = 0.5, names = TRUE, type = 7)$qx()
-}
 \arguments{
 \item{x}{An \code{R} object. Currently there are methods for numeric vectors}
 

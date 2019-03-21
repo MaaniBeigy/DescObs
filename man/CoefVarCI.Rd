@@ -3,13 +3,6 @@
 \name{CoefVarCI}
 \alias{CoefVarCI}
 \title{R6 Confidence Intervals for the Coefficient of Variation (cv)}
-\usage{
-CoefVarCI$new(x, ...)
-
-## Default R6 method:
-CoefVarCI$new(x, na.rm = FALSE, digits = 1, correction = FALSE,
-               R = 1000, alpha = 0.05)$kelley_ci()
-}
 \arguments{
 \item{x}{An \code{R} object. Currently there are methods for numeric vectors}
 

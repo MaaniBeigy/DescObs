@@ -3,13 +3,6 @@
 \name{CoefVar}
 \alias{CoefVar}
 \title{R6 Coefficient of Variation (cv)}
-\usage{
-CoefVar$new(x, ...)
-
-## Default R6 method:
-CoefVar$new(x, na.rm = FALSE, digits = 1)$est()
-CoefVar$new(x, na.rm = FALSE, digits = 1)$est_corr()
-}
 \arguments{
 \item{x}{An \code{R} object. Currently there are methods for numeric vectors}
 

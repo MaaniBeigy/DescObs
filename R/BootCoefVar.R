@@ -4,13 +4,6 @@
 #'              resamplimg for the coeficient of variation (cv) of the
 #'              given numeric vectors. It uses \link[boot]{boot} and
 #'              \link[boot]{boot.ci} from the package \pkg{boot}.
-#' @usage BootCoefVar$new(x, ...)
-#'
-#' ## Default R6 method:
-#' BootCoefVar$new(x, na.rm = FALSE, R = 1000,
-#'                alpha = 0.05, ...)$boot_cv()
-#' BootCoefVar$new(x, na.rm = FALSE, R = 1000,
-#'                alpha = 0.05, ...)$boot_cv_corr()
 #' @param x An \code{R} object. Currently there are methods for numeric vectors
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #'              stripped before the computation proceeds.

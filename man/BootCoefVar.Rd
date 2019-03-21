@@ -3,15 +3,6 @@
 \name{BootCoefVar}
 \alias{BootCoefVar}
 \title{R6 Bootstrap Resampling for Coefficient of Variation}
-\usage{
-BootCoefVar$new(x, ...)
-
-## Default R6 method:
-BootCoefVar$new(x, na.rm = FALSE, R = 1000,
-               alpha = 0.05, ...)$boot_cv()
-BootCoefVar$new(x, na.rm = FALSE, R = 1000,
-               alpha = 0.05, ...)$boot_cv_corr()
-}
 \arguments{
 \item{x}{An \code{R} object. Currently there are methods for numeric vectors}
 

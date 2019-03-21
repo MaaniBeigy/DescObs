@@ -3,13 +3,6 @@
 \name{BootCoefQuartVar}
 \alias{BootCoefQuartVar}
 \title{R6 Bootstrap Resampling for Coefficient of Quartile Variation}
-\usage{
-BootCoefQuartVar$new(x, ...)
-
-## Default R6 method:
-BootCoefQuartVar$new(x, na.rm = FALSE, R = 1000,
-               alpha = 0.05, ...)$boot_cqv()
-}
 \arguments{
 \item{x}{An \code{R} object. Currently there are methods for numeric vectors}
 

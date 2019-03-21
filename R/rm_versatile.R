@@ -1,5 +1,6 @@
 #' @title Versatile Function for Removing Objects
 #' @name rm_versatile
+#' @aliases rm_versatile rm_pattern rm_except
 #' @description Versatile function to remove objects.
 #' @param save.objects an optional list naming objects to be saved (\emph{i.e.,}
 #'                     not to be removed).
@@ -74,8 +75,7 @@ rm_versatile <- function(
     rm.patterns = NULL,
     modes = list("integer", "double", "character", "list"),
     envir = .GlobalEnv,
-    inherits = FALSE,
-    ...
+    inherits = FALSE
 ) {
     if (is.null(save.objects)) {
         save.objects = NULL

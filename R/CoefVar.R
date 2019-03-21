@@ -2,11 +2,6 @@
 #' @name CoefVar
 #' @description The R6 class \code{CoefVar} for the coefficient of
 #'              variation (cv)
-#' @usage CoefVar$new(x, ...)
-#'
-#' ## Default R6 method:
-#' CoefVar$new(x, na.rm = FALSE, digits = 1)$est()
-#' CoefVar$new(x, na.rm = FALSE, digits = 1)$est_corr()
 #' @param x An \code{R} object. Currently there are methods for numeric vectors
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #'              stripped before the computation proceeds.

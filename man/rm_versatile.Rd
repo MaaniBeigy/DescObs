@@ -2,12 +2,13 @@
 % Please edit documentation in R/rm_versatile.R
 \name{rm_versatile}
 \alias{rm_versatile}
+\alias{rm_pattern}
+\alias{rm_except}
 \title{Versatile Function for Removing Objects}
 \usage{
 rm_versatile(save.objects = NULL, save.patterns = NULL,
   rm.objects = NULL, rm.patterns = NULL, modes = list("integer",
-  "double", "character", "list"), envir = .GlobalEnv, inherits = FALSE,
-  ...)
+  "double", "character", "list"), envir = .GlobalEnv, inherits = FALSE)
 }
 \arguments{
 \item{save.objects}{an optional list naming objects to be saved (\emph{i.e.,}

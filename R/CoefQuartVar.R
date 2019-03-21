@@ -2,10 +2,6 @@
 #' @name CoefQuartVar
 #' @description The R6 class \code{CoefQuartVar} for the coefficient of
 #'              quartile variation (cqv)
-#' @usage CoefQuartVar$new(x, ...)
-#'
-#' ## Default R6 method:
-#' CoefQuartVar$new(x, na.rm = FALSE, digits = 1)$est()
 #' @param x An \code{R} object. Currently there are methods for numeric vectors
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #'              stripped before the computation proceeds.

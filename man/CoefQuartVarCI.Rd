@@ -4,13 +4,6 @@
 \alias{CoefQuartVarCI}
 \title{R6 Confidence Intervals for the Coefficient of Quartile Variation
        (cqv)}
-\usage{
-CoefQuartVarCI$new(x, ...)
-
-## Default R6 method:
-CoefQuartVarCI$new(x, na.rm = FALSE, digits = 1,
-               R = 1000, alpha = 0.05, ...)$bonett_ci()
-}
 \arguments{
 \item{x}{An \code{R} object. Currently there are methods for numeric vectors}
 

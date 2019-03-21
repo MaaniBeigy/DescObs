@@ -3,12 +3,6 @@
 \name{CoefQuartVar}
 \alias{CoefQuartVar}
 \title{R6 Coefficient of Quartile Variation (cqv)}
-\usage{
-CoefQuartVar$new(x, ...)
-
-## Default R6 method:
-CoefQuartVar$new(x, na.rm = FALSE, digits = 1)$est()
-}
 \arguments{
 \item{x}{An \code{R} object. Currently there are methods for numeric vectors}
 

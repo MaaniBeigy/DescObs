@@ -6,11 +6,6 @@
 #'              package \pkg{boot}. Also, it produces the bootstrap confidence
 #'              intervals for the cqv based on the \link[boot]{boot.ci} from the
 #'              package \pkg{boot}.
-#' @usage BootCoefQuartVar$new(x, ...)
-#'
-#' ## Default R6 method:
-#' BootCoefQuartVar$new(x, na.rm = FALSE, R = 1000,
-#'                alpha = 0.05, ...)$boot_cqv()
 #' @param x An \code{R} object. Currently there are methods for numeric vectors
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #'              stripped before the computation proceeds.

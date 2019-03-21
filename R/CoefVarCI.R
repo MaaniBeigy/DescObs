@@ -2,11 +2,6 @@
 #' @name CoefVarCI
 #' @description The R6 class \code{CoefVarCI} for the confidence intervals of
 #'              coefficient of variation (cv)
-#' @usage CoefVarCI$new(x, ...)
-#'
-#' ## Default R6 method:
-#' CoefVarCI$new(x, na.rm = FALSE, digits = 1, correction = FALSE,
-#'                R = 1000, alpha = 0.05)$kelley_ci()
 #' @param x An \code{R} object. Currently there are methods for numeric vectors
 #' @param na.rm a logical value indicating whether \code{NA} values should be
 #'              stripped before the computation proceeds.
