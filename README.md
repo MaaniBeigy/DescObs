@@ -1,7 +1,5 @@
-[![Travis build status](https://travis-ci.org/MaaniBeigy/DescObs.svg?branch=master)](https://travis-ci.org/MaaniBeigy/DescObs)     
-
+[![Travis build status](https://travis-ci.org/MaaniBeigy/DescObs.svg?branch=master)](https://travis-ci.org/MaaniBeigy/DescObs)
 [![Coverage status](https://codecov.io/gh/MaaniBeigy/DescObs/branch/master/graph/badge.svg)](https://codecov.io/github/MaaniBeigy/DescObs?branch=master)  
-
 # DescObs ![DescObs](eye.png)
 Tools for Versatile Exploration of Data.   
 
