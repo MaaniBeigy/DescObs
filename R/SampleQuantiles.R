@@ -38,6 +38,9 @@ SampleQuantiles <- R6::R6Class(
         probs = 0.5,
         names = TRUE,
         type = 7,
+        eps = NA,
+        epsp1 = NA,
+        epsm1 = NA,
         # --------- determining constructor defaults for arguments ------------
         initialize = function(
             x = NA,
@@ -69,13 +72,30 @@ SampleQuantiles <- R6::R6Class(
                 return(NA_real_)
             }
             # -------------- check for probs being in range [0,1] -------------
-            if (!missing(probs)) {
+            self$eps <- function(...) {100*.Machine$double.eps}
+            self$epsp1 <- function(...) {1+100*.Machine$double.eps}
+            self$epsm1 <- function(...) {-1 * (100*.Machine$double.eps)}
+            if (any(
+                !missing(probs) && (
+                    probs < self$epsm1() | probs > self$epsp1())
+                )
+                ) {
+                stop("probs outside [0,1]")
+            } else if ((
+                !missing(probs) && (probs <= self$epsp1() & probs >= 1)
+            )) {
+                self$probs <- 1
+            } else if ((
+                !missing(probs) && (probs >= self$epsm1() & probs <= 0)
+            )) {
+                self$probs <- 0
+            } else if (
+                (
+                    !missing(probs) && (probs >= 0 & probs <= 1)
+                )
+            ) {
                 self$probs <- probs
             }
-            eps <- 100*.Machine$double.eps
-            if (any((!is.na(self$probs)) &
-                    (self$probs < -eps | self$probs > 1 + eps)))
-                stop("'probs' outside [0,1]")
             # ------------------- set digits with user input ------------------
             if (!missing(digits)) {
                 self$digits <- digits
