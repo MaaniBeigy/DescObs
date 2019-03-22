@@ -23,9 +23,11 @@ Imports: R6,
   SciViews, 
   boot, 
   MBESS
-Suggests: testthat,
+Suggests: 
+    testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    covr
 VignetteBuilder: knitr
 URL: https://github.com/MaaniBeigy/DescObs
 BugReports: https://github.com/MaaniBeigy/DescObs/issues
