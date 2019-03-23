@@ -53,6 +53,38 @@ test_that(
             BootCoefQuartVar$new(x)$boot_cqv()$statistic(),
             100
         )
+        #
+        expect_null(
+            BootCoefQuartVar$new(x)$boot_norm_ci()$normal
+        )
+        expect_warning(
+            BootCoefQuartVar$new(x)$boot_norm_ci()$normal,
+    "cqv is NaN because both q3 and q1 are 0, max was used instead of q3"
+        )
+        #
+        expect_null(
+            BootCoefQuartVar$new(x)$boot_basic_ci()$basic
+        )
+        expect_warning(
+            BootCoefQuartVar$new(x)$boot_basic_ci()$basic,
+            "cqv is NaN because both q3 and q1 are 0, max was used instead of q3"
+        )
+        #
+        expect_null(
+            BootCoefQuartVar$new(x)$boot_perc_ci()$percent
+        )
+        expect_warning(
+            BootCoefQuartVar$new(x)$boot_perc_ci()$percent,
+            "cqv is NaN because both q3 and q1 are 0, max was used instead of q3"
+        )
+        #
+        expect_null(
+            BootCoefQuartVar$new(x)$boot_bca_ci()$bca
+        )
+        expect_warning(
+            BootCoefQuartVar$new(x)$boot_bca_ci()$bca,
+            "cqv is NaN because both q3 and q1 are 0, max was used instead of q3"
+        )
     }
 )
 test_that(
@@ -67,6 +99,22 @@ test_that(
         expect_equal(
             BootCoefQuartVar$new(x)$boot_cqv()$statistic(),
             45.625
+        )
+        expect_equal(
+            BootCoefQuartVar$new(x)$boot_norm_ci()$normal[1],
+            0.95
+        )
+        expect_equal(
+            BootCoefQuartVar$new(x)$boot_basic_ci()$basic[1],
+            0.95
+        )
+        expect_equal(
+            BootCoefQuartVar$new(x)$boot_perc_ci()$percent[1],
+            0.95
+        )
+        expect_equal(
+            BootCoefQuartVar$new(x)$boot_bca_ci()$bca[1],
+            0.95
         )
     }
 )
