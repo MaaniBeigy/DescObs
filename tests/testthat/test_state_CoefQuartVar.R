@@ -1,4 +1,4 @@
-context("state_BootCoefQuartVar")
+context("state_CoefQuartVar")
 test_that(
     desc = "check if 0.75 percentile is zero to avoid NANs", {
         x = c(0L, 0L, 0L, 0L, 0L, 0L, 0L, 1771L, 0L, 0L, 106L, 0L, 0L, 0L,
@@ -43,47 +43,54 @@ test_that(
               0L, 0L, 0L, 0L, 0L, 49L, 1176L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L,
               0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L)
         expect_true(
-            BootCoefQuartVar$new(x)$super_$initialize(x, probs = 0.75) == 0
+            CoefQuartVar$new(x)$super_$super_$initialize(
+                x, probs = 0.75
+                ) == 0
         )
         expect_warning(
-            BootCoefQuartVar$new(x)$boot_cqv()$statistic(),
-        "cqv is NaN because both q3 and q1 are 0, max was used instead of q3"
-            )
+            CoefQuartVar$new(x)$est(),
+            "cqv is NaN because both q3 and q1 are 0, max was used instead of q3"
+        )
         expect_equal(
-            BootCoefQuartVar$new(x)$boot_cqv()$statistic(),
+            CoefQuartVar$new(x)$est(),
             100
         )
-        #
-        expect_null(
-            BootCoefQuartVar$new(x)$boot_norm_ci()$normal
+        expect_equal(
+            CoefQuartVar$new(x)$a(),
+            124
         )
-        expect_warning(
-            BootCoefQuartVar$new(x)$boot_norm_ci()$normal,
-    "cqv is NaN because both q3 and q1 are 0, max was used instead of q3"
+        expect_equal(
+            CoefQuartVar$new(x)$b(),
+            164
         )
-        #
-        expect_null(
-            BootCoefQuartVar$new(x)$boot_basic_ci()$basic
+        expect_equal(
+            CoefQuartVar$new(x)$c(),
+            411
         )
-        expect_warning(
-            BootCoefQuartVar$new(x)$boot_basic_ci()$basic,
-            "cqv is NaN because both q3 and q1 are 0, max was used instead of q3"
+        expect_equal(
+            CoefQuartVar$new(x)$d(),
+            451
         )
-        #
-        expect_null(
-            BootCoefQuartVar$new(x)$boot_perc_ci()$percent
+        expect_equal(
+            CoefQuartVar$new(x)$alphastar(),
+            0.9934781,
+            tolerance = 0.0001
         )
-        expect_warning(
-            BootCoefQuartVar$new(x)$boot_perc_ci()$percent,
-            "cqv is NaN because both q3 and q1 are 0, max was used instead of q3"
+        expect_equal(
+            CoefQuartVar$new(x)$Ya(),
+            0
         )
-        #
-        expect_null(
-            BootCoefQuartVar$new(x)$boot_bca_ci()$bca
+        expect_equal(
+            CoefQuartVar$new(x)$Yb(),
+            0
         )
-        expect_warning(
-            BootCoefQuartVar$new(x)$boot_bca_ci()$bca,
-            "cqv is NaN because both q3 and q1 are 0, max was used instead of q3"
+        expect_equal(
+            CoefQuartVar$new(x)$Yc(),
+            0
+        )
+        expect_equal(
+            CoefQuartVar$new(x)$Yd(),
+            37
         )
     }
 )
@@ -94,27 +101,55 @@ test_that(
             4.6, 5.4, 5.4, 5.7, 5.8, 5.9, 6.0, 6.6, 7.1, 7.9
         )
         expect_true(
-            BootCoefQuartVar$new(x)$super_$initialize(x, probs = 0.75) != 0
+            CoefQuartVar$new(x)$super_$super_$initialize(
+                x, probs = 0.75
+            ) != 0
         )
         expect_equal(
-            BootCoefQuartVar$new(x)$boot_cqv()$statistic(),
-            45.625
+            CoefQuartVar$new(x)$est(),
+            45,
+            tolerance = 0.0001
         )
         expect_equal(
-            BootCoefQuartVar$new(x)$boot_norm_ci()$normal[1],
-            0.95
+            CoefQuartVar$new(x)$a(),
+            2
         )
         expect_equal(
-            BootCoefQuartVar$new(x)$boot_basic_ci()$basic[1],
-            0.95
+            CoefQuartVar$new(x)$b(),
+            9
         )
         expect_equal(
-            BootCoefQuartVar$new(x)$boot_perc_ci()$percent[1],
-            0.95
+            CoefQuartVar$new(x)$c(),
+            12
         )
         expect_equal(
-            BootCoefQuartVar$new(x)$boot_bca_ci()$bca[1],
-            0.95
+            CoefQuartVar$new(x)$d(),
+            19
+        )
+        expect_equal(
+            CoefQuartVar$new(x)$alphastar(),
+            0.9330522,
+            tolerance = 0.0001
+        )
+        expect_equal(
+            CoefQuartVar$new(x)$Ya(),
+            0.5,
+            tolerance = 0.0001
+        )
+        expect_equal(
+            CoefQuartVar$new(x)$Yb(),
+            3.5,
+            tolerance = 0.0001
+        )
+        expect_equal(
+            CoefQuartVar$new(x)$Yc(),
+            5.4,
+            tolerance = 0.0001
+        )
+        expect_equal(
+            CoefQuartVar$new(x)$Yd(),
+            7.1,
+            tolerance = 0.0001
         )
     }
 )
@@ -122,7 +157,7 @@ test_that(
     desc = "finds the correct bootstraps", {
         x <- c(1.2, 1.3, 1.1, 1.1, 1.5)
         expect_equal(
-            BootCoefQuartVar$new(x)$boot_cqv()$statistic(), 8.333333,
+            CoefQuartVar$new(x)$est(), 8.3,
             tolerance = 0.0001
         )
     }
@@ -130,9 +165,9 @@ test_that(
 test_that(
     desc = "detect R6 class", {
         x <- c(1.2, 1.3, 1.1, 1.1, 1.5)
-        sample_boot_1 <- BootCoefQuartVar$new(x)
+        sample_cqv_1 <- CoefQuartVar$new(x)
         expect_true(
-            R6::is.R6(sample_boot_1)
+            R6::is.R6(sample_cqv_1)
         )
     }
 )

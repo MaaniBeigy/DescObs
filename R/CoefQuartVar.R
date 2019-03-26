@@ -82,8 +82,7 @@ CoefQuartVar <- R6::R6Class(
         est = function(...) {
             if (  # check if 0.75 percentile is non-zero to avoid NANs
                 super$super_$initialize(
-                    x = self$x, na.rm = self$na.rm, probs = 0.75,
-                    digits = self$digits
+                    x = self$x, na.rm = self$na.rm, probs = 0.75
                 ) != 0
             ) {
                 return(
@@ -118,10 +117,12 @@ CoefQuartVar <- R6::R6Class(
                 )
             } else if (
                 super$super_$initialize(
-                    x = self$x, na.rm = self$na.rm, probs = 0.75,
-                    digits = self$digits
+                    x = self$x, na.rm = self$na.rm, probs = 0.75
                 ) == 0
             ) {
+                warning(
+        "cqv is NaN because both q3 and q1 are 0, max was used instead of q3"
+                )
                 return(
                     round(
                         ((max(x = self$x) - (super$super_$initialize(

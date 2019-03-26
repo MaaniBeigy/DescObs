@@ -8,5 +8,30 @@ test_that(
         expect_equal(
             SampleQuantiles$new(x, probs = 0.61, names = FALSE)$qx(), 5.4
         )
+        expect_equal(
+            SampleQuantiles$new(x, names = FALSE)$qx(), 4.5
+        )
+        expect_equal(
+            SampleQuantiles$new(
+                x, na.rm = TRUE, digits = 2, probs = 0.95, names = FALSE
+                )$qx(),
+            7.14
+        )
+        expect_equal(
+            SampleQuantiles$new(
+                x, na.rm = TRUE, digits = 2, probs = 0.75, names = FALSE
+            )$qx(),
+            5.82
+        )
+    }
+)
+test_that(
+    desc = "detect R6 class", {
+        sample_quantile_example <- SampleQuantiles$new(
+            x, na.rm = TRUE, digits = 2, probs = 0.75, names = FALSE
+        )
+        expect_true(
+            R6::is.R6(sample_quantile_example)
+        )
     }
 )
