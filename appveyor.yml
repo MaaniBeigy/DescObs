@@ -9,7 +9,7 @@ init:
 
 install:
   - ps: Bootstrap
-  - choco install -y gnuwin
+  - choco install -y lgslcblas lgsl
 
 cache:
   - C:\RLibrary
