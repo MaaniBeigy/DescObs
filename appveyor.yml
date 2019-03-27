@@ -8,7 +8,8 @@ init:
         Import-Module '..\appveyor-tool.ps1'
 
 install:
-  ps: Bootstrap
+  - ps: Bootstrap
+  - choco install -y gnuwin
 
 cache:
   - C:\RLibrary
@@ -30,9 +31,6 @@ environment:
 
   #- R_VERSION: patched
   #  GCC_PATH: mingw_32
-
-matrix:
- fast_finish: true
 
 build_script:
   - travis-tool.sh install_deps
