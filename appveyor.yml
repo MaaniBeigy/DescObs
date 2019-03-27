@@ -8,7 +8,8 @@ init:
         Import-Module '..\appveyor-tool.ps1'
 
 install:
-  ps: Bootstrap
+ - ps: Bootstrap
+ - 'setup-x86_64.exe -q -P git,make,gcc-core,gcc-g++,cmake'
 
 cache:
   - C:\RLibrary
