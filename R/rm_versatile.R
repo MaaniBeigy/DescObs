@@ -67,7 +67,11 @@
 #' # List objects
 #' ls()
 #' @export
-#' @import dplyr SciViews boot MBESS R6 utils
+#' @import dplyr SciViews boot R6 utils
+NULL
+#' @importFrom stats quantile sd qchisq qnorm
+#' @importFrom MBESS conf.limits.nct
+NULL
 rm_versatile <- function(
     save.objects = NULL,
     save.patterns = NULL,

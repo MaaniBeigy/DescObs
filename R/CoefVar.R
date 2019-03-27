@@ -32,9 +32,10 @@
 #'                 Journal of Applied Statistics, 41(4), 733–751, DOI:
 #'                 \href{http://doi.org/10.1080/02664763.2013.847405}{http://doi.org/10.1080/02664763.2013.847405}
 #' @export
-#' @import dplyr SciViews boot MBESS R6 utils
+#' @import dplyr SciViews boot R6 utils
 NULL
 #' @importFrom stats quantile sd qchisq qnorm
+#' @importFrom MBESS conf.limits.nct
 NULL
 CoefVar <- R6::R6Class(
     classname = "CoefVar",

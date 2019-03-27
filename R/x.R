@@ -5,9 +5,10 @@
 #'                 quartile variation, Computational Statistics & Data Analysis,
 #'                 50(11), 2953-7, DOI: \href{http://doi.org/10.1016/j.csda.2005.05.007}{http://doi.org/10.1016/j.csda.2005.05.007}
 #' @export
-#' @import dplyr SciViews boot MBESS R6 utils
+#' @import dplyr SciViews boot R6 utils
 NULL
 #' @importFrom stats quantile sd qchisq qnorm
+#' @importFrom MBESS conf.limits.nct
 NULL
 x <- c(
     0.2, 0.5, 1.1, 1.4, 1.8, 2.3, 2.5, 2.7, 3.5, 4.4,

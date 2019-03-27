@@ -8,9 +8,10 @@
 #'                 Known Population Mean, Journal of Probability and Statistics,
 #'                 2013, 1–11, \href{http://doi.org/10.1155/2013/324940}{http://doi.org/10.1155/2013/324940}
 #' @export
-#' @import dplyr SciViews boot MBESS R6 utils
+#' @import dplyr SciViews boot R6 utils
 NULL
 #' @importFrom stats quantile sd qchisq qnorm
+#' @importFrom MBESS conf.limits.nct
 NULL
 shortest_length = data.frame(
     # ----------- "a" and "b" values for shortest-length CI -----------

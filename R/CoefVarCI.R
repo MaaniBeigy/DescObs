@@ -144,9 +144,10 @@
 #' @references [9] Canty, A., & Ripley, B., 2017, boot: Bootstrap R (S-Plus)
 #'                 Functions, R package version 1.3-20
 #' @export
-#' @import dplyr SciViews boot MBESS R6 utils
+#' @import dplyr SciViews boot R6 utils
 NULL
 #' @importFrom stats quantile sd qchisq qnorm
+#' @importFrom MBESS conf.limits.nct
 NULL
 CoefVarCI <- R6::R6Class(
     classname = "CoefVarCI",

@@ -87,9 +87,10 @@
 #'                 Their Applications. Cambridge University Press, Cambridge.
 #'                 ISBN 0-521-57391-2
 #' @export
-#' @import dplyr SciViews boot MBESS R6 utils
+#' @import dplyr SciViews boot R6 utils
 NULL
 #' @importFrom stats quantile sd qchisq qnorm
+#' @importFrom MBESS conf.limits.nct
 NULL
 cqv_versatile <- function(
     x,

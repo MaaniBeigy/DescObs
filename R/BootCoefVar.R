@@ -32,10 +32,10 @@
 #' @references Davison, AC., & Hinkley, DV., 1997, Bootstrap Methods and
 #'             Their Applications. Cambridge University Press, Cambridge.
 #'             ISBN 0-521-57391-2
-#' @export
-#' @import dplyr SciViews boot MBESS R6 utils
+#' @import dplyr SciViews boot R6 utils
 NULL
 #' @importFrom stats quantile sd qchisq qnorm
+#' @importFrom MBESS conf.limits.nct
 NULL
 BootCoefVar <- R6::R6Class(
     classname = "BootCoefVar",
