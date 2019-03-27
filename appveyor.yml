@@ -9,7 +9,10 @@ init:
 
 install:
   - ps: Bootstrap
-  - cinst lgslcblas
+  - set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
+
+before_build:
+  - cmake .
 
 cache:
   - C:\RLibrary
@@ -34,6 +37,8 @@ environment:
 
 build_script:
   - travis-tool.sh install_deps
+  - msbuild /m GSL.sln
+  - msbuild RUN_TESTS.vcxproj
 
 test_script:
   - travis-tool.sh run_tests
