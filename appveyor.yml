@@ -9,7 +9,7 @@ init:
 
 install:
  - ps: Bootstrap
- - setup-x86_64.exe -q -P git,make,gcc-core,gcc-g++,cmake
+ - cmd: setup-x86_64.exe -q -P git,make,gcc-core,gcc-g++,cmake
 
 cache:
   - C:\RLibrary
