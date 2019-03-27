@@ -268,23 +268,37 @@ cqv_versatile <- function(
     if (is.null(method)) {
         lower <- NA
         upper <- NA
-    } else if (method == "bonett") {
+    } else if (method == "bonett" && cqv != 100) {
         lower <- round(lower.tile * 100, digits = digits)
         upper <- round(upper.tile * 100, digits = digits)
-    } else if (method == "norm") {
+    } else if (method == "norm" && cqv != 100) {
         lower <- round(boot.norm.ci$normal[2], digits = digits)
         upper <- round(boot.norm.ci$normal[3], digits = digits)
-    } else if (method == "basic") {
+    } else if (method == "basic" && cqv != 100) {
         lower <- round(boot.basic.ci$basic[4], digits = digits)
         upper <- round(boot.basic.ci$basic[5], digits = digits)
-    } else if (method == "perc") {
+    } else if (method == "perc" && cqv != 100) {
         lower <- round(boot.perc.ci$percent[4], digits = digits)
         upper <- round(boot.perc.ci$percent[5], digits = digits)
-    } else if (method == "bca") {
+    } else if (method == "bca" && cqv != 100) {
         lower <- round(boot.bca.ci$bca[4], digits = digits)
         upper <- round(boot.bca.ci$bca[5], digits = digits)
+    } else if (method == "bonett" && cqv == 100) {
+        lower <- round(lower.tile * 100, digits = digits)
+        upper <- round(upper.tile * 100, digits = digits)
+    } else if (method == "norm" && cqv == 100) {
+        lower <- round(lower.tile * 100, digits = digits)
+        upper <- round(upper.tile * 100, digits = digits)
+    } else if (method == "basic" && cqv == 100) {
+        lower <- round(lower.tile * 100, digits = digits)
+        upper <- round(upper.tile * 100, digits = digits)
+    } else if (method == "perc" && cqv == 100) {
+        lower <- round(lower.tile * 100, digits = digits)
+        upper <- round(upper.tile * 100, digits = digits)
+    } else if (method == "bca" && cqv == 100) {
+        lower <- round(lower.tile * 100, digits = digits)
+        upper <- round(upper.tile * 100, digits = digits)
     }
-
     if (is.null(method)) {
         return(
             list(

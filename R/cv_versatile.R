@@ -247,13 +247,13 @@ cv_versatile <- function(
             200.6194, 257.4375, 313.462, 368.9185
         )
     )
-    if ("kelley" %in% method) {
-        if (!requireNamespace("MBESS")) {
-            warning(
-        "package 'MBESS' required to calculate Kelley's confidence interval"
-            )
-        }
-    }
+    # if ("kelley" %in% method) {
+    #     if (!requireNamespace("MBESS")) {
+    #         warning(
+    #     "package 'MBESS' required to calculate Kelley's confidence interval"
+    #         )
+    #     }
+    # }
     cv <- (
         stats::sd(x, na.rm = na.rm)/mean(x, na.rm = na.rm)  # coefficient of variation
     )
@@ -336,9 +336,9 @@ cv_versatile <- function(
         lower.tile.kelley <- unname(sqrt(length(x))/ci$Upper.Limit)
         upper.tile.kelley <- unname(sqrt(length(x))/ci$Lower.Limit)
     } else if ("mckay" %in% method && correction == FALSE) {
-        if (cv > 0.33) {
-            warning("Confidence interval may be very approximate")
-        }
+        # if (cv > 0.33) {
+        #     warning("Confidence interval may be very approximate")
+        # }
         v <- length(x) - 1
         t1 <- stats::qchisq(1 - alpha/2,v)/v
         t2 <- stats::qchisq(alpha/2,v)/v
@@ -348,9 +348,9 @@ cv_versatile <- function(
         lower.tile.mckay <- cv/sqrt((u1/(v + 1) - 1 )*(cv^2) + u1/v)
         upper.tile.mckay <- cv/sqrt((u2/(v + 1) - 1)*(cv^2) + u2/v)
     } else if ("mckay" %in% method && correction == TRUE) {
-        if (cv_corr > 0.33) {
-            warning("Confidence interval may be very approximate")
-        }
+        # if (cv_corr > 0.33) {
+        #     warning("Confidence interval may be very approximate")
+        # }
         v <- length(x) - 1
         t1 <- stats::qchisq(1 - alpha/2,v)/v
         t2 <- stats::qchisq(alpha/2,v)/v
@@ -380,9 +380,9 @@ cv_versatile <- function(
         lower.tile.miller <- cv_corr - zu
         upper.tile.miller <- cv_corr + zu
     }  else if ("vangel" %in% method && correction == FALSE) {
-        if (cv > 0.33) {
-            warning("Confidence interval may be very approximate")
-        }
+        # if (cv > 0.33) {
+        #     warning("Confidence interval may be very approximate")
+        # }
         v <- length(x) - 1
         t1 <- stats::qchisq(1 - alpha/2,v)/v
         t2 <- stats::qchisq(alpha/2,v)/v
@@ -392,9 +392,9 @@ cv_versatile <- function(
         lower.tile.vangel <- cv/sqrt(((u1 + 1)/(v + 1) - 1 )*(cv^2) + u1/v)
         upper.tile.vangel <- cv/sqrt(((u2 + 1)/(v + 1) - 1)*(cv^2) + u2/v)
     } else if ("vangel" %in% method && correction == TRUE) {
-        if (cv_corr > 0.33) {
-            warning("Confidence interval may be very approximate")
-        }
+        # if (cv_corr > 0.33) {
+        #     warning("Confidence interval may be very approximate")
+        # }
         v <- length(x) - 1
         t1 <- stats::qchisq(1 - alpha/2,v)/v
         t2 <- stats::qchisq(alpha/2,v)/v
@@ -568,9 +568,9 @@ cv_versatile <- function(
         )
         lower.tile.kelley <- unname(sqrt(length(x))/ci$Upper.Limit)
         upper.tile.kelley <- unname(sqrt(length(x))/ci$Lower.Limit)
-        if (cv > 0.33) {
-            warning("Confidence interval may be very approximate")
-        }
+        # if (cv > 0.33) {
+        #     warning("Confidence interval may be very approximate")
+        # }
         v <- length(x) - 1
         t1 <- stats::qchisq(1 - alpha/2,v)/v
         t2 <- stats::qchisq(alpha/2,v)/v
@@ -670,9 +670,9 @@ cv_versatile <- function(
         )
         lower.tile.kelley <- unname(sqrt(length(x))/ci$Upper.Limit)
         upper.tile.kelley <- unname(sqrt(length(x))/ci$Lower.Limit)
-        if (cv_corr > 0.33) {
-            warning("Confidence interval may be very approximate")
-        }
+        # if (cv_corr > 0.33) {
+        #     warning("Confidence interval may be very approximate")
+        # }
         v <- length(x) - 1
         t1 <- stats::qchisq(1 - alpha/2,v)/v
         t2 <- stats::qchisq(alpha/2,v)/v
@@ -1053,7 +1053,7 @@ cv_versatile <- function(
                 )
             )
         )
-    } else if ("percent" %in% method && correction == FALSE) {
+    } else if ("perc" %in% method && correction == FALSE) {
         stop("percent method is not developed yet")
         # return(
         #     list(
@@ -1068,7 +1068,7 @@ cv_versatile <- function(
         #         )
         #     )
         #     )
-    } else if ("percent" %in% method && correction == TRUE) {
+    } else if ("perc" %in% method && correction == TRUE) {
         stop("percent method is not developed yet")
         # return(
         #     list(

@@ -154,7 +154,7 @@ test_that(
     }
 )
 test_that(
-    desc = "finds the correct bootstraps", {
+    desc = "finds the correct cqv", {
         x <- c(1.2, 1.3, 1.1, 1.1, 1.5)
         expect_equal(
             CoefQuartVar$new(x)$est(), 8.3,
