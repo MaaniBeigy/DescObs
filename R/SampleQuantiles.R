@@ -24,9 +24,10 @@
 #' percentile_75$qx()
 #' R6::is.R6(percentile_95)
 #' @export
-#' @import dplyr SciViews boot MBESS R6 utils gsl
+#' @import dplyr SciViews boot MBESS R6 utils
 NULL
 #' @importFrom stats quantile sd qchisq qnorm
+#' @importFrom Rcpp sourceCpp
 NULL
 SampleQuantiles <- R6::R6Class(
     classname = "SampleQuantiles",
