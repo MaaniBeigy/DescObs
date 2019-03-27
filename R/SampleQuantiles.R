@@ -24,7 +24,7 @@
 #' percentile_75$qx()
 #' R6::is.R6(percentile_95)
 #' @export
-#' @import dplyr SciViews boot MBESS R6 utils
+#' @import dplyr SciViews boot MBESS R6 utils gsl
 NULL
 #' @importFrom stats quantile sd qchisq qnorm
 NULL
