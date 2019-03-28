@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/2f85c171e8704e4f8c52887640e3b037)](https://app.codacy.com/app/MaaniBeigy/DescObs?utm_source=github.com&utm_medium=referral&utm_content=MaaniBeigy/DescObs&utm_campaign=Badge_Grade_Settings)
 [![Travis build status](https://travis-ci.org/MaaniBeigy/DescObs.svg?branch=master)](https://travis-ci.org/MaaniBeigy/DescObs)
 [![Coverage status](https://codecov.io/gh/MaaniBeigy/DescObs/branch/master/graph/badge.svg)](https://codecov.io/github/MaaniBeigy/DescObs?branch=master)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/MaaniBeigy/DescObs?branch=master&svg=true)](https://ci.appveyor.com/project/MaaniBeigy/DescObs)
