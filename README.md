@@ -10,7 +10,7 @@
 [![](https://img.shields.io/github/last-commit/MaaniBeigy/DescObs.svg)](https://github.com/MaaniBeigy/DescObs/commits/master)
 [![](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)     
 
-# DescObs ![DescObs](eye.png)
+# DescObs <img src="eye.png" align="right" width="120" />
 Tools for Versatile Exploration of Data.   
 
 `DescObs` stands for **descriptive observation**.    
