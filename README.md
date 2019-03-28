@@ -20,9 +20,15 @@ We do not just see, we *observe*!
 
 ### Background    
 
+<<<<<<< HEAD
 There are  abundant methods available for the calculation of **confidence intervals** of a dispersion measure like coefficient of variation (`cv`) or coefficient of quartile variation (`cqv`), which have not yet been implemented.  
 
 ### Aims     
+=======
+There are  abundant methods available for the calculation of **confidence intervals** of a dispersion measure like coefficient of variation (`cv`) or coefficient of quartile variation (`cqv`), which have not yet implemented.    
+
+### Aims    
+>>>>>>> 4dda6411dfde7579bd46f41443edd7b89771842f
 
 The authors' intention is to create a toolbox to facilitate the use of various 
 descriptive statistical functions and resources in favor of an easier, 
