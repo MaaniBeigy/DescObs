@@ -109,8 +109,7 @@ cqv_versatile <- function(
         x <- x
     }
     if (!is.numeric(x)) {
-        stop("argument is not a numeric vector: returning NA")
-        return(NA_real_)
+        stop("argument is not a numeric vector")
     }
     na.rm = na.rm  # removes NAs if TRUE
     if (na.rm == TRUE) {
@@ -120,9 +119,9 @@ cqv_versatile <- function(
             "missing values and NaN's not allowed if 'na.rm' is FALSE"
         )
     }
-    if (is.null(digits)) {
-        digits = 1
-    }
+    # if (is.null(digits)) {
+    #     digits = 1
+    # }
     digits = digits  # digits required for rounding
     method = method  # returns 95% confidence interval
     if (is.null(R)) {
@@ -429,6 +428,5 @@ cqv_versatile <- function(
         )
     } else {
         stop("method for confidence interval is not available")
-        return(NA_real_)
     }
 }

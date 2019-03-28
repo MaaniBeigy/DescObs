@@ -205,7 +205,7 @@ rm_versatile <- function(
               save.mode.list, save.mode.expression, save.mode.name,
               save.mode.symbol, save.mode.function)
         )
-        print(setdiff(ls(envir = .GlobalEnv), save.formula))
+        print(setdiff(ls(envir = envir), save.formula))
         ANSWER <- readline(
             "Are you a sure you want to remove these objects? [yes/no]"
         )
@@ -213,8 +213,8 @@ rm_versatile <- function(
             cat("OK, change your patterns and exceptional objects")
         } else {
             rm(
-                list = setdiff(ls(envir = .GlobalEnv), save.formula),
-                envir = .GlobalEnv,
+                list = setdiff(ls(envir = envir), save.formula),
+                envir = envir,
                 inherits = inherits
             )
             message("Done!")
@@ -316,7 +316,7 @@ rm_versatile <- function(
         } else {
             rm(
                 list = rm.formula,
-                envir = .GlobalEnv,
+                envir = envir,
                 inherits = inherits
             )
             message("Done!")
@@ -495,7 +495,7 @@ rm_versatile <- function(
               rm.mode.list, rm.mode.expression, rm.mode.name,
               rm.mode.symbol, rm.mode.function)
         )
-        print(union(setdiff(ls(envir = .GlobalEnv), save.formula), rm.formula))
+        print(union(setdiff(ls(envir = envir), save.formula), rm.formula))
         ANSWER <- readline(
             "Are you a sure you want to remove these objects? [yes/no]"
         )
@@ -504,10 +504,10 @@ rm_versatile <- function(
         } else {
             rm(
                 list = union(
-                    setdiff(ls(envir = .GlobalEnv), save.formula),
+                    setdiff(ls(envir = envir), save.formula),
                     rm.formula
                 ),
-                envir = .GlobalEnv,
+                envir = envir,
                 inherits = inherits
             )
             message("Done!")

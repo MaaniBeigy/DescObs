@@ -9,6 +9,11 @@ test_that(
             SampleQuantiles$new(x, probs = 0.61, names = FALSE)$qx(), 5.4
         )
         expect_equal(
+            SampleQuantiles$new(x, probs = 0.61, names = FALSE)$eps(),
+            2.220446e-14,
+            tolerance = 0.001
+        )
+        expect_equal(
             SampleQuantiles$new(x, names = FALSE)$qx(), 4.5
         )
         expect_equal(

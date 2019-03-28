@@ -73,8 +73,7 @@ BootCoefVar <- R6::R6Class(
             }
             # ------------- stop if input x vector is not numeric -------------
             if (!is.numeric(x)) {
-                stop("argument is not a numeric vector: returning NA")
-                return(NA_real_)
+                stop("argument is not a numeric vector")
             }
             # ---- set the number of bootstrap replicates with user input -----
             if (!missing(R)) {

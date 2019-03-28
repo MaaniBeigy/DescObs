@@ -146,8 +146,7 @@ CoefQuartVarCI <- R6::R6Class(
             }
             # ------------- stop if input x vector is not numeric -------------
             if (!is.numeric(x)) {
-                stop("argument is not a numeric vector: returning NA")
-                return(NA_real_)
+                stop("argument is not a numeric vector")
             }
             # ------------------- set digits with user input ------------------
             if (!missing(digits)) {
@@ -230,10 +229,10 @@ CoefQuartVarCI <- R6::R6Class(
                     R = self$R,
                     alpha = self$alpha
                 ))
-                invisible(self)
+                # invisible(self)
             }
             self$bootcqv()
-            invisible(self)
+            # invisible(self)
         },
         # -------------- public method bonett_ci() i.e., Bonett CI ------------
         bonett_ci = function(...) {

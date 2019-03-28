@@ -153,8 +153,7 @@ cv_versatile <- function(
         x <- x
     }
     if (!is.numeric(x)) {
-        stop("argument is not a numeric vector: returning NA")
-        return(NA_real_)
+        stop("argument is not a numeric vector")
     }
     na.rm <- na.rm  # removes NAs if TRUE
     if (na.rm == TRUE) {
@@ -165,9 +164,9 @@ cv_versatile <- function(
         )
     }
 
-    if (is.null(digits)) {
-        digits = 1
-    }
+    # if (is.null(digits)) {
+    #     digits = 1
+    # }
     if (is.null(R)) {
         R = 1000
     }
@@ -599,7 +598,7 @@ cv_versatile <- function(
             cn <- sqrt(2/(length(x) - 1)) * (
                 (gamma(length(x)/2))/(gamma((length(x) - 1)/2))
             )
-        } else {
+        } else if (length(x) > 340) {
             cn <- sqrt(2/(length(x) - 1)) * (
                 (lgamma(length(x)/2))/(lgamma((length(x) - 1)/2))
             )

@@ -113,11 +113,11 @@ test_that(
         )
         expect_error(
             cv_versatile(x, na.rm = FALSE),
-            "argument is not a numeric vector: returning NA"
+            "argument is not a numeric vector"
         )
         expect_error(
             cqv_versatile(x, na.rm = FALSE),
-            "argument is not a numeric vector: returning NA"
+            "argument is not a numeric vector"
         )
     }
 )
@@ -167,39 +167,39 @@ test_that(
         y = c("a", "b")
         expect_error(
             CoefVar$new(x = y)$est(),
-            "argument is not a numeric vector: returning NA"
+            "argument is not a numeric vector"
         )
         expect_error(
             CoefQuartVar$new(x = y)$est(),
-            "argument is not a numeric vector: returning NA"
+            "argument is not a numeric vector"
         )
         expect_error(
             CoefVarCI$new(x = y)$kelley_ci(),
-            "argument is not a numeric vector: returning NA"
+            "argument is not a numeric vector"
         )
         expect_error(
             CoefQuartVarCI$new(x = y)$bonett_ci(),
-            "argument is not a numeric vector: returning NA"
+            "argument is not a numeric vector"
         )
         expect_error(
             BootCoefVar$new(x = y)$boot_cv(),
-            "argument is not a numeric vector: returning NA"
+            "argument is not a numeric vector"
         )
         expect_error(
             BootCoefQuartVar$new(x = y)$boot_cqv(),
-            "argument is not a numeric vector: returning NA"
+            "argument is not a numeric vector"
         )
         expect_error(
             SampleQuantiles$new(x = y)$qx(),
-            "argument is not a numeric vector: returning NA"
+            "argument is not a numeric vector"
         )
         expect_error(
             cv_versatile(x = y),
-            "argument is not a numeric vector: returning NA"
+            "argument is not a numeric vector"
         )
         expect_error(
             cqv_versatile(x = y),
-            "argument is not a numeric vector: returning NA"
+            "argument is not a numeric vector"
         )
     }
 )

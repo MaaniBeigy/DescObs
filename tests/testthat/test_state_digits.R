@@ -93,6 +93,15 @@ test_that(
             nchar(
                 sub(
                     '.*\\.', '',
+                    cv_versatile(x)$statistics$est
+                )
+            ),
+            1
+        )
+        expect_equal(
+            nchar(
+                sub(
+                    '.*\\.', '',
                     cqv_versatile(x, method = "bonett")$statistics$est
                 )
             ),

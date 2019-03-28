@@ -328,8 +328,7 @@ CoefVarCI <- R6::R6Class(
             }
             # ------------- stop if input x vector is not numeric -------------
             if (!is.numeric(x)) {
-                stop("argument is not a numeric vector: returning NA")
-                return(NA_real_)
+                stop("argument is not a numeric vector")
             }
             # ------------------- set digits with user input ------------------
             if (!missing(digits)) {
@@ -762,7 +761,7 @@ CoefVarCI <- R6::R6Class(
             # -------------------- Shortest-Length method ---------------------
             self$a_value = function(...) {
                 # a_value of the Shortest-Length interval method
-                if (length(self$x) <= 300) {
+                if ((length(self$x) - 1) <= 300) {
                     return(
                         self$shortest_length %>%
                             subset(
@@ -770,7 +769,7 @@ CoefVarCI <- R6::R6Class(
                                 ) %>%
                             dplyr::select(a)
                     )
-                } else {
+                } else if ((length(self$x) - 1) > 300) {
                     return(
                         shortest_length %>%
                             subset(
@@ -782,7 +781,7 @@ CoefVarCI <- R6::R6Class(
             }
             self$b_value = function(...) {
                 # b_value of the Shortest-Length interval method
-                if (length(self$x) <= 300) {
+                if ((length(self$x) - 1) <= 300) {
                     return(
                         self$shortest_length %>%
                             subset(
@@ -790,7 +789,7 @@ CoefVarCI <- R6::R6Class(
                             ) %>%
                             dplyr::select(b)
                     )
-                } else {
+                } else if ((length(self$x) - 1) > 300) {
                     return(
                         shortest_length %>%
                             subset(
@@ -879,7 +878,7 @@ CoefVarCI <- R6::R6Class(
                         R = self$R,
                         alpha = self$alpha
                     ))
-                invisible(self)
+                # invisible(self)
             }
             self$bootcv()
             invisible(self)
