@@ -3,6 +3,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2f85c171e8704e4f8c52887640e3b037)](https://app.codacy.com/app/MaaniBeigy/DescObs?utm_source=github.com&utm_medium=referral&utm_content=MaaniBeigy/DescObs&utm_campaign=Badge_Grade_Settings)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/MaaniBeigy/DescObs?branch=master&svg=true)](https://ci.appveyor.com/project/MaaniBeigy/DescObs)
 [![Licence](https://img.shields.io/badge/licence-GPL--3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
+[![packageversion](https://img.shields.io/badge/Package%20version-`r version`-orange.svg?style=flat-square)](commits/master)
 [![minimal R version](https://img.shields.io/badge/R%3E%3D-3.1.2-6666ff.svg)](https://cran.r-project.org/)
 [![](https://img.shields.io/github/languages/code-size/MaaniBeigy/DescObs.svg)](https://github.com/MaaniBeigy/DescObs)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
