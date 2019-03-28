@@ -20,12 +20,7 @@ We do not just see, we *observe*!
 
 ### Background    
 
-There are lots of R packages with statistical functions of particular use cases.
-Despite the growing body of these packages and repositories which have been
-quite useful for scientists, the redundancy and multiplicity of them
-make it sometimes very difficult to choose between them. For instance, the 
-abundant methods available for the calculation of **confidence intervals** of a 
-dispersion measure like coefficient of variation (`cv`) or coefficient of quartile variation (`cqv`) have not yet achieved.    
+There are  abundant methods available for the calculation of **confidence intervals** of a dispersion measure like coefficient of variation (`cv`) or coefficient of quartile variation (`cqv`), which have not yet implemented.    
 
 ### Aims    
 
