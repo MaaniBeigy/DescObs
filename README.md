@@ -4,7 +4,6 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9ad35951ceb94dfe96f3bb1f2fc55468)](https://www.codacy.com/app/MaaniBeigy/DescObs?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MaaniBeigy/DescObs&amp;utm_campaign=Badge_Grade)
 [![](https://img.shields.io/github/languages/code-size/MaaniBeigy/DescObs.svg)](https://github.com/MaaniBeigy/DescObs)
 [![](https://img.shields.io/github/last-commit/MaaniBeigy/DescObs.svg)](https://github.com/MaaniBeigy/DescObs/commits/master)
-[![Dependencies](https://tinyverse.netlify.com/badge/DescObs)](https://cran.r-project.org/package=DescObs)
 [![](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 
 
