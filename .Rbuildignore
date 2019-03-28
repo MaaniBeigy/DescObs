@@ -1,3 +1,4 @@
+^CMakeLists\.txt$
 ^src$
 ^appveyor\.yml$
 ^DescObs_0\.1\.0\.tar\.gz$
@@ -7,4 +8,3 @@
 ^eye\.png$
 ^.*\.Rproj$
 ^\.Rproj\.user$
-

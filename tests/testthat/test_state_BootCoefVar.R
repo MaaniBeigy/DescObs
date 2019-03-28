@@ -71,13 +71,13 @@ test_that(
             abs(
                 BootCoefVar$new(x)$boot_norm_ci_cv_corr()$normal[3] -
                     80.07603
-            )/100 < 0.05
+            )/100 < 0.3
         )
         expect_true(
             abs(
                 BootCoefVar$new(x)$boot_basic_ci_cv_corr()$basic[4] -
                     34.87221
-            )/100 < 0.05
+            )/100 < 0.3
         )
         expect_true(
             abs(

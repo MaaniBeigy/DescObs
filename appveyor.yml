@@ -12,17 +12,10 @@ install:
   - cmd: git submodule update --init --recursive
   - cmd: git clone https://github.com/CxxTest/cxxtest
   - cmd: cd c:\tools\vcpkg
-  - cmd: git pull
-  - cmd: vcpkg update
   - cmd: vcpkg integrate install
-  - cmd: vcpkg install boost-filesystem:x64-windows
-  - cmd: vcpkg install boost-log:x64-windows
-  - cmd: vcpkg install boost-program-options:x64-windows
-  - cmd: vcpkg install boost-system:x64-windows
   - cmd: vcpkg install gsl:x64-windows
-  - cmd: vcpkg install hdf5[cpp]:x64-windows
+  - cmd: vcpkg install fftw3:x64-windows
   - cmd: cd "%APPVEYOR_BUILD_FOLDER%"
-
 
 cache:
   - C:\RLibrary
@@ -45,7 +38,7 @@ environment:
   #- R_VERSION: patched
   #  GCC_PATH: mingw_32
 before_build:
-- cmd: cmake -G "Visual Studio 15 2017 Win64" . -DSHARK_TEST=ON -DCMAKE_INCLUDE_PATH='%APPVEYOR_BUILD_FOLDER%\cxxtest' -DCMAKE_PROGRAM_PATH="%APPVEYOR_BUILD_FOLDER%\cxxtest\bin" -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -DSHARK_HDF5_USE_CONFIG=ON
+  - cmd: cmake -G "Visual Studio 15 2017 Win64" . -DLIBPROFIT_TEST=ON -DCMAKE_INCLUDE_PATH='%APPVEYOR_BUILD_FOLDER%\cxxtest' -DCMAKE_PROGRAM_PATH="%APPVEYOR_BUILD_FOLDER%\cxxtest\bin" -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake
 
 build_script:
   - travis-tool.sh install_deps
