@@ -1,4 +1,4 @@
-^eye-2-512$
+^512x512\.png$
 ^CMakeLists\.txt$
 ^src$
 ^appveyor\.yml$
