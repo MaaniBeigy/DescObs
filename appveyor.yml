@@ -37,8 +37,6 @@ environment:
 
   #- R_VERSION: patched
   #  GCC_PATH: mingw_32
-before_build:
-  - cmd: cmake -G "Visual Studio 15 2017 Win64" . -DLIBPROFIT_TEST=ON -DCMAKE_INCLUDE_PATH='%APPVEYOR_BUILD_FOLDER%\cxxtest' -DCMAKE_PROGRAM_PATH="%APPVEYOR_BUILD_FOLDER%\cxxtest\bin" -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake
 
 build_script:
   - travis-tool.sh install_deps
