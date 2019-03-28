@@ -3,11 +3,12 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2f85c171e8704e4f8c52887640e3b037)](https://app.codacy.com/app/MaaniBeigy/DescObs?utm_source=github.com&utm_medium=referral&utm_content=MaaniBeigy/DescObs&utm_campaign=Badge_Grade_Settings)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/MaaniBeigy/DescObs?branch=master&svg=true)](https://ci.appveyor.com/project/MaaniBeigy/DescObs)
 [![Licence](https://img.shields.io/badge/licence-GPL--3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
-![packageversion](https://img.shields.io/badge/Package%20version-0.1.0-orange.svg?style=flat-square)
+[![](https://img.shields.io/badge/devel%20version-0.1.0-yellow.svg)](https://github.com/MaaniBeigy/DescObs)
 [![minimal R version](https://img.shields.io/badge/R%3E%3D-3.1.2-6666ff.svg)](https://cran.r-project.org/)
 [![](https://img.shields.io/github/languages/code-size/MaaniBeigy/DescObs.svg)](https://github.com/MaaniBeigy/DescObs)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![](https://img.shields.io/github/last-commit/MaaniBeigy/DescObs.svg)](https://github.com/MaaniBeigy/DescObs/commits/master)
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/MaaniBeigy/DescObs/issues)
 [![](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)     
 
 # DescObs <img src="eye.png" align="right" width="120" />
