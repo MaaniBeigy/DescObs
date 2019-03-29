@@ -1,3 +1,6 @@
+^\.github$
+^CODE_OF_CONDUCT\.md$
+^CONTRIBUTING\.md$
 ^512x512\.png$
 ^CMakeLists\.txt$
 ^src$

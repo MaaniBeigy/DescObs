@@ -93,13 +93,13 @@ test_that(
             abs(
                 CoefQuartVarCI$new(x)$basic_ci()$statistics$lower -
                     CoefQuartVarCI$new(x)$boot_basic_ci()$basic[4]
-            )/100 < 0.05
+            )/100 < 0.3
         )
         expect_true(
             abs(
                 CoefQuartVarCI$new(x)$basic_ci()$statistics$upper -
                     CoefQuartVarCI$new(x)$boot_basic_ci()$basic[5]
-            )/100 < 0.05
+            )/100 < 0.3
         )
         expect_equal(
             CoefQuartVarCI$new(x)$perc_ci()$method,

@@ -65,7 +65,6 @@ test_that(
             ),
             "Done!"
         )
-
     }
 )
 test_that(
@@ -99,7 +98,6 @@ test_that(
             ),
             "Done!"
         )
-
     }
 )
 test_that(
@@ -133,7 +131,6 @@ test_that(
             ),
             "Done!"
         )
-
     }
 )
 test_that(
@@ -175,7 +172,6 @@ test_that(
             ),
             "Done!"
         )
-
     }
 )
 test_that(
@@ -192,7 +188,6 @@ test_that(
             ),
             "Done!"
         )
-
     }
 )
 test_that(
@@ -209,7 +204,6 @@ test_that(
             ),
             "Done!"
         )
-
     }
 )
 test_that(
@@ -226,10 +220,136 @@ test_that(
             ),
             "Done!"
         )
-
     }
 )
-
+test_that(
+    desc = "correct remove by save 5", {
+        b <- raw(2)
+        c <- raw(3)
+        x <- raw(4)
+        y <- raw(5)
+        expect_message(
+            rm_versatile(
+                save.objects = list("b"),
+                save.patterns = list("x"),
+                modes = list("raw")
+            ),
+            "Done!"
+        )
+    }
+)
+test_that(
+    desc = "correct remove by save 6", {
+        b <- 0i
+        c <- 1i
+        x <- 2i
+        y <- 3i
+        expect_message(
+            rm_versatile(
+                save.objects = list("b"),
+                save.patterns = list("x"),
+                modes = list("complex")
+            ),
+            "Done!"
+        )
+    }
+)
+test_that(
+    desc = "correct remove by save 7", {
+        b <- list(1, 2)
+        c <- list(3)
+        x <- list(4)
+        y <- list(5)
+        expect_message(
+            rm_versatile(
+                save.objects = list("b"),
+                save.patterns = list("x"),
+                modes = list("list")
+            ),
+            "Done!"
+        )
+    }
+)
+test_that(
+    desc = "correct remove by save 8", {
+        b <- as.name("arrg")
+        c <- as.name("arrrg")
+        x <- as.name("arrrrg")
+        y <- as.name("arrrrrg")
+        expect_message(
+            rm_versatile(
+                save.objects = list("b"),
+                save.patterns = list("x"),
+                modes = list("name")
+            ),
+            "Done!"
+        )
+    }
+)
+test_that(
+    desc = "correct remove by save 9", {
+        b <- c(TRUE)
+        c <- c(FALSE)
+        x <- c(TRUE, FALSE)
+        y <- c(TRUE, FALSE, TRUE, FALSE)
+        expect_message(
+            rm_versatile(
+                save.objects = list("b"),
+                save.patterns = list("x"),
+                modes = list("logical")
+            ),
+            "Done!"
+        )
+    }
+)
+test_that(
+    desc = "correct remove by save 10", {
+        b <- expression(1 + 0:9)
+        c <- expression(2 + 0:9)
+        x <- expression(3 + 0:9)
+        y <- expression(4 + 0:9)
+        expect_message(
+            rm_versatile(
+                save.objects = list("b"),
+                save.patterns = list("x"),
+                modes = list("expression")
+            ),
+            "Done!"
+        )
+    }
+)
+test_that(
+    desc = "correct remove by save 11", {
+        b <- function(x) {print(x)}
+        cc <- function(x) {print(x^2)}
+        x <- function(x) {print(x*2)}
+        yyyyyyyyyyyy <- function(x) {print(x/2)}
+        expect_message(
+            rm_versatile(
+                save.objects = list("b"),
+                save.patterns = list("yyyyyyyyyyyy"),
+                modes = list("function")
+            ),
+            "Done!"
+        )
+    }
+)
+test_that(
+    desc = "correct remove by save 12", {
+        b <- as.symbol("arrgr")
+        cc <- as.symbol("arrrgr")
+        x <- as.symbol("arrrrgr")
+        yyyyyyyyyyyy <- as.symbol("arrrrrgr")
+        expect_message(
+            rm_versatile(
+                save.objects = list("b", "rm_versatile"),
+                save.patterns = list("yyyyyyyyyyyy"),
+                modes = list("symbol")
+            ),
+            "Done!"
+        )
+    }
+)
 test_that(
     desc = "correct remove by rm 2", {
         b <- "female"
@@ -244,7 +364,6 @@ test_that(
             ),
             "Done!"
         )
-
     }
 )
 test_that(
@@ -261,7 +380,6 @@ test_that(
             ),
             "Done!"
         )
-
     }
 )
 test_that(
@@ -278,6 +396,164 @@ test_that(
             ),
             "Done!"
         )
-
     }
 )
+test_that(
+    desc = "correct remove by rm 5", {
+        b <- raw(2)
+        c <- raw(3)
+        x <- raw(4)
+        y <- raw(5)
+        expect_message(
+            rm_versatile(
+                rm.objects = list("b"),
+                rm.patterns = list("x"),
+                modes = list("raw")
+            ),
+            "Done!"
+        )
+    }
+)
+test_that(
+    desc = "correct remove by rm 6", {
+        b <- 0i
+        c <- 1i
+        x <- 2i
+        y <- 3i
+        expect_message(
+            rm_versatile(
+                rm.objects = list("b"),
+                rm.patterns = list("x"),
+                modes = list("complex")
+            ),
+            "Done!"
+        )
+    }
+)
+test_that(
+    desc = "correct remove by rm 7", {
+        b <- list(1, 2)
+        c <- list(3)
+        x <- list(4)
+        y <- list(5)
+        expect_message(
+            rm_versatile(
+                rm.objects = list("b"),
+                rm.patterns = list("x"),
+                modes = list("list")
+            ),
+            "Done!"
+        )
+    }
+)
+test_that(
+    desc = "correct remove by rm 8", {
+        b <- as.name("arrg")
+        c <- as.name("arrrg")
+        x <- as.name("arrrrg")
+        y <- as.name("arrrrrg")
+        expect_message(
+            rm_versatile(
+                rm.objects = list("b"),
+                rm.patterns = list("x"),
+                modes = list("name")
+            ),
+            "Done!"
+        )
+    }
+)
+test_that(
+    desc = "correct remove by rm 9", {
+        b <- c(TRUE)
+        c <- c(FALSE)
+        x <- c(TRUE, FALSE)
+        y <- c(TRUE, FALSE, TRUE, FALSE)
+        expect_message(
+            rm_versatile(
+                rm.objects = list("b"),
+                rm.patterns = list("x"),
+                modes = list("logical")
+            ),
+            "Done!"
+        )
+    }
+)
+test_that(
+    desc = "correct remove by rm 10", {
+        b <- expression(1 + 0:9)
+        c <- expression(2 + 0:9)
+        x <- expression(3 + 0:9)
+        y <- expression(4 + 0:9)
+        expect_message(
+            rm_versatile(
+                rm.objects = list("b"),
+                rm.patterns = list("x"),
+                modes = list("expression")
+            ),
+            "Done!"
+        )
+    }
+)
+test_that(
+    desc = "correct remove by rm 11", {
+        b <- function(x) {print(x)}
+        c <- function(x) {print(x^2)}
+        x <- function(x) {print(x*2)}
+        yyyyyyyyyyyy <- function(x) {print(x/2)}
+        expect_message(
+            rm_versatile(
+                rm.objects = list("b"),
+                rm.patterns = list("yyyyyyyyyyyy"),
+                modes = list("function")
+            ),
+            "Done!"
+        )
+    }
+)
+test_that(
+    desc = "correct remove by rm 12", {
+        b <- as.symbol("arrgr")
+        cc <- as.symbol("arrrgr")
+        x <- as.symbol("arrrrgr")
+        yyyyyyyyyyyy <- as.symbol("arrrrrgr")
+        expect_message(
+            rm_versatile(
+                rm.objects = list("b"),
+                rm.patterns = list("yyyyyyyyyyyy"),
+                modes = list("symbol")
+            ),
+            "Done!"
+        )
+    }
+)
+test_that(
+    desc = "correct remove by both remove and save 2", {
+        a <- 1
+        b <- function(x) {print(x)}
+        cx <- as.symbol("arrrgr")
+        d <- expression(1 + 0:9)
+        e <- c(TRUE)
+        f <- as.name("arrrrg")
+        g <- list(1, 2)
+        x <- 1i
+        y <- raw(3)
+        dfcol <- 10L
+        dff1 <- "female"
+        data1 <- matrix(1:10, nrow = 2, ncol = 5)
+        expect_message(
+            rm_versatile(
+                save.objects = list("a", "b", "d"),
+                save.patterns = list("df"),
+                rm.objects = list("x", "y"),
+                rm.patterns = list("data"),
+                modes = list(
+                    "logical", "integer", "double", "complex", "raw",
+                    "character", "list", "expression", "name",
+                    "symbol", "function"
+                )
+            ),
+            "Done!"
+        )
+    }
+)
+

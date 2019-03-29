@@ -101,6 +101,7 @@ rm_versatile <- function(
     } else {
         rm.patterns = unlist(rm.patterns)
     }
+
     mode <- match.arg(  # match the user's input with available methods
         arg = unlist(modes),
         choices = c(
@@ -112,13 +113,13 @@ rm_versatile <- function(
     envir = envir
     inherits = inherits
     if (
-        (is.null(save.patterns)) &&
-        (is.null(save.objects)) &&
-        (is.null(rm.objects)) &&
+        (is.null(save.patterns)) &
+        (is.null(save.objects)) &
+        (is.null(rm.objects)) &
         (is.null(rm.patterns))
     ) {
         stop("You have selected neither save nor remove objects/patterns!")
-    } else if ((!is.null(save.patterns)) ||
+    } else if ((!is.null(save.patterns)) |
                (!is.null(save.objects))
     ) {
         if ("integer" %in% mode) {
@@ -210,7 +211,7 @@ rm_versatile <- function(
             "Are you a sure you want to remove these objects? [yes/no]"
         )
         if (substr(ANSWER, 1, 1) == "n") {
-            cat("OK, change your patterns and exceptional objects")
+            message("OK, change your patterns and exceptional objects")
         } else {
             rm(
                 list = setdiff(ls(envir = envir), save.formula),
@@ -220,7 +221,7 @@ rm_versatile <- function(
             message("Done!")
         }
     } else if (
-        ((!is.null(rm.objects)) ||
+        ((!is.null(rm.objects)) |
         (!is.null(rm.patterns)))
     ) {
         if ("integer" %in% mode) {
@@ -312,7 +313,7 @@ rm_versatile <- function(
             "Are you a sure you want to remove these objects? [yes/no]"
         )
         if (substr(ANSWER, 1, 1) == "n") {
-            cat("OK, change your patterns and remove objects")
+            message("OK, change your patterns and remove objects")
         } else {
             rm(
                 list = rm.formula,
@@ -322,9 +323,9 @@ rm_versatile <- function(
             message("Done!")
         }
     } else if (
-        ((!is.null(save.patterns)) ||
-         (!is.null(save.objects))) &&
-        ((!is.null(rm.objects)) ||
+        ((!is.null(save.patterns)) |
+         (!is.null(save.objects))) &
+        ((!is.null(rm.objects)) |
          (!is.null(rm.patterns)))
     ) {
         if ("integer" %in% mode) {
@@ -500,7 +501,7 @@ rm_versatile <- function(
             "Are you a sure you want to remove these objects? [yes/no]"
         )
         if (substr(ANSWER, 1, 1) == "n") {
-            cat("OK, change your patterns and objects")
+            message("OK, change your patterns and objects")
         } else {
             rm(
                 list = union(
