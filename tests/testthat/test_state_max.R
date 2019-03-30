@@ -1,6 +1,6 @@
-context("state_digits")
+context("state_max")
 test_that(
-    desc = "understands the default value of digits = 1", {
+    desc = "understands the default value of max = 1", {
         x = c(69.5363027878474, 92.3636962002316, 53.807734500996,
               35.49315129364, 43.192061672989, 60.3180744069461,
               47.9843106948398, 73.9138704112922, 69.8551241887232,
@@ -42,82 +42,12 @@ test_that(
               57.6792350008474, 57.6185426806648, 67.2311093154884,
               81.1680227349802)
         expect_equal(
-            nchar(
-                sub('.*\\.', '', CoefVar$new(x)$est())
-            ),
-            1
-        )
-        expect_true(
-            all(
-                nchar(
-                    sub('.*\\.', '', QuantileRescale$new(x)$transform_x())
-                ) == 1
-            )
-        )
-        expect_equal(
-            nchar(
-                sub('.*\\.', '', CoefQuartVar$new(x)$est())
-            ),
-            1
-        )
-        expect_equal(
-            nchar(
-                sub(
-                    '.*\\.', '',
-                    CoefVarCI$new(x)$kelley_ci()$statistics$est
-                )
-            ),
-            1
-        )
-        expect_equal(
-            nchar(
-                sub(
-                    '.*\\.', '',
-                    CoefQuartVarCI$new(x)$norm_ci()$statistics$est
-                )
-            ),
-            1
-        )
-        expect_equal(
-            nchar(
-                sub(
-                    '.*\\.', '',
-                    SampleQuantiles$new(x, probs = 0.96)$qx()
-                )
-            ),
-            1
-        )
-        expect_equal(
-            nchar(
-                sub(
-                    '.*\\.', '',
-                    cv_versatile(x, method = "kelley")$statistics$est
-                )
-            ),
-            1
-        )
-        expect_equal(
-            nchar(
-                sub(
-                    '.*\\.', '',
-                    cv_versatile(x)$statistics$est
-                )
-            ),
-            1
-        )
-        expect_equal(
-            nchar(
-                sub(
-                    '.*\\.', '',
-                    cqv_versatile(x, method = "bonett")$statistics$est
-                )
-            ),
-            1
+            max(QuantileRescale$new(x)$transform_x()), 1
         )
     }
 )
 test_that(
-    desc = "understands the user input of digits", {
+    desc = "understands the default value of max = 100", {
         x = c(69.5363027878474, 92.3636962002316, 53.807734500996,
               35.49315129364, 43.192061672989, 60.3180744069461,
               47.9843106948398, 73.9138704112922, 69.8551241887232,
@@ -159,71 +89,7 @@ test_that(
               57.6792350008474, 57.6185426806648, 67.2311093154884,
               81.1680227349802)
         expect_equal(
-            nchar(
-                sub('.*\\.', '', CoefVar$new(x, digits = 3)$est())
-            ),
-            3
-        )
-        expect_equal(
-            unname(quantile(
-                nchar(
-                    sub('.*\\.', '', QuantileRescale$new(
-                        x, digits = 3
-                        )$transform_x())
-                ), probs = 0.75)), 3
-        )
-        expect_equal(
-            nchar(
-                sub('.*\\.', '', CoefQuartVar$new(x, digits = 2)$est())
-            ),
-            2
-        )
-        expect_equal(
-            nchar(
-                sub(
-                    '.*\\.', '',
-                    CoefVarCI$new(x, digits = 3)$kelley_ci()$statistics$est
-                    )
-            ),
-            3
-        )
-        expect_equal(
-            nchar(
-                sub(
-                    '.*\\.', '',
-                    CoefQuartVarCI$new(x, digits = 2)$bonett_ci()$statistics$est
-                )
-            ),
-            2
-        )
-        expect_equal(
-            nchar(
-                sub(
-                    '.*\\.', '',
-                    SampleQuantiles$new(x, digits = 2, probs = 0.91)$qx()
-                )
-            ),
-            2
-        )
-        expect_equal(
-            nchar(
-                sub(
-                    '.*\\.', '',
-                    cv_versatile(x, digits = 3, method = "kelley")$statistics$est
-                )
-            ),
-            3
-        )
-        expect_equal(
-            nchar(
-                sub(
-                    '.*\\.', '',
-                    cqv_versatile(
-                        x, digits = 3, method = "bonett"
-                        )$statistics$est
-                )
-            ),
-            3
+            max(QuantileRescale$new(x, max = 100)$transform_x()), 100
         )
     }
 )

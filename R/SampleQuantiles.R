@@ -73,7 +73,7 @@ SampleQuantiles <- R6::R6Class(
             }
             # -------------- check for probs being in range [0,1] -------------
             self$eps <- function(...) {100*.Machine$double.eps}
-            self$epsp1 <- function(...) {1+100*.Machine$double.eps}
+            self$epsp1 <- function(...) {1 + 100*.Machine$double.eps}
             self$epsm1 <- function(...) {-1 * (100*.Machine$double.eps)}
             if (any(
                 !missing(probs) && (

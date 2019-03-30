@@ -85,99 +85,99 @@ test_that(
 "All values of t are equal to  100 \n Cannot calculate confidence intervals \n"
         )
         expect_equal(
-            cqv_versatile(x, method = "norm")$method,
+            cqv_versatile(x, method = "norm", R = 10)$method,
             "cqv with Bonett 95% CI"
         )
         expect_equal(
-            cqv_versatile(x, method = "norm")$statistic$est,
+            cqv_versatile(x, method = "norm", R = 10)$statistic$est,
             100
         )
         expect_equal(
-            cqv_versatile(x, method = "norm")$statistic$lower,
+            cqv_versatile(x, method = "norm", R = 10)$statistic$lower,
             100
         )
         expect_equal(
-            cqv_versatile(x, method = "norm")$statistic$upper,
+            cqv_versatile(x, method = "norm", R = 10)$statistic$upper,
             100
         )
         expect_warning(
-            cqv_versatile(x, method = "norm"),
+            cqv_versatile(x, method = "norm", R = 10),
 "All values of t are equal to  100 \n Cannot calculate confidence intervals \n"
         )
         expect_equal(
-            cqv_versatile(x, method = "basic")$method,
+            cqv_versatile(x, method = "basic", R = 10)$method,
             "cqv with Bonett 95% CI"
         )
         expect_equal(
-            cqv_versatile(x, method = "basic")$statistic$est,
+            cqv_versatile(x, method = "basic", R = 10)$statistic$est,
             100
         )
         expect_equal(
-            cqv_versatile(x, method = "basic")$statistic$lower,
+            cqv_versatile(x, method = "basic", R = 10)$statistic$lower,
             100
         )
         expect_equal(
-            cqv_versatile(x, method = "basic")$statistic$upper,
+            cqv_versatile(x, method = "basic", R = 10)$statistic$upper,
             100
         )
         expect_warning(
-            cqv_versatile(x, method = "basic"),
+            cqv_versatile(x, method = "basic", R = 10),
 "All values of t are equal to  100 \n Cannot calculate confidence intervals \n"
         )
         expect_equal(
-            cqv_versatile(x, method = "perc")$method,
+            cqv_versatile(x, method = "perc", R = 10)$method,
             "cqv with Bonett 95% CI"
         )
         expect_equal(
-            cqv_versatile(x, method = "perc")$statistic$est,
+            cqv_versatile(x, method = "perc", R = 10)$statistic$est,
             100
         )
         expect_equal(
-            cqv_versatile(x, method = "perc")$statistic$lower,
+            cqv_versatile(x, method = "perc", R = 10)$statistic$lower,
             100
         )
         expect_equal(
-            cqv_versatile(x, method = "perc")$statistic$upper,
+            cqv_versatile(x, method = "perc", R = 10)$statistic$upper,
             100
         )
         expect_warning(
-            cqv_versatile(x, method = "perc"),
+            cqv_versatile(x, method = "perc", R = 10),
 "All values of t are equal to  100 \n Cannot calculate confidence intervals \n"
         )
         expect_equal(
-            cqv_versatile(x, method = "bca")$method,
+            cqv_versatile(x, method = "bca", R = 10)$method,
             "cqv with Bonett 95% CI"
         )
         expect_equal(
-            cqv_versatile(x, method = "bca")$statistic$est,
+            cqv_versatile(x, method = "bca", R = 10)$statistic$est,
             100
         )
         expect_equal(
-            cqv_versatile(x, method = "bca")$statistic$lower,
+            cqv_versatile(x, method = "bca", R = 10)$statistic$lower,
             100
         )
         expect_equal(
-            cqv_versatile(x, method = "bca")$statistic$upper,
+            cqv_versatile(x, method = "bca", R = 10)$statistic$upper,
             100
         )
         expect_warning(
-            cqv_versatile(x, method = "bca"),
+            cqv_versatile(x, method = "bca", R = 10),
 "All values of t are equal to  100 \n Cannot calculate confidence intervals \n"
         )
         expect_equal(
-            cqv_versatile(x, method = "all")$method,
+            cqv_versatile(x, method = "all", R = 10)$method,
             "cqv with Bonett 95% CI"
         )
         expect_equal(
-            cqv_versatile(x, method = "all")$statistic$est,
+            cqv_versatile(x, method = "all", R = 10)$statistic$est,
             100
         )
         expect_equal(
-            cqv_versatile(x, method = "all")$statistic$lower,
+            cqv_versatile(x, method = "all", R = 10)$statistic$lower,
             100
         )
         expect_equal(
-            cqv_versatile(x, method = "all")$statistic$upper,
+            cqv_versatile(x, method = "all", R = 10)$statistic$upper,
             100
         )
         expect_warning(
@@ -219,11 +219,11 @@ test_that(
             tolerance = 0.0001
         )
         expect_equal(
-            cqv_versatile(x, method = "norm")$statistic$est,
+            cqv_versatile(x, method = "norm", R = 10)$statistic$est,
             45.6
         )
         expect_equal(
-            cqv_versatile(x, method = "norm")$method,
+            cqv_versatile(x, method = "norm", R = 10)$method,
             "cqv with normal approximation 95% CI"
         )
         expect_true(

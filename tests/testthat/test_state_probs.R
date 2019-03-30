@@ -1,9 +1,12 @@
 context("state_probs")
 test_that(
-    desc = "understands the default value of probs = 0.5", {
+    desc = "understands the default values", {
         x = 1:100
         expect_equal(
             SampleQuantiles$new(x)$probs, 0.5
+        )
+        expect_equal(
+            QuantileRescale$new(x)$probs, 0.025
         )
     }
 )
@@ -12,6 +15,9 @@ test_that(
         x = 1:100
         expect_equal(
             SampleQuantiles$new(x, probs = 0.61)$probs, 0.61
+        )
+        expect_equal(
+            QuantileRescale$new(x, probs = 0.005)$probs, 0.005
         )
     }
 )
@@ -22,6 +28,10 @@ test_that(
             SampleQuantiles$new(x, probs = -0.001)$qx(),
             "probs outside \\[0\\,1\\]"
         )
+        expect_error(
+            QuantileRescale$new(x, probs = -0.001)$transform_x(),
+            "probs outside \\[0\\,1\\]"
+        )
     }
 )
 test_that(
@@ -29,6 +39,10 @@ test_that(
         x = 1:100
         expect_error(
             SampleQuantiles$new(x, probs = 1.001)$qx(),
+            "probs outside \\[0\\,1\\]"
+        )
+        expect_error(
+            QuantileRescale$new(x, probs = 1.001)$transform_x(),
             "probs outside \\[0\\,1\\]"
         )
     }
@@ -43,6 +57,13 @@ test_that(
                 )$probs,
             0
         )
+        expect_equal(
+            QuantileRescale$new(
+                x,
+                probs = -2.220446e-14
+            )$probs,
+            0
+        )
     }
 )
 test_that(
@@ -50,6 +71,13 @@ test_that(
         x = 1:100
         expect_equal(
             SampleQuantiles$new(
+                x,
+                probs = (1 + 2.220446e-14)
+            )$probs,
+            1
+        )
+        expect_equal(
+            QuantileRescale$new(
                 x,
                 probs = (1 + 2.220446e-14)
             )$probs,

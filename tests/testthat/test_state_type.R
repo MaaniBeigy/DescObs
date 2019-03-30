@@ -5,6 +5,9 @@ test_that(
         expect_equal(
             SampleQuantiles$new(x)$type, 7
         )
+        expect_equal(
+            QuantileRescale$new(x)$type, 7
+        )
     }
 )
 test_that(
@@ -12,6 +15,9 @@ test_that(
         x = 1:100
         expect_equal(
             SampleQuantiles$new(x, type = 8)$type, 8
+        )
+        expect_equal(
+            QuantileRescale$new(x, type = 8)$type, 8
         )
     }
 )
