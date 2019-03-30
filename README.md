@@ -62,7 +62,7 @@ available:
 |BootCoefVar      |TRUE    |Bootstrap Resampling for cv             |
 |BootCoefQuartVar |TRUE    |Bootstrap Resampling for cqv            |
 |rm_versatile     |FALSE   |Versatile Function for Removing Objects |
-
+|QuantileRescale  |TRUE    |Quantile Rescale                        |
 
 
 
