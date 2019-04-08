@@ -1,7 +1,7 @@
 #' @title R6 Quantile Rescale
 #' @name QuantileRescale
-#' @description The R6 class \code{QuantileRescale} transform data into 0-1 or
-#'              0-100 scale with values above (1-p)% and below p% percentiles
+#' @description The R6 class \code{QuantileRescale} transforms data into 0-1 or
+#'              0-100 scale with values above (1-p)\% and below p\% percentiles
 #'              taken as the nearest endpoints.
 #' @param x An \code{R} object. Currently there are methods for numeric
 #'              vectors, matrices, and data frames.

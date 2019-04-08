@@ -25,8 +25,8 @@ environment:
   global:
     USE_RTOOLS: true
     NOT_CRAN: true
-    _R_CHECK_FORCE_SUGGESTS: true
-    _R_CHECK_CRAN_INCOMING_: true
+    _R_CHECK_FORCE_SUGGESTS: false
+    _R_CHECK_CRAN_INCOMING_: false
     #R_CHECK_ARGS: "--run-dontrun"
   matrix:
 
