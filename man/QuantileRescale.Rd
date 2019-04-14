@@ -28,8 +28,8 @@ might be 1, 100, etc.}
 algorithms explained in \link[stats]{quantile} to be used.}
 }
 \description{
-The R6 class \code{QuantileRescale} transform data into 0-1 or
-             0-100 scale with values above (1-p)% and below p% percentiles
+The R6 class \code{QuantileRescale} transforms data into 0-1 or
+             0-100 scale with values above (1-p)\% and below p\% percentiles
              taken as the nearest endpoints.
 }
 \examples{
